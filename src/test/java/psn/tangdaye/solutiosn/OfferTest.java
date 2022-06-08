@@ -6,7 +6,6 @@ import psn.tangdaye.model.ListNode;
 import psn.tangdaye.model.Node;
 import psn.tangdaye.solutions.Offer;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 
 public class OfferTest {
@@ -82,7 +81,21 @@ public class OfferTest {
     @Test
     public void testReverseLeftWords() {
         String t = "hello world";
-        Assert.assertEquals("llo worldhe", offer.reverseLeftWords(t,2));
+        Assert.assertEquals("llo worldhe", offer.reverseLeftWords(t, 2));
+    }
+
+    @Test
+    public void testFindRepeatNumber() {
+        int[] nums = {2, 3, 1, 0, 2, 5, 3};
+        Assert.assertEquals(2, offer.findRepeatNumber(nums));
+    }
+
+    @Test
+    public void testSearch() {
+        int[] nums = {5, 7, 7, 8, 8, 10};
+        int target = 8;
+        Assert.assertEquals(8, offer.search(nums, target));
+
     }
 
 }

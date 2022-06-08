@@ -181,4 +181,21 @@ public class Offer {
         return new String(target);
     }
 
+    /**
+     * 剑指 Offer 03. 数组中重复的数字
+     */
+    public int findRepeatNumber(int[] nums) {
+        boolean[] t = new boolean[nums.length];
+        int k = 0;
+        while (!t[nums[k]]) {
+            t[nums[k]] = true;
+            k++;
+        }
+        return nums[k];
+    }
+
+    public int search(int[] nums, int target) {
+        
+        return 0;
+    }
 }

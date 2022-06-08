@@ -2,9 +2,9 @@ package psn.tangdaye.solutions;
 
 import psn.tangdaye.model.ListNode;
 import psn.tangdaye.model.Node;
+import psn.tangdaye.model.TreeNode;
 
-import java.util.HashMap;
-import java.util.Stack;
+import java.util.*;
 
 public class Offer {
 
@@ -194,8 +194,129 @@ public class Offer {
         return nums[k];
     }
 
+    /**
+     * 剑指 Offer 53 - I. 在排序数组中查找数字 I
+     */
     public int search(int[] nums, int target) {
-        
-        return 0;
+        int index = Arrays.binarySearch(nums, target);
+        if (index < 0) return 0;
+        int i = index, j = index;
+        while (i >= 0 && nums[i] == target) i--;
+        while (j < nums.length && nums[j] == target) j++;
+        return j - i - 1;
     }
+
+    /**
+     * 剑指 Offer 53 - II. 0～n-1中缺失的数字
+     */
+    public int missingNumber(int[] nums) {
+        int n = nums.length + 1;
+        int low = 0, high = n - 2;
+        while (low <= high) {
+            int mid = high + low >> 1;
+            int midVal = nums[mid];
+            if (midVal == mid) low = mid + 1;
+            else high = mid - 1;
+        }
+        return low;
+    }
+
+    /**
+     * 剑指 Offer 04. 二维数组中的查找
+     */
+    public boolean findNumberIn2DArray(int[][] matrix, int target) {
+        int m = matrix.length; // row
+        if (m == 0) return false;
+        int n = matrix[0].length; // column
+        if (n == 0) return false;
+
+        int lowRow = 0, highRow = m - 1;
+        while (lowRow <= highRow) {
+            int midRow = highRow + lowRow >> 1;
+            int midRowVal = matrix[midRow][0];
+            if (midRowVal < target) lowRow = midRow + 1;
+            else if (midRowVal > target) highRow = midRow - 1;
+            else return true;
+        }
+        int row = lowRow;
+
+        int lowColumn = 0, highColumn = n - 1;
+        while (lowColumn <= highColumn) {
+            int midColumn = lowColumn + highColumn >> 1;
+            int midColumnVal = matrix[0][midColumn];
+            if (midColumnVal < target) lowColumn = midColumn + 1;
+            else if (midColumnVal > target) highColumn = midColumn - 1;
+            else return true;
+        }
+        int column = lowColumn;
+
+        for (int i = 0; i < row; i++) {
+            int index = Arrays.binarySearch(matrix[i], 0, column, target);
+            if (index > 0) return true;
+        }
+        return false;
+    }
+
+    /**
+     * 剑指 Offer 11. 旋转数组的最小数字
+     */
+    public int minArray(int[] numbers) {
+        int low = 0, high = numbers.length - 1;
+        while (low < high) {
+            if (numbers[low] < numbers[high]) break;
+            int mid = low + high >> 1;
+            if (numbers[mid] > numbers[low]) low = mid + 1;
+            else if (numbers[mid] < numbers[high]) high = mid;
+            else if (numbers[low] == numbers[high]) {
+                low++;
+                high--;
+            } else if (numbers[mid] == numbers[high]) {
+                high = mid;
+            } else if (numbers[mid] == numbers[low]) {
+                low = mid + 1;
+            }
+        }
+        return numbers[low];
+    }
+
+    /**
+     * 剑指 Offer 50. 第一个只出现一次的字符
+     */
+    public char firstUniqChar(String s) {
+        short[] x = new short[26];
+        for (int i = 0; i < s.length(); i++) {
+            x[s.charAt(i) - 'a']++;
+        }
+        for (int i = 0; i < s.length(); i++) {
+            if (x[s.charAt(i) - 'a'] == 1) return s.charAt(i);
+        }
+        return ' ';
+    }
+
+    public int[] levelOrder(TreeNode root) {
+        if (root == null) return new int[0];
+        TreeNode[] q = new TreeNode[1000];
+        ArrayList<Integer> a = new ArrayList<>();
+        int i = 0, j = 1;
+        q[i] = root;
+        while (i != j) {
+            TreeNode current = q[i];
+            i++;
+            a.add(current.val);
+            if (current.left != null) {
+                q[j] = current.left;
+                j++;
+            }
+            if (current.right != null) {
+                q[j] = current.right;
+                j++;
+            }
+        }
+        int[] array = new int[a.size()];
+        for (int m = 0; m < a.size(); m++) {
+            array[m] = a.get(m);
+        }
+        return array;
+    }
+
 }

@@ -4,8 +4,10 @@ import org.junit.Assert;
 import org.junit.Test;
 import psn.tangdaye.model.ListNode;
 import psn.tangdaye.model.Node;
+import psn.tangdaye.model.TreeNode;
 import psn.tangdaye.solutions.Offer;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
 
 public class OfferTest {
@@ -94,8 +96,48 @@ public class OfferTest {
     public void testSearch() {
         int[] nums = {5, 7, 7, 8, 8, 10};
         int target = 8;
-        Assert.assertEquals(8, offer.search(nums, target));
+        Assert.assertEquals(2, offer.search(nums, target));
+    }
 
+    @Test
+    public void testMissingNumber() {
+        int[] nums = {0, 1, 2, 3, 4, 5, 6, 7, 8};
+        Assert.assertEquals(9, offer.missingNumber(nums));
+    }
+
+    @Test
+    public void testFindNumberIn2DArray() {
+        int[][] matrix = {{1, 4, 7, 11, 15}, {2, 5, 8, 12, 19}, {3, 6, 9, 16, 22}, {10, 13, 14, 17, 24}, {18, 21, 23, 26, 30}};
+        Assert.assertTrue(offer.findNumberIn2DArray(matrix, 8));
+
+        int[][] matrix2 = {{1}};
+        Assert.assertTrue(offer.findNumberIn2DArray(matrix2, 1));
+    }
+
+    @Test
+    public void testMinArray() {
+        int[] nums = {4, 5, 1, 2, 3};
+        Assert.assertEquals(1, offer.minArray(nums));
+
+        int[] nums2 = {3, 3, 1, 3};
+        Assert.assertEquals(1, offer.minArray(nums2));
+
+        int[] nums3 = {3, 1, 3};
+        Assert.assertEquals(1, offer.minArray(nums3));
+    }
+
+    @Test
+    public void testFirstUniqChar() {
+        String s = "abac";
+        Assert.assertEquals('b', offer.firstUniqChar(s));
+    }
+
+    @Test
+    public void testTreeNode() {
+        Integer[] array = {3, 9, 20, null, null, 15, 7,  8};
+        TreeNode root = TreeNode.fromArray(array);
+        int[] result = offer.levelOrder(root);
+        System.out.println(Arrays.toString(result));
     }
 
 }

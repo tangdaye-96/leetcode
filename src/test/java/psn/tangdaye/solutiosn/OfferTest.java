@@ -134,10 +134,12 @@ public class OfferTest {
 
     @Test
     public void testTreeNode() {
-        Integer[] array = {3, 9, 20, null, null, 15, 7,  8};
+        Integer[] array = {1, 2, 3, 4, null, null, 5};
         TreeNode root = TreeNode.fromArray(array);
         int[] result = offer.levelOrder(root);
-        System.out.println(Arrays.toString(result));
+        Assert.assertEquals("[1, 2, 3, 4, 5]", Arrays.toString(result));
+        Assert.assertEquals("[[1], [2, 3], [4, 5]]", offer.levelOrder2(root).toString());
+        Assert.assertEquals("[[1], [3, 2], [4, 5]]", offer.levelOrder3(root).toString());
     }
 
 }

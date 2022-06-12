@@ -5,6 +5,7 @@ import psn.tangdaye.model.Node;
 import psn.tangdaye.model.TreeNode;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Offer {
 
@@ -293,6 +294,9 @@ public class Offer {
         return ' ';
     }
 
+    /**
+     * 剑指 Offer 32 - I. 从上到下打印二叉树
+     */
     public int[] levelOrder(TreeNode root) {
         if (root == null) return new int[0];
         TreeNode[] q = new TreeNode[1000];
@@ -317,6 +321,80 @@ public class Offer {
             array[m] = a.get(m);
         }
         return array;
+    }
+
+    /**
+     * 剑指 Offer 32 - II. 从上到下打印二叉树 II
+     */
+    public List<List<Integer>> levelOrder2(TreeNode root) {
+        if (root == null) return List.of();
+        List<List<TreeNode>> treeNodes = new ArrayList<>();
+        List<List<Integer>> result = new ArrayList<>();
+        treeNodes.add(List.of(root));
+        int i = 0, layer = 1;
+        while (i != layer) {
+            List<TreeNode> currentLayer = treeNodes.get(i);
+            i++;
+            result.add(currentLayer.stream().map(treeNode -> treeNode.val).collect(Collectors.toList()));
+            List<TreeNode> nextLayer = new ArrayList<>();
+            boolean next = false;
+            for (TreeNode treeNode : currentLayer) {
+                if (treeNode.left != null) {
+                    nextLayer.add(treeNode.left);
+                    next = true;
+                }
+                if (treeNode.right != null) {
+                    nextLayer.add(treeNode.right);
+                    next = true;
+                }
+            }
+            if (next) {
+                layer++;
+                treeNodes.add(nextLayer);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 剑指 Offer 32 - III. 从上到下打印二叉树 III
+     */
+    public List<List<Integer>> levelOrder3(TreeNode root) {
+        if (root == null) return List.of();
+        List<List<TreeNode>> treeNodes = new ArrayList<>();
+        List<List<Integer>> result = new ArrayList<>();
+        treeNodes.add(List.of(root));
+        int i = 0, layer = 1;
+        while (i != layer) {
+            List<TreeNode> currentLayer = treeNodes.get(i);
+            if (i % 2 == 0) {
+                result.add(currentLayer.stream().map(treeNode -> treeNode.val).collect(Collectors.toList()));
+            } else {
+                List<Integer> integers = new ArrayList<>();
+                for (int s = currentLayer.size() - 1; s >= 0; s--) {
+                    integers.add(currentLayer.get(s).val);
+                }
+                result.add(integers);
+            }
+            i++;
+            List<TreeNode> nextLayer = new ArrayList<>();
+            boolean next = false;
+            for (TreeNode treeNode : currentLayer) {
+                if (treeNode.left != null) {
+                    nextLayer.add(treeNode.left);
+                    next = true;
+                }
+                if (treeNode.right != null) {
+                    nextLayer.add(treeNode.right);
+                    next = true;
+                }
+            }
+            if (next) {
+                layer++;
+                treeNodes.add(nextLayer);
+            }
+        }
+        return result;
     }
 
 }

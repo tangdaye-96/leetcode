@@ -1,8 +1,6 @@
 package psn.tangdaye.model;
 
 import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
 
 public class TreeNode {
     public int val;
@@ -32,5 +30,55 @@ public class TreeNode {
             i++;
         }
         return root;
+    }
+
+    public LinkedList<Integer> layer() {
+        LinkedList<TreeNode> q = new LinkedList<>();
+        q.push(this);
+        LinkedList<Integer> result = new LinkedList<>();
+        while (!q.isEmpty()) {
+            TreeNode current = q.pop();
+            if (current != null) {
+                result.add(current.val);
+                q.add(current.left);
+                q.add(current.right);
+            } else {
+                result.add(null);
+            }
+        }
+        while (true) {
+            Integer t = result.pollLast();
+            if (t != null) {
+                result.add(t);
+                break;
+            }
+        }
+        return result;
+    }
+
+    public LinkedList<Integer> pre() {
+        LinkedList<Integer> result = new LinkedList<>();
+        pre(result, this);
+        return result;
+    }
+
+    private static void pre(LinkedList<Integer> result, TreeNode current) {
+        if (current == null) return;
+        result.add(current.val);
+        pre(result, current.left);
+        pre(result, current.right);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof TreeNode)) return false;
+        TreeNode theOther = (TreeNode) obj;
+        return toString().equals(theOther.toString());
+    }
+
+    @Override
+    public String toString() {
+        String t = pre().toString();
+        return t.substring(1, t.length() - 1);
     }
 }

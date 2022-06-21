@@ -4,7 +4,12 @@ import psn.tangdaye.model.ListNode;
 import psn.tangdaye.model.Node;
 import psn.tangdaye.model.TreeNode;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Stack;
 import java.util.stream.Collectors;
 
 public class Offer {
@@ -327,10 +332,10 @@ public class Offer {
      * 剑指 Offer 32 - II. 从上到下打印二叉树 II
      */
     public List<List<Integer>> levelOrder2(TreeNode root) {
-        if (root == null) return List.of();
+        if (root == null) return Collections.emptyList();
         List<List<TreeNode>> treeNodes = new ArrayList<>();
         List<List<Integer>> result = new ArrayList<>();
-        treeNodes.add(List.of(root));
+        treeNodes.add(Collections.singletonList(root));
         int i = 0, layer = 1;
         while (i != layer) {
             List<TreeNode> currentLayer = treeNodes.get(i);
@@ -360,10 +365,10 @@ public class Offer {
      * 剑指 Offer 32 - III. 从上到下打印二叉树 III
      */
     public List<List<Integer>> levelOrder3(TreeNode root) {
-        if (root == null) return List.of();
+        if (root == null) return Collections.emptyList();
         List<List<TreeNode>> treeNodes = new ArrayList<>();
         List<List<Integer>> result = new ArrayList<>();
-        treeNodes.add(List.of(root));
+        treeNodes.add(Collections.singletonList(root));
         int i = 0, layer = 1;
         while (i != layer) {
             List<TreeNode> currentLayer = treeNodes.get(i);
@@ -397,4 +402,11 @@ public class Offer {
         return result;
     }
 
+    /**
+     * 剑指 Offer 26. 树的子结构
+     */
+    public boolean isSubStructure(TreeNode A, TreeNode B) {
+        if (A == null || B == null) return false;
+        return A.toString().contains(B.toString());
+    }
 }

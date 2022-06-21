@@ -7,7 +7,6 @@ import psn.tangdaye.model.Node;
 import psn.tangdaye.model.TreeNode;
 import psn.tangdaye.solutions.Offer;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 
 public class OfferTest {
@@ -140,6 +139,13 @@ public class OfferTest {
         Assert.assertEquals("[1, 2, 3, 4, 5]", Arrays.toString(result));
         Assert.assertEquals("[[1], [2, 3], [4, 5]]", offer.levelOrder2(root).toString());
         Assert.assertEquals("[[1], [3, 2], [4, 5]]", offer.levelOrder3(root).toString());
+        Assert.assertEquals("1, 2, 4, 3, 5", root.toString());
+
+        Integer[] array2 = {4, 2, 3, 4, 5, 6, 7, 8, 9};
+        TreeNode root2 = TreeNode.fromArray(array2);
+        Integer[] array3 = {4, 8, 9};
+        TreeNode root3 = TreeNode.fromArray(array3);
+        Assert.assertTrue(offer.isSubStructure(root2, root3));
     }
 
 }

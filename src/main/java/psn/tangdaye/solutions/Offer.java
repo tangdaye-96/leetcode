@@ -4,6 +4,7 @@ import psn.tangdaye.model.ListNode;
 import psn.tangdaye.model.Node;
 import psn.tangdaye.model.TreeNode;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -406,7 +407,37 @@ public class Offer {
      * 剑指 Offer 26. 树的子结构
      */
     public boolean isSubStructure(TreeNode A, TreeNode B) {
-        if (A == null || B == null) return false;
-        return A.toString().contains(B.toString());
+        return A != null && A.contains(B);
+    }
+
+    /**
+     * 剑指 Offer 27. 二叉树的镜像
+     */
+    public TreeNode mirrorTree(TreeNode root) {
+        if (root == null) return null;
+        return root.mirror();
+    }
+
+    /**
+     * 剑指 Offer 28. 对称的二叉树
+     */
+    public boolean isSymmetric(TreeNode root) {
+        return root == null || root.isSymmetric();
+    }
+
+    /**
+     * 剑指 Offer 10- I. 斐波那契数列
+     */
+    public int fib(int n) {
+        if (n < 2) return n;
+        BigInteger a = new BigInteger("0");
+        BigInteger b = new BigInteger("1");
+        BigInteger c = new BigInteger("1");
+        for (int i = 2; i <= n; i++) {
+            c = a.add(b);
+            a = b;
+            b = c;
+        }
+        return c.mod(new BigInteger("1000000007")).intValue();
     }
 }

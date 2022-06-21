@@ -62,11 +62,39 @@ public class TreeNode {
         return result;
     }
 
-    private static void pre(LinkedList<Integer> result, TreeNode current) {
+    public TreeNode mirror() {
+        TreeNode treeNode = new TreeNode(val);
+        if (left != null) {
+            treeNode.right = left.mirror();
+        }
+        if (right != null) {
+            treeNode.left = right.mirror();
+        }
+        return treeNode;
+    }
+
+    public boolean isSymmetric() {
+        return preDFSReverse(left, right);
+    }
+
+    private void pre(LinkedList<Integer> result, TreeNode current) {
         if (current == null) return;
         result.add(current.val);
         pre(result, current.left);
         pre(result, current.right);
+    }
+
+    private boolean preDFS(TreeNode a, TreeNode b) {
+        if (b == null) return true;
+        if (a == null) return false;
+        return a.val == b.val && preDFS(a.left, b.left) && preDFS(a.right, b.right);
+    }
+
+    private boolean preDFSReverse(TreeNode a, TreeNode b) {
+        if (a == null && b == null) return true;
+        if (a == null) return false;
+        if (b == null) return false;
+        return a.val == b.val && preDFSReverse(a.left, b.right) && preDFSReverse(a.right, b.left);
     }
 
     @Override
@@ -77,8 +105,18 @@ public class TreeNode {
     }
 
     @Override
+    public int hashCode() {
+        return toString().hashCode();
+    }
+
+    @Override
     public String toString() {
         String t = pre().toString();
         return t.substring(1, t.length() - 1);
+    }
+
+    public boolean contains(TreeNode b) {
+        if (b == null) return false;
+        return preDFS(this, b) || (left != null && left.contains(b)) || (right != null && right.contains(b));
     }
 }

@@ -141,11 +141,26 @@ public class OfferTest {
         Assert.assertEquals("[[1], [3, 2], [4, 5]]", offer.levelOrder3(root).toString());
         Assert.assertEquals("1, 2, 4, 3, 5", root.toString());
 
-        Integer[] array2 = {4, 2, 3, 4, 5, 6, 7, 8, 9};
+        Integer[] array2 = {10, 12, 6, 8, 3, 11};
         TreeNode root2 = TreeNode.fromArray(array2);
-        Integer[] array3 = {4, 8, 9};
+        Integer[] array3 = {10, 12, 6, 8};
         TreeNode root3 = TreeNode.fromArray(array3);
         Assert.assertTrue(offer.isSubStructure(root2, root3));
+
+        Integer[] array4 = {4, 2, 7, 1, 3, 6, 9};
+        TreeNode root4 = TreeNode.fromArray(array4);
+        Integer[] array5 = {4, 7, 2, 9, 6, 3, 1};
+        TreeNode root5 = TreeNode.fromArray(array5);
+        Assert.assertEquals(offer.mirrorTree(root4).toString(), root5.toString());
+
+        Integer[] array6 = {1, 2, 2, 3, 4, 4, 3};
+        TreeNode root6 = TreeNode.fromArray(array6);
+        Assert.assertTrue(offer.isSymmetric(root6));
+    }
+
+    @Test
+    public void testFib() {
+        Assert.assertEquals(407059028, offer.fib(95));
     }
 
 }

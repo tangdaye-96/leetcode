@@ -163,4 +163,25 @@ public class OfferTest {
         Assert.assertEquals(407059028, offer.fib(95));
     }
 
+    @Test
+    public void testNumWays() {
+        Assert.assertEquals(21, offer.numWays(7));
+    }
+
+    @Test
+    public void testMaxProfit() {
+        int[] prices1 = {7, 1, 5, 3, 6, 4};
+        int[] prices2 = {7, 6, 4, 3, 1};
+        Assert.assertEquals(5, offer.maxProfit(prices1));
+        Assert.assertEquals(0, offer.maxProfit(prices2));
+    }
+
+    @Test
+    public void testMaxSubArray() {
+        int[] array1 = {-2, 1, -3, 4, -1, 2, 1, -5, 4};
+        int[] array2 = {5, 4, -1, 7, 8};
+        Assert.assertEquals(6, offer.maxSubArray(array1));
+        Assert.assertEquals(23, offer.maxSubArray(array2));
+    }
+
 }

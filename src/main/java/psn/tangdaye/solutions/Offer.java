@@ -440,4 +440,52 @@ public class Offer {
         }
         return c.mod(new BigInteger("1000000007")).intValue();
     }
+
+    /**
+     * 剑指 Offer 10- II. 青蛙跳台阶问题
+     */
+    public int numWays(int n) {
+        if (n == 0) return 1;
+        if (n == 1) return 1;
+        BigInteger a = new BigInteger("1");
+        BigInteger b = new BigInteger("1");
+        BigInteger c = new BigInteger("2");
+        for (int i = 2; i <= n; i++) {
+            c = a.add(b);
+            a = b;
+            b = c;
+        }
+        return c.mod(new BigInteger("1000000007")).intValue();
+    }
+
+    /**
+     * 剑指 Offer 63. 股票的最大利润
+     */
+    public int maxProfit(int[] prices) {
+        if (prices.length == 0) return 0;
+        int[] dp = new int[prices.length];
+        dp[0] = 0;
+        int min = prices[0];
+        for (int i = 1; i < prices.length; i++) {
+            int price = prices[i];
+            int thisMax = price - min;
+            dp[i] = Math.max(thisMax, dp[i - 1]);
+            min = Math.min(min, price);
+        }
+        return dp[prices.length - 1];
+    }
+
+    /**
+     * 剑指 Offer 42. 连续子数组的最大和
+     */
+    public int maxSubArray(int[] nums) {
+        int[] dp = new int[nums.length];
+        dp[0] = nums[0];
+        int max = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            dp[i] = dp[i - 1] < 0 ? nums[i] : dp[i - 1] + nums[i];
+            max = Math.max(max, dp[i]);
+        }
+        return max;
+    }
 }

@@ -5,18 +5,14 @@ import psn.tangdaye.model.Node;
 import psn.tangdaye.model.TreeNode;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Offer {
 
     /**
      * 剑指 Offer 09. 用两个栈实现队列
+     * 看了答案
      */
     public static class CQueue {
         private final Stack<Integer> input = new Stack<>();
@@ -479,7 +475,7 @@ public class Offer {
      * 剑指 Offer 42. 连续子数组的最大和
      */
     public int maxSubArray(int[] nums) {
-        int[] dp = new int[nums.length];
+        int[] dp = new int[nums.length]; // 包含自身的最大连续子数组和
         dp[0] = nums[0];
         int max = nums[0];
         for (int i = 1; i < nums.length; i++) {
@@ -487,5 +483,203 @@ public class Offer {
             max = Math.max(max, dp[i]);
         }
         return max;
+    }
+
+
+    /**
+     * 剑指 Offer 47. 礼物的最大价值
+     */
+    public int maxValue(int[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+        int[][] dp = new int[m][n];
+        dp[0][0] = grid[0][0];
+        for (int i = 1; i < n; i++) {
+            dp[0][i] = dp[0][i - 1] + grid[0][i];
+        }
+        for (int i = 1; i < m; i++) {
+            dp[i][0] = dp[i - 1][0] + grid[i][0];
+        }
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
+                dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]) + grid[i][j];
+            }
+        }
+        return dp[m - 1][n - 1];
+    }
+
+    /**
+     * 剑指 Offer 46. 把数字翻译成字符串
+     */
+    public int translateNum(int num) {
+        if (num <= 9) return 1;
+        String str = String.valueOf(num);
+        int[] dp = new int[str.length()];
+        dp[0] = 1;
+        dp[1] = str.charAt(0) == '1' || (str.charAt(0) == '2' && str.charAt(1) <= '5') ? 2 : 1;
+        for (int i = 2; i < str.length(); i++) {
+            dp[i] = dp[i - 1];
+            if (str.charAt(i - 1) == '1' || (str.charAt(i - 1) == '2' && str.charAt(i) <= '5')) {
+                dp[i] = dp[i - 1] + dp[i - 2];
+            }
+        }
+        return dp[str.length() - 1];
+    }
+
+    /**
+     * 剑指 Offer 48. 最长不含重复字符的子字符串
+     * 看了答案
+     */
+    public int lengthOfLongestSubstring(String s) {
+        if (s.length() == 0) return 0;
+        Set<Character> characters = new HashSet<>();
+        characters.add(s.charAt(0));
+        int i = 0, j = 1;
+        int max = Integer.MIN_VALUE;
+        while (i < s.length() && j < s.length()) {
+            while (j < s.length()) {
+                char c = s.charAt(j);
+                if (characters.contains(c)) {
+                    break;
+                }
+                characters.add(c);
+                j++;
+            }
+            max = Math.max(max, j - i);
+            characters.remove(s.charAt(i));
+            i++;
+        }
+        return max;
+    }
+
+    /**
+     * 剑指 Offer 18. 删除链表的节点
+     */
+    public ListNode deleteNode(ListNode head, int val) {
+        if (head == null) return null;
+        if (head.val == val) return head.next;
+        ListNode current = head;
+        while (current != null) {
+            if (current.next == null) return head;
+            if (current.next.val == val) {
+                current.next = current.next.next;
+            }
+            current = current.next;
+        }
+        return head;
+    }
+
+    /**
+     * 剑指 Offer 22. 链表中倒数第k个节点
+     */
+    public ListNode getKthFromEnd(ListNode head, int k) {
+        ListNode kthNode = head;
+        for (int i = 0; i < k; i++) {
+            kthNode = kthNode.next;
+        }
+        ListNode current = head;
+        while (kthNode != null) {
+            current = current.next;
+            kthNode = kthNode.next;
+        }
+        return current;
+    }
+
+    /**
+     * 剑指 Offer 25. 合并两个排序的链表
+     */
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+        ListNode n1 = l1;
+        ListNode n2 = l2;
+        ListNode head = new ListNode(Integer.MIN_VALUE);
+        ListNode current = head;
+        while (n1 != null && n2 != null) {
+            if (n1.val <= n2.val) {
+                current.next = new ListNode(n1.val);
+                n1 = n1.next;
+            } else {
+                current.next = new ListNode(n2.val);
+                n2 = n2.next;
+            }
+            current = current.next;
+        }
+        while (n1 != null) {
+            current.next = new ListNode(n1.val);
+            n1 = n1.next;
+            current = current.next;
+        }
+        while (n2 != null) {
+            current.next = new ListNode(n2.val);
+            n2 = n2.next;
+            current = current.next;
+        }
+        return head.next;
+    }
+
+    /**
+     * 剑指 Offer 52. 两个链表的第一个公共节点
+     * 看了答案
+     */
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        if (headA == null || headB == null) return null;
+        ListNode a = headA;
+        ListNode b = headB;
+        while (true) {
+            if (a == b) return a;
+            if (a != null && b != null) {
+                a = a.next;
+                b = b.next;
+            } else if (a == null) {
+                a = headB;
+            } else {
+                b = headA;
+            }
+        }
+    }
+
+    /**
+     * 剑指 Offer 21. 调整数组顺序使奇数位于偶数前面
+     */
+    public int[] exchange(int[] nums) {
+        int i = 0, n = nums.length - 1;
+        while (i < n) {
+            int t = nums[i];
+            if (t % 2 == 0) {
+                nums[i] = nums[n];
+                nums[n] = t;
+                n--;
+            } else {
+                i++;
+            }
+        }
+        return nums;
+    }
+
+    /**
+     * 剑指 Offer 57. 和为s的两个数字
+     */
+    public int[] twoSum(int[] nums, int target) {
+        int i = 0, j = nums.length - 1;
+        while (i < j) {
+            int sum = nums[i] + nums[j];
+            if (sum == target) {
+                int[] result = new int[2];
+                result[0] = nums[i];
+                result[1] = nums[j];
+                return result;
+            } else if (sum < target) {
+                i++;
+            } else {
+                j--;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 剑指 Offer 58 - I. 翻转单词顺序
+     */
+    public String reverseWords(String s) {
+        return null;
     }
 }

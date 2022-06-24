@@ -14,6 +14,17 @@ public class ListNode {
         return this.next;
     }
 
+    public static ListNode fromArray(int[] array) {
+        if (array.length == 0) return null;
+        ListNode head = new ListNode(array[0]);
+        ListNode current = head;
+        for (int i = 1; i < array.length; i++) {
+            current.next = new ListNode(array[i]);
+            current = current.next;
+        }
+        return head;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

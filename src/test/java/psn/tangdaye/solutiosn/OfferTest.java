@@ -184,4 +184,66 @@ public class OfferTest {
         Assert.assertEquals(23, offer.maxSubArray(array2));
     }
 
+    @Test
+    public void testMaxValue() {
+        int[][] grid = {{1, 3, 1}, {1, 5, 1}, {4, 2, 1}};
+        Assert.assertEquals(12, offer.maxValue(grid));
+    }
+
+    @Test
+    public void testTranslateNum() {
+        int num = 12258;
+        Assert.assertEquals(5, offer.translateNum(num));
+    }
+
+    @Test
+    public void testLengthOfLongestSubstring() {
+        String s = "advertisement";
+        Assert.assertEquals(8, offer.lengthOfLongestSubstring(s));
+    }
+
+    @Test
+    public void testDeleteNode() {
+        int[] array = {4, 5, 1, 2, 3};
+        ListNode head = ListNode.fromArray(array);
+        Assert.assertEquals("[4, 5, 1, 2]", offer.deleteNode(head, 3).toString());
+    }
+
+    @Test
+    public void testGetKthFromEnd() {
+        int[] array = {4, 5, 1, 2, 3};
+        ListNode head = ListNode.fromArray(array);
+        Assert.assertEquals("[3]", offer.getKthFromEnd(head, 1).toString());
+    }
+
+    @Test
+    public void testMergeTwoLists() {
+        int[] array1 = {1, 2, 4};
+        int[] array2 = {1, 3, 4};
+        ListNode l1 = ListNode.fromArray(array1);
+        ListNode l2 = ListNode.fromArray(array2);
+        Assert.assertEquals("[1, 1, 2, 3, 4, 4]", offer.mergeTwoLists(l1, l2).toString());
+    }
+
+    @Test
+    public void testGetIntersectionNode() {
+        int[] array = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+        ListNode l1 = ListNode.fromArray(array);
+        ListNode l2 = new ListNode(99);
+        l2.next = l1.next.next.next;
+        Assert.assertEquals("[4, 5, 6, 7, 8, 9]", offer.getIntersectionNode(l1, l2).toString());
+    }
+
+    @Test
+    public void testExchange() {
+        int[] array = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+        Assert.assertEquals("[1, 9, 3, 7, 5, 6, 8, 4, 2]", Arrays.toString(offer.exchange(array)));
+    }
+
+    @Test
+    public void testTwoSum() {
+        int[] array = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+        Assert.assertEquals("[1, 9]", Arrays.toString(offer.twoSum(array, 10)));
+    }
+
 }

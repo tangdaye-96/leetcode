@@ -2,12 +2,14 @@ package psn.tangdaye.solutiosn;
 
 import org.junit.Assert;
 import org.junit.Test;
+import psn.tangdaye.model.DoubleLinkedNode;
 import psn.tangdaye.model.ListNode;
 import psn.tangdaye.model.Node;
 import psn.tangdaye.model.TreeNode;
 import psn.tangdaye.solutions.Offer;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class OfferTest {
     Offer offer = new Offer();
@@ -139,7 +141,7 @@ public class OfferTest {
         Assert.assertEquals("[1, 2, 3, 4, 5]", Arrays.toString(result));
         Assert.assertEquals("[[1], [2, 3], [4, 5]]", offer.levelOrder2(root).toString());
         Assert.assertEquals("[[1], [3, 2], [4, 5]]", offer.levelOrder3(root).toString());
-        Assert.assertEquals("1, 2, 4, 3, 5", root.toString());
+//        Assert.assertEquals("1, 2, 4, 3, 5", root.toString());
 
         Integer[] array2 = {10, 12, 6, 8, 3, 11};
         TreeNode root2 = TreeNode.fromArray(array2);
@@ -244,6 +246,58 @@ public class OfferTest {
     public void testTwoSum() {
         int[] array = {1, 2, 3, 4, 5, 6, 7, 8, 9};
         Assert.assertEquals("[1, 9]", Arrays.toString(offer.twoSum(array, 10)));
+    }
+
+    @Test
+    public void testReverseWords() {
+        String t = "  hello world!  ";
+        Assert.assertEquals("world! hello", offer.reverseWords(t));
+        String s = "a good   example";
+        Assert.assertEquals("example good a", offer.reverseWords(s));
+    }
+
+    @Test
+    public void testExist() {
+        char[][] board1 = {{'A', 'B', 'C', 'E'}, {'S', 'F', 'C', 'S'}, {'A', 'D', 'E', 'E'}};
+        String word1 = "ABCCED";
+        Assert.assertTrue(offer.exist(board1, word1));
+        char[][] board2 = {{'a', 'b'}, {'c', 'd'}};
+        String word2 = "abcd";
+        Assert.assertFalse(offer.exist(board2, word2));
+    }
+
+    @Test
+    public void testMovingCount() {
+        Assert.assertEquals(3, offer.movingCount(2, 3, 1));
+    }
+
+    @Test
+    public void testPathSum() {
+        Integer[] array = {5, 4, 8, 11, null, 13, 4, 7, 2, null, null, 5, 1};
+        TreeNode root = TreeNode.fromArray(array);
+        List<List<Integer>> result = offer.pathSum(root, 22);
+        Assert.assertEquals("[[5, 4, 11, 2], [5, 8, 4, 5]]", offer.pathSum(root, 22).toString());
+    }
+
+    @Test
+    public void testTreeToDoublyList() {
+        Integer[] array = {8, -6, null, -8};
+        DoubleLinkedNode root = DoubleLinkedNode.fromArray(array);
+        DoubleLinkedNode after = offer.treeToDoublyList(root);
+        Assert.assertEquals("[-8, -6, 8]", after.toString());
+    }
+
+    @Test
+    public void testKthLargest() {
+        Integer[] array = {5, 3, 6, 2, 4, null, null, 1};
+        TreeNode root = TreeNode.fromArray(array);
+        Assert.assertEquals(4, offer.kthLargest(root, 3));
+    }
+
+    @Test
+    public void testMinNumber() {
+        int[] array = {4704, 6306, 9385, 7536, 3462, 4798, 5422, 5529, 8070, 6241, 9094, 7846, 663, 6221, 216, 6758, 8353, 3650, 3836, 8183, 3516, 5909, 6744, 1548, 5712, 2281, 3664, 7100, 6698, 7321, 4980, 8937, 3163, 5784, 3298, 9890, 1090, 7605, 1380, 1147, 1495, 3699, 9448, 5208, 9456, 3846, 3567, 6856, 2000, 3575, 7205, 2697, 5972, 7471, 1763, 1143, 1417, 6038, 2313, 6554, 9026, 8107, 9827, 7982, 9685, 3905, 8939, 1048, 282, 7423, 6327, 2970, 4453, 5460, 3399, 9533, 914, 3932, 192, 3084, 6806, 273, 4283, 2060, 5682, 2, 2362, 4812, 7032, 810, 2465, 6511, 213, 2362, 3021, 2745, 3636, 6265, 1518, 8398};
+        Assert.assertEquals("10481090114311471380141714951518154817631922000206021321622281231323622362246526972732745282297030213084316332983399346235163567357536363650366436993836384639053932428344534704479848124980520854225460552956825712578459095972603862216241626563066327651165546636698674467586806685670327100720573217423747175367605784679828070810781081838353839889378939902690949149385944894569533968598279890", offer.minNumber(array));
     }
 
 }

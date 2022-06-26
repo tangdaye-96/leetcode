@@ -1,5 +1,6 @@
 package psn.tangdaye.model;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class TreeNode {
@@ -60,6 +61,19 @@ public class TreeNode {
         LinkedList<Integer> result = new LinkedList<>();
         pre(result, this);
         return result;
+    }
+
+    public ArrayList<Integer> middle() {
+        ArrayList<Integer> result = new ArrayList<>();
+        middle(result, this);
+        return result;
+    }
+
+    private void middle(ArrayList<Integer> result, TreeNode current) {
+        if (current == null) return;
+        middle(result, current.left);
+        result.add(current.val);
+        middle(result, current.right);
     }
 
     public TreeNode mirror() {

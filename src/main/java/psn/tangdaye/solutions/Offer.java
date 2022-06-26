@@ -1,5 +1,6 @@
 package psn.tangdaye.solutions;
 
+import psn.tangdaye.model.DoubleLinkedNode;
 import psn.tangdaye.model.ListNode;
 import psn.tangdaye.model.Node;
 import psn.tangdaye.model.TreeNode;
@@ -680,6 +681,183 @@ public class Offer {
      * 剑指 Offer 58 - I. 翻转单词顺序
      */
     public String reverseWords(String s) {
-        return null;
+        s = s.trim();
+        List<String> wordList = Arrays.asList(s.split("\\s+"));
+        Collections.reverse(wordList);
+        return String.join(" ", wordList);
+    }
+
+    /**
+     * 剑指 Offer 12. 矩阵中的路径
+     * 看了答案
+     */
+    public boolean exist(char[][] board, String word) {
+        boolean[][] used = new boolean[board.length][board[0].length];
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                if (check(board, i, j, 0, word, used)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean check(char[][] board, int i, int j, int k, String word, boolean[][] used) {
+        if (board[i][j] != word.charAt(k)) return false;
+        if (k == word.length() - 1) return true;
+        used[i][j] = true;
+        int[][] directions = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+        boolean result = false;
+        for (int[] dir : directions) {
+            int s = i + dir[0], t = j + dir[1];
+            if (s >= 0 && s < board.length && t >= 0 && t < board[0].length) {
+                if (!used[s][t]) {
+                    boolean flag = check(board, s, t, k + 1, word, used);
+                    if (flag) {
+                        result = true;
+                        break;
+                    }
+                }
+            }
+        }
+        used[i][j] = false;
+        return result;
+    }
+
+    /**
+     * 剑指 Offer 13. 机器人的运动范围
+     */
+    public int movingCount(int m, int n, int k) {
+        List<int[]> candidates = new ArrayList<>();
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (i / 100 + (i % 100) / 10 + i % 10 + j / 100 + (j % 100) / 10 + j % 10 <= k) {
+                    candidates.add(new int[]{i, j});
+                }
+            }
+        }
+        Set<String> done = new HashSet<>();
+        done.add("0,0");
+        int[][] directions = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+        for (int h = 1; h < candidates.size(); h++) {
+            int[] candidate = candidates.get(h);
+            int i = candidate[0];
+            int j = candidate[1];
+            for (int[] dir : directions) {
+                int s = i + dir[0], t = j + dir[1];
+                if (s >= 0 && s < m && t >= 0 && t < n && done.contains(s + "," + t)) {
+                    done.add(i + "," + j);
+                }
+            }
+        }
+        return done.size();
+    }
+
+
+    /**
+     * 剑指 Offer 34. 二叉树中和为某一值的路径
+     */
+    public List<List<Integer>> pathSum(TreeNode root, int target) {
+        List<LinkedList<Integer>> r = subPathSum(root, target);
+        return new ArrayList<>(r);
+    }
+
+    public List<LinkedList<Integer>> subPathSum(TreeNode root, int target) {
+        if (root == null) {
+            return Collections.emptyList();
+        }
+        if (root.left == null && root.right == null) {
+            if (root.val == target) {
+                return List.of(new LinkedList<>() {{
+                    add(root.val);
+                }});
+            } else return Collections.emptyList();
+        }
+        List<LinkedList<Integer>> result = new ArrayList<>();
+        List<LinkedList<Integer>> l = subPathSum(root.left, target - root.val);
+        List<LinkedList<Integer>> r = subPathSum(root.right, target - root.val);
+        for (LinkedList<Integer> a : l) {
+            a.push(root.val);
+            result.add(a);
+        }
+        for (LinkedList<Integer> a : r) {
+            a.push(root.val);
+            result.add(a);
+        }
+        return result;
+    }
+
+    /**
+     * 剑指 Offer 36. 二叉搜索树与双向链表
+     */
+    public DoubleLinkedNode treeToDoublyList(DoubleLinkedNode root) {
+        if (root == null) return null;
+        DoubleLinkedNode l = treeToDoublyList(root.left);
+        DoubleLinkedNode r = treeToDoublyList(root.right);
+        DoubleLinkedNode lEnd;
+        DoubleLinkedNode rEnd;
+        if (l == null && r == null) {
+            root.left = root;
+            root.right = root;
+            return root;
+        }
+        if (l == null) {
+            rEnd = r.left;
+            root.right = r;
+            r.left = root;
+            rEnd.right = root;
+            root.left = rEnd;
+            return root;
+        }
+        if (r == null) {
+            lEnd = l.left;
+            lEnd.right = root;
+            root.left = lEnd;
+            root.right = l;
+            l.left = root;
+            return l;
+        }
+        lEnd = l.left;
+        rEnd = r.left;
+        // 左节点的终点的right是root
+        lEnd.right = root;
+        root.left = lEnd;
+        // 右节点的起点的left是root
+        r.left = root;
+        root.right = r;
+        // 右节点的终点的right是左节点
+        rEnd.right = l;
+        l.left = rEnd;
+
+        return l;
+    }
+
+    /**
+     * 剑指 Offer 54. 二叉搜索树的第k大节点
+     */
+    public int kthLargest(TreeNode root, int k) {
+        ArrayList<Integer> list = root.middle();
+        return list.get(list.size() - k);
+    }
+
+    /**
+     * 剑指 Offer 45. 把数组排成最小的数
+     */
+    public String minNumber(int[] nums) {
+        String[] array = new String[nums.length];
+        for (int i = 0; i < nums.length; i++) {
+            array[i] = String.valueOf(nums[i]);
+        }
+        Arrays.sort(array, (left, right) -> {
+            int i = 0;
+            while (i < left.length() && i < right.length()) {
+                if (left.charAt(i) < right.charAt(i)) return -1;
+                if (left.charAt(i) > right.charAt(i)) return 1;
+                i++;
+            }
+            return (left + right).compareTo(right + left);
+        });
+        return String.join("", array);
     }
 }

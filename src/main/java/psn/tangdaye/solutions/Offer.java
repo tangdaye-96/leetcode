@@ -860,4 +860,72 @@ public class Offer {
         });
         return String.join("", array);
     }
+
+    /**
+     * 剑指 Offer 61. 扑克牌中的顺子
+     */
+    public boolean isStraight(int[] nums) {
+        Arrays.sort(nums);
+        int i = 0;
+        while (nums[i] == 0) i++;
+        for (int k = i; k < nums.length - 1; k++) {
+            int t = nums[k];
+            int n = nums[k + 1];
+            if (t == n) return false;
+            if (i - (n - t - 1) >= 0) {
+                i -= (n - t - 1);
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 面试题40. 最小的k个数
+     */
+    public int[] getLeastNumbers(int[] arr, int k) {
+        int[] result = new int[k];
+        System.arraycopy(arr, 0, result, 0, k);
+        PriorityQueue<Integer> maxHeap = new PriorityQueue<>(k + 1, Collections.reverseOrder());
+        for (int i : result) maxHeap.add(i);
+        for (int i = k; i < arr.length; i++) {
+            if (!maxHeap.isEmpty() && arr[i] < maxHeap.peek()) {
+                maxHeap.add(arr[i]);
+                maxHeap.poll();
+            }
+        }
+        for (int i = 0; i < arr.length && !maxHeap.isEmpty(); i++) {
+            result[i] = maxHeap.poll();
+        }
+        return result;
+    }
+
+    /**
+     * 剑指 Offer 41. 数据流中的中位数
+     * 优化：大堆 + 小堆
+     */
+    public static class MedianFinder {
+        private final LinkedList<Integer> list;
+
+        public MedianFinder() {
+            list = new LinkedList<>();
+        }
+
+        public void addNum(int num) {
+            int index = Collections.binarySearch(list, num);
+            if (index < 0) index = -index - 1;
+            list.add(index, num);
+        }
+
+        public double findMedian() {
+            if (list.size() % 2 == 0) {
+                int index = list.size() / 2 - 1;
+                return ((double) list.get(index) + list.get(index + 1)) / 2;
+            }
+            int index = list.size() / 2;
+            return list.get(index);
+        }
+    }
+
 }

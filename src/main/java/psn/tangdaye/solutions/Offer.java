@@ -928,4 +928,78 @@ public class Offer {
         }
     }
 
+    /**
+     * 104. 二叉树的最大深度
+     */
+    public int maxDepth(TreeNode root) {
+        if (root == null) return 0;
+        return Math.max(maxDepth(root.left), maxDepth(root.right)) + 1;
+    }
+
+    /**
+     * 剑指 Offer 55 - II. 平衡二叉树
+     */
+    public boolean isBalanced(TreeNode root) {
+        return depth(root) != -1;
+    }
+
+    public int depth(TreeNode current) {
+        if (current == null) return 0;
+        int left = depth(current.left);
+        if (left == -1) return -1;
+        int right = depth(current.right);
+        if (right == -1) return -1;
+        return Math.abs(left - right) < 2 ? Math.max(left, right) + 1 : -1;
+    }
+
+    /**
+     * 剑指 Offer 64. 求1+2+…+n
+     * 看了一下短路思路
+     */
+    public int sumNums(int n) {
+        return (square(n) + n) >> 1;
+    }
+
+    private int square(int a) {
+        int o = 0;
+        o += square(a, 0);
+        o += square(a, 1);
+        o += square(a, 2);
+        o += square(a, 3);
+        o += square(a, 4);
+        o += square(a, 5);
+        o += square(a, 6);
+        o += square(a, 7);
+        o += square(a, 8);
+        o += square(a, 9);
+        o += square(a, 10);
+        o += square(a, 11);
+        o += square(a, 12);
+        o += square(a, 13);
+        o += square(a, 14);
+        o += square(a, 15);
+        o += square(a, 16);
+        o += square(a, 17);
+        o += square(a, 18);
+        o += square(a, 19);
+        o += square(a, 20);
+        o += square(a, 21);
+        o += square(a, 22);
+        o += square(a, 23);
+        o += square(a, 24);
+        o += square(a, 25);
+        o += square(a, 26);
+        o += square(a, 27);
+        o += square(a, 28);
+        o += square(a, 29);
+        o += square(a, 30);
+        o += square(a, 31);
+        return o;
+    }
+
+    private int square(int a, int i) {
+        int o = 0;
+        boolean k = (a & (1 << i)) > 0 && (o += a << i) >= 0;
+        return o;
+    }
 }

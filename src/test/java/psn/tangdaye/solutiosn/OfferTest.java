@@ -339,4 +339,24 @@ public class OfferTest {
         Assert.assertEquals("[null,null,6.00000,null,8.00000,null,6.00000,null,6.00000,null,6.00000,null,5.50000,null,6.00000,null,5.50000,null,5.00000,null,4.00000,null,3.00000]", sb.substring(0, sb.length() - 1) + "]");
     }
 
+
+    @Test
+    public void testMaxDepth() {
+        Integer[] array = {3, 9, 20, null, null, 15, 7};
+        TreeNode root = TreeNode.fromArray(array);
+        Assert.assertEquals(3, offer.maxDepth(root));
+    }
+
+    @Test
+    public void testIsBalanced() {
+        Integer[] array = {1, 2, 2, 3, 3, null, null, 4, 4};
+        TreeNode root = TreeNode.fromArray(array);
+        Assert.assertFalse(offer.isBalanced(root));
+    }
+
+    @Test
+    public void testSumNums() {
+        Assert.assertEquals(45, offer.sumNums(9));
+    }
+
 }

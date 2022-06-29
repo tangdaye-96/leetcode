@@ -11,6 +11,7 @@ import psn.tangdaye.solutions.Offer;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public class OfferTest {
     Offer offer = new Offer();
@@ -377,6 +378,29 @@ public class OfferTest {
         int[] inorder = {4, 2, 5, 1, 3, 7};
         TreeNode root = offer.buildTree(preorder, inorder);
         Assert.assertEquals("[1, 2, 3, 4, 5, null, 7]", root.layer().toString());
+    }
+
+    @Test
+    public void testMyPow() {
+        double x = 2.00000;
+        int n = -2147483648;
+        Assert.assertEquals(Math.pow(x, n), offer.myPow(x, n), 0.0);
+    }
+
+    @Test
+    public void testVerifyPostorder() {
+        int[] array = {4, 8, 6, 12, 16, 14, 10};
+        Assert.assertTrue(offer.verifyPostorder(array));
+    }
+
+    @Test
+    public void testHammingWeight() {
+        Assert.assertEquals(31, offer.hammingWeight(-3));
+    }
+
+    @Test
+    public void testAdd() {
+        Assert.assertEquals(18, offer.add(10, 8));
     }
 
 }

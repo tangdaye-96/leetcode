@@ -1065,4 +1065,87 @@ public class Offer {
         root.right = buildTree(preorder, preRightIndex, j, inorder, inorderMap, inRootIndex + 1, t);
         return root;
     }
+
+    /**
+     * 剑指 Offer 16. 数值的整数次方
+     */
+    public double myPow(double x, int n) {
+        if (n == 0) return 1;
+        if (Integer.MIN_VALUE < n && n < 0) return 1.0 / myPow(x, -n);
+        if (Integer.MIN_VALUE == n) {
+            if (x == 1 || x == -1) return 1;
+            return 0.0;
+        }
+        if (n % 2 == 0) {
+            double y = myPow(x, n / 2);
+            return y * y;
+        } else {
+            double y = myPow(x, (n - 1) / 2);
+            return y * y * x;
+        }
+    }
+
+    /**
+     * 剑指 Offer 33. 二叉搜索树的后序遍历序列
+     */
+    public boolean verifyPostorder(int[] postorder) {
+        return verifyPostorder(postorder, 0, postorder.length - 1, 0, 0);
+    }
+
+    public boolean verifyPostorder(int[] postorder, int low, int high, int flag, int parent) {
+        if (low >= high) return true;
+        int root = postorder[high];
+        int leftIndex = low - 1;
+        boolean set = false;
+        for (int i = high; i >= low; i--) {
+            if (flag == 1 && postorder[i] <= parent) return false;
+            if (flag == -1 && postorder[i] >= parent) return false;
+            if (postorder[i] < root && !set) {
+                leftIndex = i;
+                set = true;
+            }
+        }
+
+        return verifyPostorder(postorder, low, leftIndex, -1, root) && verifyPostorder(postorder, leftIndex + 1, high - 1, 1, root);
+    }
+
+    /**
+     * 剑指 Offer 15. 二进制中1的个数
+     */
+    public int hammingWeight(int n) {
+        int count = 0;
+        for (int i = 0; i < 32; i++) {
+            if ((n & (1 << i)) != 0) count += 1;
+        }
+        return count;
+    }
+
+    /**
+     * 剑指 Offer 65. 不用加减乘除做加法
+     */
+    public int add(int a, int b) {
+        int[] x = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31};
+        int sum = 0;
+        boolean r = false;
+        for (int i : x) {
+            int t = 1 << i;
+            int ta = a & t;
+            int tb = b & t;
+            if (ta == t && tb == t) {
+                if (r) {
+                    sum |= t;
+                } else r = true;
+            } else if (ta == t || tb == t) {
+                if (!r) {
+                    sum |= t;
+                }
+            } else {
+                if (r) {
+                    sum |= t;
+                }
+                r = false;
+            }
+        }
+        return sum;
+    }
 }

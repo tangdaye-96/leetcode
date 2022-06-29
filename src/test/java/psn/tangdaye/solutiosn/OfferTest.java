@@ -359,4 +359,24 @@ public class OfferTest {
         Assert.assertEquals(45, offer.sumNums(9));
     }
 
+    @Test
+    public void testLowestCommonAncestor() {
+        Integer[] array = {3, 5, 1, 6, 2, 0, 8, null, null, 7, 4};
+        TreeNode root = TreeNode.fromArray(array);
+        TreeNode p = root.left;
+        TreeNode q = root.right;
+        Assert.assertEquals(root, offer.lowestCommonAncestor(root, p, q));
+    }
+
+    /**
+     * 剑指 Offer 07. 重建二叉树
+     */
+    @Test
+    public void testBuildTree() {
+        int[] preorder = {1, 2, 4, 5, 3, 7};
+        int[] inorder = {4, 2, 5, 1, 3, 7};
+        TreeNode root = offer.buildTree(preorder, inorder);
+        Assert.assertEquals("[1, 2, 3, 4, 5, null, 7]", root.layer().toString());
+    }
+
 }

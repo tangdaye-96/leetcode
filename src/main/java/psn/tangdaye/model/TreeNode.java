@@ -112,18 +112,6 @@ public class TreeNode {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (!(obj instanceof TreeNode)) return false;
-        TreeNode theOther = (TreeNode) obj;
-        return toString().equals(theOther.toString());
-    }
-
-    @Override
-    public int hashCode() {
-        return toString().hashCode();
-    }
-
-    @Override
     public String toString() {
         String t = pre().toString();
         return t.substring(1, t.length() - 1);

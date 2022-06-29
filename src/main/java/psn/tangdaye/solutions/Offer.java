@@ -1002,4 +1002,67 @@ public class Offer {
         boolean k = (a & (1 << i)) > 0 && (o += a << i) >= 0;
         return o;
     }
+
+    /**
+     * 剑指 Offer 68 - II. 二叉树的最近公共祖先
+     */
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        Map<TreeNode, TreeNode> parentMap = new HashMap<>();
+        parentMap.put(root, null);
+        genParentMap(root, parentMap);
+
+        List<TreeNode> pAncestors = new ArrayList<>();
+        List<TreeNode> qAncestors = new ArrayList<>();
+        TreeNode pAncestor = p;
+        while (pAncestor != null) {
+            pAncestors.add(pAncestor);
+            pAncestor = parentMap.get(pAncestor);
+        }
+
+        TreeNode qAncestor = q;
+        while (qAncestor != null) {
+            qAncestors.add(qAncestor);
+            qAncestor = parentMap.get(qAncestor);
+        }
+
+        for (TreeNode i : pAncestors) {
+            if (qAncestors.contains(i)) return i;
+        }
+        return null;
+    }
+
+    private void genParentMap(TreeNode current, Map<TreeNode, TreeNode> parentMap) {
+        if (current == null) return;
+        if (current.left != null) {
+            parentMap.put(current.left, current);
+        }
+        if (current.right != null) {
+            parentMap.put(current.right, current);
+        }
+        genParentMap(current.left, parentMap);
+        genParentMap(current.right, parentMap);
+    }
+
+    /**
+     * 剑指 Offer 07. 重建二叉树
+     */
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        Map<Integer, Integer> inorderMap = new HashMap<>();
+        for (int i = 0; i < inorder.length; i++) {
+            inorderMap.put(inorder[i], i);
+        }
+        return buildTree(preorder, 0, preorder.length - 1, inorder, inorderMap, 0, inorder.length - 1);
+    }
+
+    private TreeNode buildTree(int[] preorder, int i, int j, int[] inorder, Map<Integer, Integer> inorderMap, int s, int t) {
+        if (i > j || s > t || i < 0 || j >= preorder.length || s < 0 || t >= inorder.length) {
+            return null;
+        }
+        TreeNode root = new TreeNode(preorder[i]);
+        int inRootIndex = inorderMap.get(root.val);
+        int preRightIndex = inRootIndex - s + i + 1;
+        root.left = buildTree(preorder, i + 1, preRightIndex - 1, inorder, inorderMap, s, inRootIndex - 1);
+        root.right = buildTree(preorder, preRightIndex, j, inorder, inorderMap, inRootIndex + 1, t);
+        return root;
+    }
 }

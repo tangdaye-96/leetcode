@@ -403,4 +403,19 @@ public class OfferTest {
         Assert.assertEquals(18, offer.add(10, 8));
     }
 
+    @Test
+    public void testSingleNumbers() {
+        int[] array = {1, 3, 1, 3, 1998, 1996};
+        Assert.assertEquals("[1996, 1998]", Arrays.toString(offer.singleNumbers(array)));
+
+        int[] array2 = {1, 3, 1, 3, 1, 3, 1996};
+        Assert.assertEquals(1996, offer.singleNumber(array2));
+    }
+
+    @Test
+    public void testMajorityElement() {
+        int[] array = {1, 2, 3, 2, 2, 2, 5, 4, 2};
+        Assert.assertEquals(2, offer.majorityElement(array));
+    }
+
 }

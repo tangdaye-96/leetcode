@@ -1148,4 +1148,79 @@ public class Offer {
         }
         return sum;
     }
+
+    /**
+     * 剑指 Offer 56 - I. 数组中数字出现的次数
+     * 想到了xy，没想到分组
+     */
+    public int[] singleNumbers(int[] nums) {
+        int xy = 0;
+        for (int i : nums) {
+            xy ^= i;
+        }
+        int x = xy;
+        int t = 0;
+        while (0 == ((xy >> t) & 1)) t++;
+        for (int i : nums) {
+            if (1 == ((i >> t) & 1)) x ^= i;
+        }
+        int[] result = new int[2];
+        result[0] = x;
+        result[1] = x ^ xy;
+        return result;
+    }
+
+    /**
+     * 剑指 Offer 56 - II. 数组中数字出现的次数 II
+     */
+    public int singleNumber(int[] nums) {
+        int x = 0;
+        for (int k = 0; k < 32; k++) {
+            boolean f1 = false;
+            boolean f2 = false;
+            for (int i : nums) {
+                if (((i >> k) & 1) == 1) {
+                    if (!f1 && !f2) {
+                        f2 = true;
+                    } else if (!f1) {
+                        f1 = true;
+                        f2 = false;
+                    } else {
+                        f1 = false;
+                    }
+                }
+            }
+            if (f2) {
+                x |= (1 << k);
+            }
+        }
+        return x;
+    }
+
+    /**
+     * 剑指 Offer 39. 数组中出现次数超过一半的数字
+     * 这个精巧的思路参考了答案
+     */
+    public int majorityElement(int[] nums) {
+        int x = 0;
+        int votes = 0;
+        for (int i : nums) {
+            if (votes == 0) x = i;
+            votes += x == i ? 1 : -1;
+        }
+        return x;
+    }
+
+    /**
+     * 剑指 Offer 66. 构建乘积数组
+     */
+    public int[] constructArr(int[] a) {
+        int[] b = new int[a.length];
+        b[0] = 1;
+        for (int i = 1; i < a.length; i++) {
+            b[0] *= a[i];
+        }
+
+        return b;
+    }
 }

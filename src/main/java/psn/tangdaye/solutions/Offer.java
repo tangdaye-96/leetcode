@@ -1213,14 +1213,364 @@ public class Offer {
 
     /**
      * 剑指 Offer 66. 构建乘积数组
+     * 参考了答案
      */
     public int[] constructArr(int[] a) {
-        int[] b = new int[a.length];
-        b[0] = 1;
-        for (int i = 1; i < a.length; i++) {
-            b[0] *= a[i];
+        int n = a.length;
+        if (n == 0) return a;
+        int[] l = new int[n];
+        l[0] = 1;
+        int[] r = new int[n];
+        r[n - 1] = 1;
+        for (int i = 1; i < n; i++) {
+            l[i] = l[i - 1] * a[i - 1];
+            r[n - i - 1] = r[n - i] * a[n - i];
+        }
+        int[] b = new int[n];
+        for (int i = 0; i < n; i++) {
+            b[i] = l[i] * r[i];
+        }
+        return b;
+    }
+
+    /**
+     * 剑指 Offer 14- I. 剪绳子
+     */
+    public int cuttingRope(int n) {
+        int max = Integer.MIN_VALUE;
+        for (int i = 2; i <= n; i++) {
+            max = Math.max(maxCutting(n, i), max);
+        }
+        return max;
+    }
+
+    private int maxCutting(int n, int m) {
+        int q = n / m;
+        int r = n % m;
+        return (int) (Math.pow(q, m - r) * Math.pow(q + 1, r));
+    }
+
+    /**
+     * 剑指 Offer 57 - II. 和为s的连续正数序列
+     */
+    public int[][] findContinuousSequence(int target) {
+        List<int[]> result = new ArrayList<>();
+        for (int m = 2; m * (m + 1) <= 2 * target; m++) {
+            if ((2 * target - (m + 1) * m) % (2 * m) == 0) {
+                int n = (2 * target - (m * m - 1)) / (2 * m);
+                int[] t = new int[m];
+                for (int i = 1; i <= m; i++) {
+                    t[i - 1] = n + i;
+                }
+                result.add(t);
+            }
+        }
+        Collections.reverse(result);
+        int[][] result2 = new int[result.size()][];
+        result.toArray(result2);
+        return result2;
+    }
+
+    /**
+     * 剑指 Offer 62. 圆圈中最后剩下的数字
+     * 参考了答案
+     */
+    public int lastRemaining(int n, int m) {
+        return lastRemainingR(n, m);
+    }
+
+    private int lastRemainingR(int n, int m) {
+        if (n == 1) {
+            return 0;
+        }
+        int x = lastRemainingR(n - 1, m);
+        return (m + x) % n;
+    }
+
+    /**
+     * 剑指 Offer 29. 顺时针打印矩阵
+     */
+    public int[] spiralOrder(int[][] matrix) {
+        if (matrix.length == 0 || matrix[0].length == 0) return new int[0];
+        int i = 0, j = 0;
+        int t = 0;
+        int m = matrix.length, n = matrix[0].length;
+        int[] result = new int[m * n];
+        int a = 0, b = n, c = 1, d = m;
+        int direction = 0;
+        while (t < m * n) {
+            result[t] = matrix[i][j];
+            t += 1;
+            if (direction == 0 && j == b - 1) {
+                b = b - 1;
+                direction = 1;
+            }
+            if (direction == 1 && i == d - 1) {
+                d = d - 1;
+                direction = 2;
+            }
+            if (direction == 2 && j == a) {
+                a = a + 1;
+                direction = 3;
+            }
+            if (direction == 3 && i == c) {
+                c = c + 1;
+                direction = 0;
+            }
+            if (direction == 0) j = j + 1; // 右
+            else if (direction == 1) i = i + 1; // 下
+            else if (direction == 2) j = j - 1; // 左
+            else i = i - 1; // 上
+        }
+        return result;
+    }
+
+    /**
+     * 剑指 Offer 31. 栈的压入、弹出序列
+     */
+    public boolean validateStackSequences(int[] pushed, int[] popped) {
+        Stack<Integer> stack = new Stack<>();
+        int i = 0, j = 0;
+        while (j < popped.length && i <= pushed.length) {
+            if (!stack.isEmpty() && stack.peek() == popped[j]) {
+                stack.pop();
+                j += 1;
+            } else {
+                if (i == pushed.length) return false;
+                stack.push(pushed[i]);
+                i++;
+            }
+        }
+        return stack.isEmpty();
+    }
+
+    /**
+     * 剑指 Offer 20. 表示数值的字符串
+     */
+    public boolean isNumber(String s) {
+        if (s.length() == 0) return false;
+        int start = 0, end = s.length();
+        while (start < s.length() && s.charAt(start) == ' ') {
+            start += 1;
+        }
+        while (end >= 1 && s.charAt(end - 1) == ' ') {
+            end -= 1;
+        }
+        int eIndex = -1;
+        for (int i = start; i < end; i++) {
+            if (s.charAt(i) == 'e' || s.charAt(i) == 'E') {
+                eIndex = i;
+                break;
+            }
+        }
+        if (eIndex == -1) {
+            return isDecimalOrInteger(s, start, end);
+        } else {
+            return isDecimalOrInteger(s, start, eIndex) && isInteger(s, eIndex + 1, end);
+        }
+    }
+
+    private boolean isDecimalOrInteger(String s, int start, int end) {
+        if (end <= start) return false;
+        char f = s.charAt(start);
+        int t = (f == '+' || f == '-') ? 1 : 0;
+        int dotIndex = s.indexOf('.', start + t);
+        if (dotIndex == -1) return isUnSignNumber(s, start + t, end);
+        else if (dotIndex == start + t) return isUnSignNumber(s, start + t + 1, end);
+        else if (dotIndex > start + t && dotIndex < end - 1)
+            return isUnSignNumber(s, start + t, dotIndex) && isUnSignNumber(s, dotIndex + 1, end);
+        else if (dotIndex == end - 1) return isUnSignNumber(s, start + t, end - 1);
+        else return false;
+
+    }
+
+    private boolean isInteger(String s, int start, int end) {
+        if (end <= start) return false;
+        char f = s.charAt(start);
+        int t = (f == '+' || f == '-') ? 1 : 0;
+        return isUnSignNumber(s, start + t, end);
+    }
+
+    private boolean isUnSignNumber(String s, int start, int end) {
+        if (end <= start) return false;
+        for (int i = start; i < end; i++) {
+            char c = s.charAt(i);
+            if (c < '0' || c > '9') return false;
+        }
+        return true;
+    }
+
+    /**
+     * 剑指 Offer 67. 把字符串转换成整数
+     */
+    public int strToInt(String str) {
+        if (str.length() == 0) return 0;
+        int start = 0;
+        while (start < str.length() && str.charAt(start) == ' ') {
+            start += 1;
+        }
+        if (start == str.length()) return 0;
+        char f = str.charAt(start);
+        if (f != '+' && f != '-' && (f < '0' || f > '9')) return 0;
+        int t = (f == '+' || f == '-') ? 1 : 0;
+
+        int end = start + t;
+        while (end < str.length() && str.charAt(end) >= '0' && str.charAt(end) <= '9') {
+            end++;
+        }
+        int d = 1;
+        int result = 0;
+        for (int i = end - 1; i >= start + t; i--) {
+            if ((d % 10 != 0 && d != 1)) {
+                for (int k = start + t; k <= i; k++) {
+                    if (str.charAt(k) != '0') return f != '-' ? Integer.MAX_VALUE : Integer.MIN_VALUE;
+                }
+                return f != '-' ? result : -result;
+            }
+
+            if (1000000000 == d && str.charAt(i) > '2') return f != '-' ? Integer.MAX_VALUE : Integer.MIN_VALUE;
+            if (1000000000 == d && str.charAt(i) == '2' && result > Integer.MAX_VALUE - 2000000000)
+                return f != '-' ? Integer.MAX_VALUE : Integer.MIN_VALUE;
+            result += (str.charAt(i) - '0') * d;
+            d *= 10;
+        }
+        return f != '-' ? result : -result;
+    }
+
+    /**
+     * 剑指 Offer 59 - I. 滑动窗口的最大值
+     * 参考了答案 单调队列
+     */
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        if (nums.length == 0) return nums;
+        if (k == 1) return nums;
+        int[] q = new int[nums.length + 1];
+        int[] result = new int[nums.length + 1 - k];
+        int head = 0;
+        int tail = 0;
+        for (int i = 0; i < nums.length; i++) {
+            int current = nums[i];
+            while (tail >= head && nums[q[tail]] < current) tail--;
+            tail++;
+            q[tail] = i;
+            while (q[head] <= i - k) head++;
+
+            if (i >= k - 1) {
+                result[i + 1 - k] = nums[q[head]];
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 剑指 Offer 59 - II. 队列的最大值
+     */
+    public static class MaxQueue {
+        private LinkedList<Integer> data;
+        private LinkedList<Integer> maxSince;
+
+        public MaxQueue() {
+            data = new LinkedList<>();
+            maxSince = new LinkedList<>();
         }
 
-        return b;
+        public int max_value() {
+            if (maxSince.isEmpty()) return -1;
+            return maxSince.peekFirst();
+        }
+
+        public void push_back(int value) {
+            while (!maxSince.isEmpty() && maxSince.peekLast() < value) {
+                maxSince.pollLast();
+            }
+            maxSince.add(value);
+            data.add(value);
+
+
+        }
+
+        public int pop_front() {
+            if (data.isEmpty() || maxSince.isEmpty()) {
+                return -1;
+            }
+            int ans = data.poll();
+            if (maxSince.peekFirst() != null && ans == maxSince.peekFirst()) {
+                maxSince.pollFirst();
+            }
+            return ans;
+        }
+    }
+
+    /**
+     * 剑指 Offer 17. 打印从1到最大的n位数
+     */
+    public int[] printNumbers(int n) {
+        int[] result = new int[(int) Math.pow(10, n) - 1];
+        for (int i = 0; i < result.length; i++) result[i] = i + 1;
+        return result;
+    }
+
+    /**
+     * 剑指 Offer 37. 序列化二叉树
+     */
+    public static class Codec {
+        public String serialize(TreeNode root) {
+            if (root == null) return "[]";
+            LinkedList<TreeNode> q = new LinkedList<>();
+            q.push(root);
+            LinkedList<Integer> result = new LinkedList<>();
+            while (!q.isEmpty()) {
+                TreeNode current = q.pop();
+                if (current != null) {
+                    result.add(current.val);
+                    q.add(current.left);
+                    q.add(current.right);
+                } else {
+                    result.add(null);
+                }
+            }
+
+            while (true) {
+                Integer t = result.pollLast();
+                if (t != null) {
+                    result.add(t);
+                    break;
+                }
+            }
+
+            return result.toString();
+        }
+
+        public TreeNode deserialize(String data) {
+            if ("[]".equals(data)) return null;
+
+            String[] temp = data.substring(1, data.length() - 1).split(",");
+            Integer[] array = new Integer[temp.length];
+            for (int i = 0; i < temp.length; i++) {
+                String s = temp[i].trim();
+                if ("null".equals(s)) array[i] = null;
+                else array[i] = Integer.valueOf(s);
+            }
+            if (array.length == 0 || null == array[0]) return null;
+
+            LinkedList<TreeNode> q = new LinkedList<>();
+            TreeNode root = new TreeNode(array[0]);
+            q.push(root);
+            int i = 1;
+            while (!q.isEmpty() && i < array.length) {
+                TreeNode current = q.pop();
+                if (array[i] != null) {
+                    current.left = new TreeNode(array[i]);
+                    q.add(current.left);
+                }
+                i++;
+                if (i < array.length && array[i] != null) {
+                    current.right = new TreeNode(array[i]);
+                    q.add(current.right);
+                }
+                i++;
+            }
+            return root;
+        }
     }
 }

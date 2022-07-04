@@ -418,4 +418,112 @@ public class OfferTest {
         Assert.assertEquals(2, offer.majorityElement(array));
     }
 
+    @Test
+    public void testConstructArr() {
+        int[] array = {1, 2, 3};
+        Assert.assertEquals("[6, 3, 2]", Arrays.toString(offer.constructArr(array)));
+    }
+
+    @Test
+    public void testCuttingRope() {
+        Assert.assertEquals(36, offer.cuttingRope(10));
+    }
+
+    @Test
+    public void testFindContinuousSequence() {
+        Assert.assertEquals("[[1, 2, 3, 4, 5], [4, 5, 6], [7, 8]]", Arrays.deepToString(offer.findContinuousSequence(15)));
+    }
+
+    @Test
+    public void testLastRemaining() {
+        Assert.assertEquals(3, offer.lastRemaining(10, 3));
+    }
+
+    @Test
+    public void testSpiralOrder() {
+        int[][] matrix = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+        Assert.assertEquals("[1, 2, 3, 6, 9, 8, 7, 4, 5]", Arrays.toString(offer.spiralOrder(matrix)));
+        int[][] matrix2 = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}};
+        Assert.assertEquals("[1, 2, 3, 4, 8, 12, 11, 10, 9, 5, 6, 7]", Arrays.toString(offer.spiralOrder(matrix2)));
+    }
+
+    @Test
+    public void testValidateStackSequences() {
+        int[] pushed = {1, 2, 3, 4, 5};
+        int[] popped = {4, 5, 3, 2, 1};
+        Assert.assertTrue(offer.validateStackSequences(pushed, popped));
+    }
+
+    @Test
+    public void testIsNumber() {
+        String[] trueArray = {"+100", "5e2", "-123", "3.1416", "-1E-16", "0123"};
+        for (String s : trueArray) {
+            Assert.assertTrue(offer.isNumber(s));
+        }
+
+        String[] falseArray = {"12e", "1a3.14", "1.2.3", "+-5", "12e+5.4"};
+        for (String s : falseArray) {
+            Assert.assertFalse(offer.isNumber(s));
+        }
+    }
+
+    @Test
+    public void testStrToInt() {
+        String s = "-000000000000001";
+        Assert.assertEquals(-1, offer.strToInt(s));
+    }
+
+    @Test
+    public void testMaxSlidingWindow() {
+        int[] array = {1, 3, -1, -3, 5, 3, 6, 7};
+        Assert.assertEquals("[3, 3, 5, 5, 6, 7]", Arrays.toString(offer.maxSlidingWindow(array, 3)));
+        int[] array2 = {3, 1, 5, 7, 4, 2, 8};
+        Assert.assertEquals("[5, 7, 7, 7, 8]", Arrays.toString(offer.maxSlidingWindow(array2, 3)));
+        int[] array3 = {1, 3, 1, 2, 0, 5};
+        Assert.assertEquals("[3, 3, 2, 5]", Arrays.toString(offer.maxSlidingWindow(array3, 3)));
+    }
+
+    @Test
+    public void testMaxQueue() {
+        Offer.MaxQueue maxQueue = null;
+        StringBuilder sb = new StringBuilder("[");
+        String[] optList = {"MaxQueue", "pop_front", "max_value"};
+        int[][] nuList = {{}, {}, {}};
+        for (int i = 0; i < optList.length; i++) {
+            String opt = optList[i];
+            switch (opt) {
+                case "MaxQueue":
+                    maxQueue = new Offer.MaxQueue();
+                    sb.append("null,");
+                    break;
+                case "pop_front":
+                    int v = maxQueue.pop_front();
+                    sb.append(v).append(",");
+                    break;
+                case "max_value":
+                    int max = maxQueue.max_value();
+                    sb.append(max).append(",");
+                    break;
+                case "push_back":
+                    int value = nuList[i][0];
+                    maxQueue.push_back(value);
+                    sb.append("null,");
+                    break;
+                default:
+                    break;
+            }
+        }
+        Assert.assertEquals("[null,-1,-1]", sb.substring(0, sb.length() - 1) + "]");
+    }
+
+    @Test
+    public void testCodec() {
+        Integer[] array = {1, 2, 3, null, null, 4, 5};
+        TreeNode root = TreeNode.fromArray(array);
+        Offer.Codec codec = new Offer.Codec();
+        String t = codec.serialize(root);
+        TreeNode newRoot = codec.deserialize(t);
+        Assert.assertEquals(root.toString(), newRoot.toString());
+
+    }
 }

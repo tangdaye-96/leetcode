@@ -11,7 +11,6 @@ import psn.tangdaye.solutions.Offer;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 public class OfferTest {
     Offer offer = new Offer();
@@ -430,6 +429,11 @@ public class OfferTest {
     }
 
     @Test
+    public void testCuttingRope2() {
+        Assert.assertEquals(36, offer.cuttingRope2(120));
+    }
+
+    @Test
     public void testFindContinuousSequence() {
         Assert.assertEquals("[[1, 2, 3, 4, 5], [4, 5, 6], [7, 8]]", Arrays.deepToString(offer.findContinuousSequence(15)));
     }
@@ -524,6 +528,18 @@ public class OfferTest {
         String t = codec.serialize(root);
         TreeNode newRoot = codec.deserialize(t);
         Assert.assertEquals(root.toString(), newRoot.toString());
+    }
+
+    @Test
+    public void testDicesProbability() {
+        double[] t = {1.0 / 36, 2.0 / 36, 3.0 / 36, 4.0 / 36, 5.0 / 36, 6.0 / 36, 5.0 / 36, 4.0 / 36, 3.0 / 36, 2.0 / 36, 1.0 / 36};
+        Assert.assertEquals(Arrays.toString(t), Arrays.toString(offer.dicesProbability(2)));
+    }
+
+    @Test
+    public void testCountDigitOne() {
+        Assert.assertEquals(5, offer.countDigitOne(12));
+
 
     }
 }

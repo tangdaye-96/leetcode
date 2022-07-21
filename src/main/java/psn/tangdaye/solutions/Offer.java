@@ -1251,6 +1251,33 @@ public class Offer {
     }
 
     /**
+     * 剑指 Offer 14- II. 剪绳子 II
+     */
+    public int cuttingRope2(int n) {
+        if (n == 2) return 1;
+        if (n == 3) return 2;
+        long t = 1;
+        int p = 0;
+        int q = 0;
+        if (n % 3 == 1) {
+            p = (n - 4) / 3;
+            q = 2;
+        } else if (n % 3 == 2) {
+            p = (n - 2) / 3;
+            q = 1;
+        } else {
+            p = n / 3;
+        }
+        for (int i = 1; i <= p; i++) {
+            t = (t * 3) % 1000000007;
+        }
+        for (int i = 1; i <= q; i++) {
+            t = (t * 2) % 1000000007;
+        }
+        return (int) t;
+    }
+
+    /**
      * 剑指 Offer 57 - II. 和为s的连续正数序列
      */
     public int[][] findContinuousSequence(int target) {
@@ -1572,5 +1599,52 @@ public class Offer {
             }
             return root;
         }
+    }
+
+    /**
+     * 剑指 Offer 60. n个骰子的点数
+     */
+    public double[] dicesProbability(int n) {
+        long[][] dp = new long[n + 1][6 * n + 1];
+        for (int i = 1; i <= 6; i++) {
+            dp[1][i] = 1L;
+        }
+        for (int i = 2; i <= n; i++) {
+            for (int j = i; j <= 6 * i; j++) {
+                for (int k = 1; k <= 6; k++) {
+                    dp[i][j] += j - k >= 0 ? dp[i - 1][j - k] : 0L;
+                }
+            }
+        }
+        double[] result = new double[5 * n + 1];
+        double t = Math.pow(6, n);
+        for (int i = n; i <= 6 * n; i++) {
+            double sum = (double) dp[n][i];
+            result[i - n] = sum / t;
+        }
+        return result;
+    }
+
+    /**
+     * 剑指 Offer 43. 1～n 整数中 1 出现的次数
+     */
+    public int countDigitOne(int n) {
+        int[] data = {1, 20, 300, 4000, 50000, 600000, 7000000, 80000000, 900000000};
+        int[] m = {10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000};
+        int t = n;
+        int count = 0;
+        for (int j = 8; j >= 0; j--) {
+            int q = t / m[j];
+            int r = t % m[j];
+            if (1 == q) {
+                count += data[j];
+                count += (r + 1);
+            } else if (q >= 2) {
+                count += q * data[j];
+                count += m[j];
+            }
+            t = r;
+        }
+        return t >= 1 ? count + 1 : count;
     }
 }

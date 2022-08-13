@@ -1647,4 +1647,144 @@ public class Offer {
         }
         return t >= 1 ? count + 1 : count;
     }
+
+    /**
+     * 剑指 Offer 38. 字符串的排列
+     */
+    public String[] permutation(String s) {
+        if (s.length() == 0) return new String[0];
+        HashSet<String> t = new HashSet<>();
+        t.add(s.substring(0, 1));
+        for (int i = 1; i < s.length(); i++) {
+            HashSet<String> newT = new HashSet<>();
+            for (String k : t) {
+                for (int j = 0; j <= k.length(); j++) {
+                    String left = k.substring(0, j);
+                    String right = k.substring(j);
+                    newT.add(left + s.charAt(i) + right);
+                }
+            }
+            t = newT;
+        }
+        String[] result = new String[t.size()];
+        return t.toArray(result);
+    }
+
+    /**
+     * 剑指 Offer 49. 丑数
+     */
+    public int nthUglyNumber(int n) {
+        int i = 0, j = 0, k = 0;
+        int[] dp = new int[n];
+        dp[0] = 1;
+        for (int s = 1; s < n; s++) {
+            dp[s] = Math.min(Math.min(dp[i] * 2, dp[j] * 3), dp[k] * 5);
+            if (dp[s] == dp[i] * 2) i += 1;
+            if (dp[s] == dp[j] * 3) j += 1;
+            if (dp[s] == dp[k] * 5) k += 1;
+        }
+        return dp[n - 1];
+    }
+
+    /**
+     * 剑指 Offer 44. 数字序列中某一位的数字
+     * 1*10 + 2*90 +3*900
+     */
+    public int findNthDigit(int n) {
+        if (n <= 9) return n;
+        int i = 1;
+        while (n >= 0) {
+            int t = i == 1 ? 10 : (int) (i * 9 * Math.pow(10, i - 1));
+            if (n > t) {
+                n -= t;
+                i++;
+            } else break;
+        }
+        int q = n / i;
+        int r = n % i;
+        if (q == 0) {
+            return r == 0 ? 1 : 0;
+        }
+        int x = (int) (Math.pow(10, i - 1)) + q;
+        return (x + "").charAt(r) - '0';
+    }
+
+    /**
+     * 剑指 Offer 19. 正则表达式匹配
+     */
+    public boolean isMatch(String s, String p) {
+        int m = s.length();
+        int n = p.length();
+
+        boolean[][] f = new boolean[m + 1][n + 1];
+        f[0][0] = true;
+        for (int i = 0; i <= m; ++i) {
+            for (int j = 1; j <= n; ++j) {
+                if (p.charAt(j - 1) == '*') {
+                    f[i][j] = f[i][j - 2];
+                    if (isMatchSingle(s, p, i, j - 1)) {
+                        f[i][j] = f[i][j] || f[i - 1][j];
+                    }
+                } else {
+                    if (isMatchSingle(s, p, i, j)) {
+                        f[i][j] = f[i - 1][j - 1];
+                    }
+                }
+            }
+        }
+        return f[m][n];
+    }
+
+    private boolean isMatchSingle(String s, String p, int si, int pi) {
+        if (si == 0) {
+            return false;
+        }
+        if (p.charAt(pi - 1) == '.') {
+            return true;
+        }
+        return s.charAt(si - 1) == p.charAt(pi - 1);
+    }
+
+    /**
+     * 剑指 Offer 51. 数组中的逆序对
+     */
+    public int reversePairs(int[] nums) {
+        int[] temp = new int[nums.length];
+        return mergeSort(nums, 0, nums.length, temp);
+    }
+
+    private int mergeSort(int[] nums, int l, int r, int[] temp) {
+        if (l + 1 >= r) return 0;
+        int m = (l + r) / 2;
+        int t = mergeSort(nums, l, m, temp);
+        int s = mergeSort(nums, m, r, temp);
+        int x = merge(nums, l, m, r, temp);
+        return t + s + x;
+    }
+
+    private int merge(int[] result, int l, int m, int r, int[] temp) {
+        System.arraycopy(result, 0, temp, 0, result.length);
+        int i = l, j = m, k = l;
+        int t = 0;
+        while (i < m && j < r) {
+            if (temp[i] <= temp[j]) {
+                result[k] = temp[i];
+                i++;
+                k++;
+            } else {
+                result[k] = temp[j];
+                j++;
+                k++;
+                t += (m - i);
+            }
+        }
+
+        if (i != m) {
+            System.arraycopy(temp, i, result, k, m - i);
+        }
+        if (j != r) {
+            System.arraycopy(temp, j, result, k, r - j);
+        }
+        return t;
+    }
 }

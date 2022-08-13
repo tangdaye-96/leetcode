@@ -430,7 +430,7 @@ public class OfferTest {
 
     @Test
     public void testCuttingRope2() {
-        Assert.assertEquals(36, offer.cuttingRope2(120));
+        Assert.assertEquals(36, offer.cuttingRope2(10));
     }
 
     @Test
@@ -539,7 +539,32 @@ public class OfferTest {
     @Test
     public void testCountDigitOne() {
         Assert.assertEquals(5, offer.countDigitOne(12));
+    }
 
+    @Test
+    public void testPermutation() {
+        String[] result = offer.permutation("abc");
+        Assert.assertEquals(result.length, 6);
+    }
 
+    @Test
+    public void testNthUglyNumber() {
+        Assert.assertEquals(144, offer.nthUglyNumber(40));
+    }
+
+    @Test
+    public void testFindNthDigit() {
+        Assert.assertEquals(3, offer.findNthDigit(1000));
+    }
+
+    @Test
+    public void testMatch() {
+        Assert.assertTrue(offer.isMatch("abcde", "abc*cde"));
+    }
+
+    @Test
+    public void testReversePairs() {
+        int[] result = {5, 4, 3, 2, 1};
+        Assert.assertEquals(10, offer.reversePairs(result));
     }
 }

@@ -6,7 +6,17 @@ import psn.tangdaye.model.Node;
 import psn.tangdaye.model.TreeNode;
 
 import java.math.BigInteger;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.Set;
+import java.util.Stack;
 import java.util.stream.Collectors;
 
 public class Offer {
@@ -769,9 +779,11 @@ public class Offer {
         }
         if (root.left == null && root.right == null) {
             if (root.val == target) {
-                return List.of(new LinkedList<>() {{
+                List<LinkedList<Integer>> result = new ArrayList<>();
+                result.add(new LinkedList<Integer>() {{
                     add(root.val);
                 }});
+                return result;
             } else return Collections.emptyList();
         }
         List<LinkedList<Integer>> result = new ArrayList<>();

@@ -31,4 +31,22 @@ public class Hot100Test {
         String s = "pwwkew";
         Assert.assertEquals(3, hot.lengthOfLongestSubstring(s));
     }
+
+    @Test
+    public void testFindMedianSortedArrays() {
+//        int[] nums1 = {1, 2, 3, 4, 5, 6};
+//        int[] nums2 = {2, 4, 6, 8, 10, 12};
+//        Assert.assertEquals(hot.findMedianSortedArrays(nums1, nums2), 4.5, 0.0);
+
+        int[] nums3 = {2, 3, 5, 6};
+        int[] nums4 = {1, 4};
+        System.out.println(hot.findMedianSortedArrays(nums3, nums4));
+    }
+
+    @Test
+    public void testLongestPalindrome() {
+        String s = "aabaab";
+        Assert.assertEquals(hot.longestPalindrome(s),"aabaa");
+    }
+
 }

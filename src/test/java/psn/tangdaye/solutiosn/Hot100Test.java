@@ -46,7 +46,22 @@ public class Hot100Test {
     @Test
     public void testLongestPalindrome() {
         String s = "aabaab";
-        Assert.assertEquals(hot.longestPalindrome(s),"aabaa");
+        Assert.assertEquals(hot.longestPalindrome(s), "aabaa");
+    }
+
+    @Test
+    public void testHot100() {
+        String[] s = {"aa", "asdfasdfasdfasdfasdf","aaca"};
+        String[] p = {"a*", ".*asdf.*sdf.*df.*f.*","ab*a*c*a"};
+        for (int i = 0; i < s.length; i++) {
+            Assert.assertTrue(hot.isMatch(s[i], p[i]));
+
+        }
+        String[] s2 = {"a", "sdf", "ff"};
+        String[] p2 = {"aaa*", "d*s*f", "f"};
+        for (int i = 0; i < s2.length; i++) {
+            Assert.assertTrue(!hot.isMatch(s2[i], p2[i]));
+        }
     }
 
 }

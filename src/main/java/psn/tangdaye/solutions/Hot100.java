@@ -1,5 +1,6 @@
 package psn.tangdaye.solutions;
 
+import psn.tangdaye.model.NFA;
 import psn.tangdaye.model.ListNode;
 
 import java.util.Arrays;
@@ -226,4 +227,11 @@ public class Hot100 {
         }
         return (right - left) / 2 - 1;
     }
+
+    public boolean isMatch(String s, String p) {
+        NFA d = new NFA(p);
+        return d.match(s);
+    }
+
+
 }

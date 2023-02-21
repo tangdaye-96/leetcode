@@ -1,6 +1,5 @@
 package psn.tangdaye.solutions;
 
-import psn.tangdaye.model.NFA;
 import psn.tangdaye.model.ListNode;
 
 import java.util.*;
@@ -226,8 +225,65 @@ public class Hot100 {
     }
 
     public boolean isMatch(String s, String p) {
-        NFA d = new NFA(p);
-        return d.match(s);
+        s = "#" + s;
+        p = "#" + p;
+        // dp[i][j]  = isMatch(s[:i],p[:j])
+        /*
+         *     #    a     *     b
+         * # true  false true  false
+         * a false true  true  false
+         * a false false true  false
+         * a false false true  false
+         * a false false true  false
+         * b false false false true
+         */
+        boolean[][] dp = new boolean[s.length()][p.length()];
+        dp[0][0] = true;
+        // 初始化第一行
+        for (int j = 1; j < p.length(); j++) {
+            char cp = p.charAt(j);
+            if (cp == '*') {
+                dp[0][j] = dp[0][j - 2];
+            } else {
+                dp[0][j] = false;
+            }
+        }
+        // 初始化第一列
+        for (int i = 1; i < s.length(); i++) {
+            dp[i][0] = false;
+        }
+        // 动态规划
+        for (int i = 1; i < s.length(); i++) {
+            for (int j = 1; j < p.length(); j++) {
+                char cs = s.charAt(i);
+                char cp = p.charAt(j);
+                if (cp != '*') {
+                    if (cs == cp || cp == '.') {
+                        dp[i][j] = dp[i - 1][j - 1];
+                    } else {
+                        dp[i][j] = false;
+                    }
+                } else {
+                    char cpm = p.charAt(j - 1);
+                    if (cs == cpm || cpm == '.') {
+                        /*
+                         * s = ($$$$)x
+                         * p = ($$$$x)*
+                         */
+                        dp[i][j] = dp[i - 1][j] || dp[i - 1][j - 2] || dp[i][j - 2];
+                    } else {
+                        /*
+                         * s = ($$$$)x
+                         * p = ($$$$y)*
+                         */
+                        dp[i][j] = dp[i][j - 2];
+                    }
+                }
+            }
+        }
+        return dp[s.length() - 1][p.length() - 1];
+
+
     }
 
 

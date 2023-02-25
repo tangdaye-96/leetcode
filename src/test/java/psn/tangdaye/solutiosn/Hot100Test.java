@@ -51,8 +51,8 @@ public class Hot100Test {
 
     @Test
     public void testHot100() {
-        String[] s = {"aa", "asdfasdfasdfasdfasdf","aaca"};
-        String[] p = {"a*", ".*asdf.*sdf.*df.*f.*","ab*a*c*a"};
+        String[] s = {"aa", "asdfasdfasdfasdfasdf", "aaca"};
+        String[] p = {"a*", ".*asdf.*sdf.*df.*f.*", "ab*a*c*a"};
         for (int i = 0; i < s.length; i++) {
             Assert.assertTrue(hot.isMatch(s[i], p[i]));
 
@@ -62,6 +62,29 @@ public class Hot100Test {
         for (int i = 0; i < s2.length; i++) {
             Assert.assertTrue(!hot.isMatch(s2[i], p2[i]));
         }
+    }
+
+
+    @Test
+    public void testRemoveNthFromEnd() {
+        int[] array = {1, 2};
+        ListNode head = ListNode.fromArray(array);
+        Assert.assertEquals(String.valueOf(hot.removeNthFromEnd(head, 2)), "[2]");
+    }
+
+    @Test
+    public void testIsValid() {
+        String s = "([{{{}}}])";
+        Assert.assertTrue(hot.isValid(s));
+    }
+
+    @Test
+    public void testMergeTwoLists() {
+        int[] array1 = {1, 3, 5, 7, 9};
+        int[] array2 = {2, 4, 6, 8, 10, 12, 14};
+        ListNode head1 = ListNode.fromArray(array1);
+        ListNode head2 = ListNode.fromArray(array2);
+        System.out.println(hot.mergeTwoLists(head1, head2));
     }
 
 }

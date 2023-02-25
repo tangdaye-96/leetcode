@@ -3,10 +3,7 @@ package psn.tangdaye.solutions;
 import psn.tangdaye.model.NFA;
 import psn.tangdaye.model.ListNode;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class Hot100 {
 
@@ -231,6 +228,117 @@ public class Hot100 {
     public boolean isMatch(String s, String p) {
         NFA d = new NFA(p);
         return d.match(s);
+    }
+
+
+    /**
+     * 19. 删除链表的倒数第 N 个结点
+     * https://leetcode.cn/problems/remove-nth-node-from-end-of-list/
+     */
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        ListNode left = head;
+        ListNode right = head;
+        ListNode pre = new ListNode(-1);
+        pre.next = head;
+
+        for (int i = 0; i < n; i++) {
+            right = right.next;
+        }
+        if (right == null) {
+            // 删除头结点
+            return head.next;
+        }
+        while (right != null) {
+            right = right.next;
+            left = left.next;
+            pre = pre.next;
+        }
+        pre.next = left.next;
+        left.next = null;
+        return head;
+    }
+
+    /**
+     * 20. 有效的括号
+     * https://leetcode.cn/problems/valid-parentheses/?favorite=2cktkvj
+     */
+    public boolean isValid(String s) {
+        LinkedList<Character> l = new LinkedList<>();
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (c == '(' || c == '[' || c == '{') l.add(c);
+            else {
+                if (l.size() == 0) return false;
+                char x = l.removeLast();
+                if ((x == '(' && c == ')') || (x == '[' && c == ']') || (x == '{' && c == '}')) continue;
+                return false;
+            }
+        }
+        return l.size() == 0;
+    }
+
+    /**
+     * 21. 合并两个有序链表
+     * https://leetcode.cn/problems/merge-two-sorted-lists/?favorite=2cktkvj
+     */
+    public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
+        ListNode current1 = list1;
+        ListNode current2 = list2;
+        ListNode pre = new ListNode(Integer.MIN_VALUE);
+        ListNode current = pre;
+        while (current1 != null && current2 != null) {
+            if (current1.val < current2.val) {
+                current.next = current1;
+                current1 = current1.next;
+            } else {
+                current.next = current2;
+                current2 = current2.next;
+            }
+            current = current.next;
+        }
+        if (current1 != null) {
+            current.next = current1;
+        } else {
+            current.next = current2;
+        }
+        return pre.next;
+    }
+
+    /**
+     * 22. 括号生成
+     * https://leetcode.cn/problems/generate-parentheses/?favorite=2cktkvj
+     */
+    public List<String> generateParenthesis(int n) {
+        List<String> result = new ArrayList<>();
+        int numsLP = 0;
+        String t = "";
+        LinkedList<Character> stack = new LinkedList<>();
+        for (int i = 0; i < 2 * n; i++) {
+            for (String preS : result) {
+                String l1 = null, l2 = null;
+                if (numsLP < n) {
+                    l1 = nextParentheses(preS, '(', stack);
+                    l2 = nextParentheses(preS, ')', stack);
+                } else {
+                    l2 = nextParentheses(preS, ')', stack);
+                }
+                if (l1 != null) {
+                }
+            }
+
+        }
+    }
+
+    private String nextParentheses(String current, char parentheses, LinkedList<Character> stack) {
+        if (parentheses == '(') {
+            stack.add(parentheses);
+            return current + parentheses;
+        } else {
+            if (stack.isEmpty()) return null;
+            char c = stack.removeLast();
+            if (c != '(') return null;
+            return current + parentheses;
+        }
     }
 
 

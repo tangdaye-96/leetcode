@@ -2,7 +2,15 @@ package psn.tangdaye.solutions;
 
 import psn.tangdaye.model.ListNode;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class Hot100 {
 
@@ -224,6 +232,11 @@ public class Hot100 {
         return (right - left) / 2 - 1;
     }
 
+    /**
+     * 10. 正则表达式匹配
+     * 动态规划
+     * https://leetcode.cn/problems/regular-expression-matching/?favorite=2cktkvj
+     */
     public boolean isMatch(String s, String p) {
         s = "#" + s;
         p = "#" + p;
@@ -286,6 +299,108 @@ public class Hot100 {
 
     }
 
+
+    /**
+     * 11. 盛最多水的容器
+     * https://leetcode.cn/problems/container-with-most-water/?favorite=2cktkvj
+     */
+    public int maxArea(int[] height) {
+        int left = 0;
+        int right = height.length - 1;
+        int max = 0;
+        while (left < right) {
+            if (height[left] <= height[right]) {
+                int current = height[left] * (right - left);
+                max = current > max ? current : max;
+                left++;
+            } else {
+                int current = height[right] * (right - left);
+                max = current > max ? current : max;
+                right--;
+            }
+        }
+        return max;
+    }
+
+    /**
+     * 15. 三数之和
+     * https://leetcode.cn/problems/3sum/?favorite=2cktkvj
+     */
+    public List<List<Integer>> threeSum(int[] nums) {
+        Arrays.sort(nums);
+        List<List<Integer>> result = new LinkedList<>();
+        HashMap<Integer, Integer> indexHashMap = new HashMap<>();
+        for (int num : nums) {
+            int count = 0;
+            if (indexHashMap.containsKey(num)) {
+                count = indexHashMap.get(num);
+            }
+            indexHashMap.put(num, count + 1);
+        }
+        if (indexHashMap.size() == 0) return result;
+        Integer preA = null;
+        for (int i = 0; i < nums.length && nums[i] <= 0; i++) {
+            int a = nums[i];
+            if (preA == null || preA != a) preA = a;
+            else continue;
+            Integer preC = null;
+            for (int j = nums.length - 1; j > i + 1 && nums[j] >= 0; j--) {
+                int c = nums[j];
+                if (preC == null || preC != c) preC = c;
+                else continue;
+                int b = -a - c;
+                if (b < a) {
+                } else if (b == a) {
+                    if (indexHashMap.getOrDefault(b, 0) > 1) result.add(Arrays.asList(a, b, c));
+                } else if (a < b && b < c) {
+                    if (indexHashMap.getOrDefault(b, 0) > 0) result.add(Arrays.asList(a, b, c));
+                } else if (b == c) {
+                    if (indexHashMap.getOrDefault(b, 0) > 1) result.add(Arrays.asList(a, b, c));
+                } else {
+                    break;
+                }
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 17. 电话号码的字母组合
+     * https://leetcode.cn/problems/letter-combinations-of-a-phone-number/?favorite=2cktkvj
+     */
+    public List<String> letterCombinations(String digits) {
+        Map<Character, String> map = new HashMap<Character, String>() {{
+            put('2', "abc");
+            put('3', "def");
+            put('4', "ghi");
+            put('5', "jkl");
+            put('6', "mno");
+            put('7', "pqrs");
+            put('8', "tuv");
+            put('9', "wxyz");
+        }};
+        List<String> result = new LinkedList<>();
+        if (digits.length() == 0) return result;
+        char x = digits.charAt(0);
+        String t = map.get(x);
+        for (int i = 0; i < t.length(); i++) {
+            result.add("" + t.charAt(i));
+        }
+        for (int i = 1; i < digits.length(); i++) {
+            result = descartesMultiple(result, map.get(digits.charAt(i)).toCharArray());
+        }
+        return result;
+    }
+
+    private List<String> descartesMultiple(List<String> aL, char[] bL) {
+        List<String> result = new LinkedList<>();
+        for (Object a : aL) {
+            for (Object b : bL) {
+                result.add(String.valueOf(a) + String.valueOf(b));
+            }
+        }
+        return result;
+    }
 
     /**
      * 19. 删除链表的倒数第 N 个结点
@@ -395,6 +510,15 @@ public class Hot100 {
             if (c != '(') return null;
             return current + parentheses;
         }
+    }
+
+
+    /**
+     * 23. 合并K个升序链表
+     * https://leetcode.cn/problems/merge-k-sorted-lists/?favorite=2cktkvj
+     */
+    public ListNode mergeKLists(ListNode[] lists) {
+        
     }
 
 

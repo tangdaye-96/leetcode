@@ -50,7 +50,7 @@ public class Hot100Test {
     }
 
     @Test
-    public void testHot100() {
+    public void testIsMatch() {
         String[] s = {"aa", "asdfasdfasdfasdfasdf", "aaca"};
         String[] p = {"a*", ".*asdf.*sdf.*df.*f.*", "ab*a*c*a"};
         for (int i = 0; i < s.length; i++) {
@@ -63,6 +63,25 @@ public class Hot100Test {
             Assert.assertTrue(!hot.isMatch(s2[i], p2[i]));
         }
     }
+
+    @Test
+    public void testMaxArea() {
+        int[] height = {1, 8, 6, 1000, 1000, 6, 3, 8, 7};
+        Assert.assertEquals(hot.maxArea(height), 1000);
+    }
+
+    @Test
+    public void testThreeSum() {
+        int[] x = {3, 0, -2, -1, 1, 2};
+        Assert.assertEquals(3, hot.threeSum(x).size());
+    }
+
+    @Test
+    public void testLetterCombinations() {
+        String digits = "237";
+        Assert.assertEquals(36, hot.letterCombinations(digits).size());
+    }
+
 
 
     @Test

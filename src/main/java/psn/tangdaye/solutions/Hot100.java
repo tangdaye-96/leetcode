@@ -498,6 +498,7 @@ public class Hot100 {
             }
 
         }
+        return null;
     }
 
     private String nextParentheses(String current, char parentheses, LinkedList<Character> stack) {
@@ -518,7 +519,14 @@ public class Hot100 {
      * https://leetcode.cn/problems/merge-k-sorted-lists/?favorite=2cktkvj
      */
     public ListNode mergeKLists(ListNode[] lists) {
-        
+        if (lists.length == 1) {
+            return lists[0];
+        }
+        // 头应该用（最小）堆，不应该用列表，否则会重复比较
+        ListNode pre = new ListNode(-1);
+        ListNode rCurrent = null;
+        pre.next = rCurrent;
+
     }
 
 

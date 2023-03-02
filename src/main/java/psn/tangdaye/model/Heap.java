@@ -11,14 +11,29 @@ public class Heap<T extends Comparable<T>> {
 
     private boolean isMin;
 
+    public Heap(Iterable<T> data, boolean isMin) {
+        this.isMin = isMin;
+        this.data = new ArrayList<>();
+        for (T e : data) {
+            if (e != null) {
+                add(e);
+            }
+        }
+    }
+
     public Heap(T[] data, boolean isMin) {
+        this.isMin = isMin;
+        this.data = new ArrayList<>();
+        for (T e : data) {
+            if (e != null) {
+                add(e);
+            }
+        }
     }
 
     public void add(T element) {
-        // 加在最后面
-        // 最后的元素【向上调整】
         data.add(element);
-        upLast();
+        up(data.size() - 1);
     }
 
     public T top() {
@@ -26,19 +41,70 @@ public class Heap<T extends Comparable<T>> {
     }
 
     public T pop() {
-        // 交换第一个元素和最后一个元素
-        // 删除最后一个元素
-        // 第一个的元素【向下调整】
         T last = data.remove(data.size() - 1);
+        if (data.size() == 0) return last;
         T top = data.set(0, last);
-        downTop();
+        down(0);
         return top;
     }
 
-    private void upLast() {
+    public int size() {
+        return data.size();
     }
 
-    private void downTop() {
+    public void setTop(T e) {
+        data.set(0, e);
+        down(0);
     }
 
+    @Override
+    public String toString() {
+        return data.toString();
+    }
+
+    private void up(int index) {
+        if (index <= 0) return;
+
+        T current = data.get(index);
+        int parentIndex = (index - 1) / 2;
+        T parent = data.get(parentIndex);
+        if ((isMin && parent.compareTo(current) > 0) || (!isMin && parent.compareTo(current) < 0)) {
+            T origin = data.set(parentIndex, current);
+            data.set(index, origin);
+            up(parentIndex);
+        }
+    }
+
+    private void down(int index) {
+        if (index >= data.size() / 2) return;
+
+        T current = data.get(index);
+        int leftIndex = 2 * index + 1; // <= 2*(size/2-1)+1<= 2*size/2 -1 <= size-1
+        int rightIndex = 2 * index + 2;// <=size
+        int childIndex = -1;
+        T child = null;
+        T left = data.get(leftIndex);
+        T right = null;
+        if (rightIndex < data.size()) {
+            right = data.get(rightIndex);
+        }
+        if (right == null) {
+            child = left;
+            childIndex = leftIndex;
+        } else {
+            if ((isMin && left.compareTo(right) < 0) || (!isMin && left.compareTo(right) > 0)) {
+                child = left;
+                childIndex = leftIndex;
+            } else {
+                child = right;
+                childIndex = rightIndex;
+            }
+
+        }
+        if ((isMin && current.compareTo(child) > 0) || (!isMin && current.compareTo(child) < 0)) {
+            T origin = data.set(childIndex, current);
+            data.set(index, origin);
+            down(childIndex);
+        }
+    }
 }

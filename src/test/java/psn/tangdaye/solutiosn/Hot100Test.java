@@ -5,6 +5,8 @@ import org.junit.Test;
 import psn.tangdaye.model.ListNode;
 import psn.tangdaye.solutions.Hot100;
 
+import java.util.Arrays;
+
 public class Hot100Test {
     Hot100 hot = new Hot100();
 
@@ -83,7 +85,6 @@ public class Hot100Test {
     }
 
 
-
     @Test
     public void testRemoveNthFromEnd() {
         int[] array = {1, 2};
@@ -104,6 +105,39 @@ public class Hot100Test {
         ListNode head1 = ListNode.fromArray(array1);
         ListNode head2 = ListNode.fromArray(array2);
         System.out.println(hot.mergeTwoLists(head1, head2));
+    }
+
+    @Test
+    public void testMergeKLists() {
+        int[] array1 = {1, 4, 7, 10, 20};
+        int[] array2 = {2, 5, 8, 11, 14, 17, 20};
+        int[] array3 = {3, 6, 9, 12, 15, 18, 21, 24};
+        ListNode head1 = ListNode.fromArray(array1);
+        ListNode head2 = ListNode.fromArray(array2);
+        ListNode head3 = ListNode.fromArray(array3);
+        ListNode[] heads = {head1, head2, head3};
+        Assert.assertEquals("[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 17, 18, 20, 20, 21, 24]", hot.mergeKLists(heads).toString());
+    }
+
+    @Test
+    public void testNextPermutation() {
+        int[] array = {3, 5, 3, 3, 3, 2, 1};
+        hot.nextPermutation(array);
+        Assert.assertEquals("[5, 3, 1, 2, 3, 3, 3]", Arrays.toString(array));
+
+        int[] array2 = {3, 5, 3, 3, 3, 2, 1, 7};
+        hot.nextPermutation(array2);
+        Assert.assertEquals("[3, 5, 3, 3, 3, 2, 7, 1]", Arrays.toString(array2));
+
+        int[] array3 = {5, 1, 1};
+        hot.nextPermutation(array3);
+        Assert.assertEquals("[1, 1, 5]", Arrays.toString(array3));
+    }
+
+    @Test
+    public void testLongestValidParentheses() {
+        String s = "()()((()()()()()";
+        Assert.assertEquals(10, hot.longestValidParentheses(s));
     }
 
 }

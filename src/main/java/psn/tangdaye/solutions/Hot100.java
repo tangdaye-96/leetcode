@@ -1,5 +1,6 @@
 package psn.tangdaye.solutions;
 
+import psn.tangdaye.model.Heap;
 import psn.tangdaye.model.ListNode;
 
 import java.util.ArrayList;
@@ -513,7 +514,6 @@ public class Hot100 {
         }
     }
 
-
     /**
      * 23. 合并K个升序链表
      * https://leetcode.cn/problems/merge-k-sorted-lists/?favorite=2cktkvj
@@ -522,12 +522,80 @@ public class Hot100 {
         if (lists.length == 1) {
             return lists[0];
         }
-        // 头应该用（最小）堆，不应该用列表，否则会重复比较
-        ListNode pre = new ListNode(-1);
-        ListNode rCurrent = null;
-        pre.next = rCurrent;
+        ListNode pre = new ListNode(Integer.MIN_VALUE);
+        // 头应该用（最小）堆【优先队列】，不应该用列表，否则会重复比较
+        Heap<ListNode> heap = new Heap<>(lists, true);
+        ListNode current = pre;
 
+        while (heap.size() != 0) {
+            ListNode head = heap.top();
+            current.next = head;
+            current = current.next;
+            head = head.next;
+            if (head == null) {
+                heap.pop();
+            } else {
+                heap.setTop(head);
+            }
+        }
+
+        return pre.next;
     }
 
+
+    /**
+     * 31. 下一个排列
+     * https://leetcode.cn/problems/next-permutation/?favorite=2cktkvj
+     */
+    public void nextPermutation(int[] nums) {
+        if (nums.length == 1) return;
+        if (nums.length == 2) {
+            swap(nums, 0, 1);
+            return;
+        }
+        //1. 从后向前，找到破坏升序的第一个数字（等于不是破坏）
+        int index = nums.length - 2;
+        for (; index >= 0; index--) {
+            int next = index + 1;
+            if (nums[index] < nums[next]) break;
+        }
+        if (index < 0) {
+            // 如果没有破坏反向升序的，说明原序列是完全降序，revert
+            revert(nums, 0, nums.length - 1);
+        } else {
+            // 如果有破坏升序的 index， 找到后面最小的比它大的，交换，然后revert
+            // x x x 5 9 8 6 5 4 3 2 1 ==> x x x 6 9 8 5 5 4 3 2 1 ==> x x x 6 1 2 3 4 5 5 8 9
+            int i = index + 1;
+            while (i < nums.length && nums[i] > nums[index]) i++;
+            i = i - 1;
+            swap(nums, index, i);
+            revert(nums, index + 2, nums.length - 1);
+        }
+    }
+
+    private void revert(int[] array, int i, int j) {
+        int left = i, right = j;
+        while (left < right && array[left] != array[right]) {
+            swap(array, left, right);
+            left++;
+            right--;
+        }
+    }
+
+    private void swap(int[] array, int i, int j) {
+        int temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+
+    /**
+     * https://leetcode.cn/problems/longest-valid-parentheses/?favorite=2cktkvj
+     * 32. 最长有效括号
+     */
+    public int longestValidParentheses(String s) {
+        if (s.length() == 0) return 0;
+
+        return -1;
+    }
 
 }

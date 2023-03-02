@@ -1,6 +1,8 @@
 package psn.tangdaye.model;
 
-public class ListNode {
+import org.jetbrains.annotations.NotNull;
+
+public class ListNode implements Comparable<ListNode> {
     public int val;
     public ListNode next;
 
@@ -37,4 +39,8 @@ public class ListNode {
         return "[" + sb.substring(2);
     }
 
+    @Override
+    public int compareTo(@NotNull ListNode o) {
+        return val - o.val;
+    }
 }

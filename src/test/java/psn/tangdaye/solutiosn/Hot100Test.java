@@ -138,6 +138,12 @@ public class Hot100Test {
     public void testLongestValidParentheses() {
         String s = "()()((()()()()()";
         Assert.assertEquals(10, hot.longestValidParentheses(s));
+        String u = "()()((()()()()())";
+        Assert.assertEquals(12, hot.longestValidParentheses(u));
+        String z = "()()((()()()()())()";
+        Assert.assertEquals(14, hot.longestValidParentheses(z));
+        String v = "(((())))";
+        Assert.assertEquals(8, hot.longestValidParentheses(v));
     }
 
 }

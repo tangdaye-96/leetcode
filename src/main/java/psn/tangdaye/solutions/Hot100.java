@@ -593,9 +593,47 @@ public class Hot100 {
      * 32. 最长有效括号
      */
     public int longestValidParentheses(String s) {
+        int left = 0, right = s.length();
+        while (left < s.length() && s.charAt(left) == ')') left++;
+        while (right > 0 && s.charAt(right - 1) == '(') right++;
+        s = s.substring(left, right);
         if (s.length() == 0) return 0;
-
-        return -1;
+        int[] dp = new int[s.length()]; // dp[i] 是s[0:i]的最长串
+        dp[0] = 0;
+        LinkedList<LPStruct> stack = new LinkedList<>();// 左括号右边的成对的数量
+        stack.add(new LPStruct(0));
+        for (int i = 1; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (c == '(') {
+                dp[i] = dp[i - 1];
+                stack.add(new LPStruct(i));
+            } else {
+                if (stack.size() == 0) {
+                    dp[i] = dp[i - 1];
+                } else {
+                    stack.forEach(k -> k.value++);
+                    LPStruct x = stack.removeLast();
+                    if (stack.size() == 0) {
+                        dp[i] = dp[x.index] + x.value;
+                    } else {
+                        LPStruct y = stack.getLast();
+                        dp[i] = Math.max(dp[i - 1], y.value);
+                    }
+                }
+            }
+        }
+        return dp[s.length() - 1] * 2;
     }
+
+    private static class LPStruct {
+        int index;
+        int value;
+
+        LPStruct(int index) {
+            this.index = index;
+            this.value = 0;
+        }
+    }
+
 
 }

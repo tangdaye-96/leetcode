@@ -1,6 +1,6 @@
 package psn.tangdaye.solutions;
 
-import psn.tangdaye.model.Heap;
+import psn.tangdaye.structure.Heap;
 import psn.tangdaye.model.ListNode;
 
 import java.util.ArrayList;

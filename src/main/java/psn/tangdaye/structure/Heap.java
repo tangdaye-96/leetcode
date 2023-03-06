@@ -1,4 +1,4 @@
-package psn.tangdaye.model;
+package psn.tangdaye.structure;
 
 import java.util.ArrayList;
 

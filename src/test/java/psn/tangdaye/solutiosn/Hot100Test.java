@@ -36,13 +36,9 @@ public class Hot100Test {
 
     @Test
     public void testFindMedianSortedArrays() {
-//        int[] nums1 = {1, 2, 3, 4, 5, 6};
-//        int[] nums2 = {2, 4, 6, 8, 10, 12};
-//        Assert.assertEquals(hot.findMedianSortedArrays(nums1, nums2), 4.5, 0.0);
-
-        int[] nums3 = {2, 3, 5, 6};
-        int[] nums4 = {1, 4};
-        System.out.println(hot.findMedianSortedArrays(nums3, nums4));
+        int[] nums1 = {1, 2, 3, 4, 5, 6};
+        int[] nums2 = {2, 4, 6, 8, 10, 12};
+        Assert.assertEquals(hot.findMedianSortedArrays(nums1, nums2), 4.5, 0.0);
     }
 
     @Test
@@ -104,7 +100,7 @@ public class Hot100Test {
         int[] array2 = {2, 4, 6, 8, 10, 12, 14};
         ListNode head1 = ListNode.fromArray(array1);
         ListNode head2 = ListNode.fromArray(array2);
-        System.out.println(hot.mergeTwoLists(head1, head2));
+        Assert.assertEquals("[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14]", hot.mergeTwoLists(head1, head2).toString());
     }
 
     @Test
@@ -144,6 +140,16 @@ public class Hot100Test {
         Assert.assertEquals(14, hot.longestValidParentheses(z));
         String v = "(((())))";
         Assert.assertEquals(8, hot.longestValidParentheses(v));
+    }
+
+    @Test
+    public void testSearch() {
+        int[] array = {6, 7, 8, 9, 1, 2, 3, 4, 5};
+        Assert.assertEquals(2, hot.search(array, 8));
+        Assert.assertEquals(-1, hot.search(array, 0));
+        int[] array2 = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+        Assert.assertEquals(0, hot.search(array2, 1));
+        Assert.assertEquals(-1, hot.search(array2, 0));
     }
 
 }

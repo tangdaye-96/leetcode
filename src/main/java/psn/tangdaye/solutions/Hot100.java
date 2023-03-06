@@ -1,7 +1,7 @@
 package psn.tangdaye.solutions;
 
-import psn.tangdaye.structure.Heap;
 import psn.tangdaye.model.ListNode;
+import psn.tangdaye.structure.Heap;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -635,5 +635,39 @@ public class Hot100 {
         }
     }
 
+    /**
+     * https://leetcode.cn/problems/search-in-rotated-sorted-array/?favorite=2cktkvj
+     * 33. 搜索旋转排序数组
+     */
+    public int search(int[] nums, int target) {
+        if (nums.length == 0) return -1;
+        if (nums.length == 1) return target == nums[0] ? 0 : -1;
+
+        int left = 0, right = nums.length - 1;
+        while (left < right) {
+            int mid = (left + right) / 2;
+            if (left == mid) break;
+            if (nums[left] < nums[mid]) {
+                // 前半有序
+                left = mid;
+            } else {
+                right = mid;
+            }
+        }
+        // left和right最大差1
+        if (nums[left] < nums[right]) left = right;
+        // left是最大值
+        if (target > nums[left]) return -1;
+        if (target == nums[left]) return left;
+        if (target > nums[0]) {
+            int x = Arrays.binarySearch(nums, 0, left, target);
+            return x >= 0 ? x : -1;
+        }
+        if (target == nums[0]) return 0;
+        if (left == nums.length - 1) return -1;
+        int x = Arrays.binarySearch(nums, left + 1, nums.length - 1, target);
+        return x >= 0 ? x : -1;
+
+    }
 
 }

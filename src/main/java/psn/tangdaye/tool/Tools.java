@@ -1,6 +1,6 @@
 package psn.tangdaye.tool;
 
-import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 public class Tools {
@@ -8,15 +8,69 @@ public class Tools {
         System.out.println(pythonArray.replace('[', '{').replace(']', '}'));
     }
 
-    public static String beauty2DArray(boolean[][] array) {
+    public static <T> String beauty2DArray(List<List<T>> list) {
         StringBuilder sb = new StringBuilder();
-        for (boolean[] anArray : array) {
-            String x = Arrays.toString(anArray);
-            sb.append(x, 1, x.length() - 1);
-            sb.append("\n");
+        sb.append("[");
+        for (List<T> l : list) {
+            sb.append("[");
+            for (T t : l) {
+                sb.append(String.valueOf(t));
+                sb.append(", ");
+            }
+            if (sb.length() > 2) {
+                sb.delete(sb.length() - 2, sb.length());
+            }
+            sb.append("], ");
         }
-        return sb.substring(0, sb.length() - 1);
+        if (sb.length() > 2) {
+            sb.delete(sb.length() - 2, sb.length());
+        }
+        sb.append("]");
+        return sb.toString();
     }
+
+    public static String beauty2DArray(int[][] list) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
+        for (int[] l : list) {
+            sb.append("[");
+            for (int t : l) {
+                sb.append(String.valueOf(t));
+                sb.append(",");
+            }
+            if (sb.length() > 1) {
+                sb.delete(sb.length() - 1, sb.length());
+            }
+            sb.append("],");
+        }
+        if (sb.length() > 1) {
+            sb.delete(sb.length() - 1, sb.length());
+        }
+        sb.append("]");
+        return sb.toString();
+    }
+
+    public static <T> String beauty2DArray(T[][] list) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("[\n");
+        for (T[] l : list) {
+            sb.append(" [");
+            for (T t : l) {
+                sb.append(String.valueOf(t));
+                sb.append(", ");
+            }
+            if (sb.length() > 2) {
+                sb.delete(sb.length() - 2, sb.length());
+            }
+            sb.append("], \n");
+        }
+        if (sb.length() > 3) {
+            sb.delete(sb.length() - 3, sb.length());
+        }
+        sb.append("\n]");
+        return sb.toString();
+    }
+
 
     public static <T> void shuffle(T[] array) {
         shuffle(array, 0, array.length);
@@ -32,9 +86,4 @@ public class Tools {
         }
     }
 
-    public static void main(String[] args) {
-        boolean[][] array = {{true, true, true}, {true, true, true}, {true, true, true}};
-        System.out.println(beauty2DArray(array));
-//        printJavaArray("[[1,2,3,4],[5,6,7,8],[9,10,11,12]]");
-    }
 }

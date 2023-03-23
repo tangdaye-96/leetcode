@@ -5,6 +5,7 @@ import psn.tangdaye.structure.Heap;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -12,11 +13,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Stack;
 
 public class Hot100 {
 
     /**
      * 1. 两数之和
+     * 给定一个整数数组 nums 和一个整数目标值 target，请你在该数组中找出 和为目标值 target  的那 两个 整数，并返回它们的数组下标。
      * https://leetcode.cn/problems/two-sum/?favorite=2cktkvj
      */
     public int[] twoSum(int[] nums, int target) {
@@ -52,6 +55,9 @@ public class Hot100 {
 
     /**
      * 2. 两数相加
+     * 给你两个 非空 的链表，表示两个非负的整数。它们每位数字都是按照 逆序 的方式存储的，并且每个节点只能存储 一位 数字。
+     *
+     * 请你将两个数相加，并以相同形式返回一个表示和的链表。
      * https://leetcode.cn/problems/add-two-numbers/?favorite=2cktkvj
      */
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
@@ -105,7 +111,7 @@ public class Hot100 {
 
     /**
      * 3. 无重复字符的最长子串
-     * https://leetcode.cn/problems/add-two-numbers/?favorite=2cktkvj
+     * https://leetcode.cn/problems/longest-substring-without-repeating-characters/
      */
     public int lengthOfLongestSubstring(String s) {
         if (s.length() == 0) return 0;
@@ -299,7 +305,6 @@ public class Hot100 {
 
 
     }
-
 
     /**
      * 11. 盛最多水的容器
@@ -542,7 +547,6 @@ public class Hot100 {
         return pre.next;
     }
 
-
     /**
      * 31. 下一个排列
      * https://leetcode.cn/problems/next-permutation/?favorite=2cktkvj
@@ -665,9 +669,499 @@ public class Hot100 {
         }
         if (target == nums[0]) return 0;
         if (left == nums.length - 1) return -1;
-        int x = Arrays.binarySearch(nums, left + 1, nums.length - 1, target);
+        int x = Arrays.binarySearch(nums, left + 1, nums.length, target);
         return x >= 0 ? x : -1;
 
+    }
+
+    /**
+     * 34. 在排序数组中查找元素的第一个和最后一个位置
+     * https://leetcode.cn/problems/find-first-and-last-position-of-element-in-sorted-array/?favorite=2cktkvj
+     */
+    public int[] searchRange(int[] nums, int target) {
+        if (nums.length == 0) return new int[]{-1, -1};
+        if (nums[0] > target || nums[nums.length - 1] < target) return new int[]{-1, -1};
+        int left = 0, right = nums.length;
+        int mid = (left + right) / 2;
+        while (left < right) {
+            mid = (left + right) / 2;
+            if (nums[mid] < target) {
+                left = mid + 1;
+            } else if (nums[mid] > target) {
+                right = mid;
+            } else {
+                // 两边扩展
+                break;
+            }
+        }
+        if (nums[mid] == target) {
+            // nums[left] <= target nums[right-1] >= target
+            int first = searchFirst(nums, left, mid, target);
+            int last = searchLast(nums, mid, right - 1, target);
+            return new int[]{first, last};
+        }
+        return new int[]{-1, -1};
+    }
+
+    // 保持nums[j] == target;
+    private int searchFirst(int[] nums, int i, int j, int target) {
+        if (i + 1 == j) return nums[i] == target ? i : j;
+        if (nums[i] == target) return i;
+        int mid = (i + j) / 2;
+        if (nums[mid] < target) return searchFirst(nums, mid + 1, j, target);
+        else return searchFirst(nums, i, mid, target);
+    }
+
+    // 保持nums[i] == target;
+    private int searchLast(int[] nums, int i, int j, int target) {
+        if (i + 1 == j) return nums[j] == target ? j : i;
+        if (nums[j] == target) return j;
+        int mid = (i + j) / 2;
+        if (nums[mid] > target) return searchLast(nums, i, mid - 1, target);
+        else return searchLast(nums, mid, j, target);
+    }
+
+    /**
+     * 39. 组合总和
+     * 给你一个 无重复元素 的整数数组 candidates 和一个目标整数 target ，找出 candidates 中可以使数字和为目标数 target 的 所有 不同组合 ，并以列表形式返回。你可以按 任意顺序 返回这些组合。
+     * https://leetcode.cn/problems/combination-sum/?favorite=2cktkvj
+     */
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        Arrays.sort(candidates);
+        List<List<Integer>>[] dp = new ArrayList[target + 1];
+        dp[0] = new ArrayList<>();
+        for (int sum = 1; sum <= target; sum++) {
+            dp[sum] = new ArrayList<>();
+            for (int c : candidates) {
+                if (c > sum) break;
+                else if (c == sum) dp[sum].add(Collections.singletonList(sum));
+                else {
+                    List<List<Integer>> once = dp[sum - c];
+                    for (List<Integer> k : once) {
+                        if (k.get(k.size() - 1) <= c) {
+                            List<Integer> newK = new ArrayList<>(k);
+                            newK.add(c);
+                            dp[sum].add(newK);
+                        }
+                    }
+                }
+            }
+        }
+        return dp[target];
+    }
+
+    /**
+     * 42. 接雨水
+     * 给定 n 个非负整数表示每个宽度为 1 的柱子的高度图，计算按此排列的柱子，下雨之后能接多少雨水。
+     * https://leetcode.cn/problems/trapping-rain-water/?favorite=2cktkvj
+     */
+    public int trap(int[] height) {
+        // 递减栈
+        Stack<int[]> stack = new Stack<>();
+        int sum = 0;
+        for (int i = 0; i < height.length; i++) {
+            int h = height[i];
+            if (stack.isEmpty() || h <= stack.peek()[0]) {
+                stack.push(new int[]{h, i});
+                continue;
+            }
+            while (!stack.isEmpty()) {
+                int[] k = stack.peek();
+                if (k[0] >= h) break;
+                stack.pop();
+                if (stack.isEmpty()) break;
+                int[] top = stack.peek();
+                sum += (Math.min(top[0], h) - k[0]) * (i - top[1] - 1);
+            }
+            stack.push(new int[]{h, i});
+        }
+        return sum;
+    }
+
+    /**
+     * 46. 全排列
+     * 给定一个不含重复数字的数组 nums ，返回其 所有可能的全排列 。你可以 按任意顺序 返回答案。
+     * https://leetcode.cn/problems/permutations/?favorite=2cktkvj
+     */
+    public List<List<Integer>> permute(int[] nums) {
+        if (nums.length == 0) {
+            return new ArrayList<>();
+        }
+        List<List<Integer>> result = new LinkedList<>();
+        for (int n : nums) {
+            if (result.isEmpty()) {
+                result.add(new LinkedList<Integer>() {{
+                    add(n);
+                }});
+            } else {
+                List<List<Integer>> temp = new LinkedList<>();
+                for (List<Integer> array : result) {
+                    for (int i = 1; i <= array.size(); i++) {
+                        List<Integer> next = new LinkedList<>(array);
+                        next.add(i, n);
+                        temp.add(next);
+                    }
+                    array.add(0, n);
+                }
+                result.addAll(temp);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 给定一个 n × n 的二维矩阵 matrix 表示一个图像。请你将图像顺时针旋转 90 度。
+     * 48. 旋转图像
+     * https://leetcode.cn/problems/rotate-image/?favorite=2cktkvj
+     */
+    public void rotate(int[][] matrix) {
+        int n = matrix.length;
+        for (int i = 0; i < n / 2; i++) {
+            // 仅处理matrix[i][i]到matrix[i][n-1-i],一共(n-1-2*i)个单元格
+            for (int j = i; j < n - 1 - i; j++) {
+                // (i,j) -> (j, n-1-i) -> (n-1-i, n-1-j) -> (n-1-j,i) -> (i,j);
+                int t = matrix[i][j];
+                matrix[i][j] = matrix[n - 1 - j][i];
+                matrix[n - 1 - j][i] = matrix[n - 1 - i][n - 1 - j];
+                matrix[n - 1 - i][n - 1 - j] = matrix[j][n - 1 - i];
+                matrix[j][n - 1 - i] = t;
+            }
+        }
+    }
+
+    /**
+     * 49. 字母异位词分组
+     * https://leetcode.cn/problems/group-anagrams/?favorite=2cktkvj
+     * 给你一个字符串数组，请你将 字母异位词 组合在一起。可以按任意顺序返回结果列表。
+     */
+    public List<List<String>> groupAnagrams(String[] strs) {
+        // 找个hashcode，把【字母异位词】映射到同一个int上
+        Map<String, List<String>> a = new HashMap<>();
+        int[] alphabet = new int[26];
+        for (String s : strs) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < 26; i++) {
+                alphabet[i] = 0;
+            }
+            for (int i = 0; i < s.length(); i++) {
+                alphabet[s.charAt(i) - 'a'] += 1;
+            }
+            for (int i = 0; i < 26; i++) {
+                if (alphabet[i] > 0) {
+                    char c = (char) (i + 'a');
+                    sb.append(alphabet[i]).append(c);
+                }
+            }
+            String x = sb.toString();
+            if (a.get(x) == null) {
+                a.put(x, new ArrayList<String>() {{
+                    add(s);
+                }});
+            } else {
+                a.get(x).add(s);
+            }
+        }
+        List<List<String>> result = new ArrayList<>();
+        for (Map.Entry<String, List<String>> entry : a.entrySet()) {
+            result.add(entry.getValue());
+        }
+        return result;
+    }
+
+    /**
+     * 53. 最大子数组和
+     * 给你一个整数数组 nums ，请你找出一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。
+     * https://leetcode.cn/problems/maximum-subarray/
+     */
+    public int maxSubArray(int[] nums) {
+        int[] dp = new int[nums.length];
+        int maxSum = nums[0];
+        dp[0] = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            if (dp[i - 1] >= 0) {
+                dp[i] = dp[i - 1] + nums[i];
+            } else {
+                dp[i] = nums[i];
+            }
+            maxSum = Math.max(maxSum, dp[i]);
+        }
+        return maxSum;
+    }
+
+    /**
+     * 55. 跳跃游戏
+     * 给定一个非负整数数组 nums ，你最初位于数组的 第一个下标。数组中的每个元素代表你在该位置可以跳跃的最大长度。判断你是否能够到达最后一个下标。
+     * https://leetcode.cn/problems/jump-game/?favorite=2cktkvj
+     */
+    public boolean canJump(int[] nums) {
+        int[] dp = new int[nums.length];
+        int n = nums.length;
+        // dp[i]表示，从i到n-1，最前一个能到达nums[n-1]的下标
+        dp[n - 1] = n - 1;
+        for (int i = n - 2; i >= 0; i--) {
+            if (i + nums[i] >= dp[i + 1]) {
+                dp[i] = i;
+            } else {
+                dp[i] = dp[i + 1];
+            }
+        }
+        return dp[0] == 0;
+    }
+
+    /**
+     * 56. 合并区间
+     * 以数组 intervals 表示若干个区间的集合，其中单个区间为 intervals[i] = [starti, endi] 。请你合并所有重叠的区间，并返回 一个不重叠的区间数组，该数组需恰好覆盖输入中的所有区间 。
+     * https://leetcode.cn/problems/merge-intervals/?favorite=2cktkvj
+     */
+    public int[][] merge(int[][] intervals) {
+        Arrays.sort(intervals, Comparator.comparingInt(o -> o[0]));
+        List<int[]> result = new ArrayList<>();
+        for (int[] interval : intervals) {
+            if (result.isEmpty()) result.add(interval);
+            else {
+                int[] x = result.get(result.size() - 1);
+                if (interval[0] <= x[1]) {
+                    x[1] = Math.max(interval[1], x[1]);
+                } else {
+                    result.add(interval);
+                }
+            }
+        }
+        int[][] x = new int[result.size()][2];
+        for (int i = 0; i < result.size(); i++) {
+            x[i] = result.get(i);
+        }
+        return x;
+    }
+
+    /**
+     * 62. 不同路径
+     *
+     * 一个机器人位于一个 m x n 网格的左上角 （起始点在下图中标记为 “Start” ）。
+     * 机器人每次只能向下或者向右移动一步。机器人试图达到网格的右下角（在下图中标记为 “Finish” ）。
+     * 问总共有多少条不同的路径？
+     *
+     * https://leetcode.cn/problems/unique-paths/?favorite=2cktkvj
+     */
+    public int uniquePaths(int m, int n) {
+        // 答案是C(m-1, m+n-2);
+        int s = m - 1;
+        int t = n - 1;
+        int k = s > t ? t : s;
+        long res = 1;
+        for (int i = 0; i < k; i++) {
+            res = res * (s + t - i);
+            res = res / (i + 1);
+        }
+        return (int) res;
+    }
+
+    /**
+     * 64. 最小路径和
+     * 给定一个包含非负整数的 m x n 网格 grid ，请找出一条从左上角到右下角的路径，使得路径上的数字总和为最小。
+     * https://leetcode.cn/problems/minimum-path-sum/?favorite=2cktkvj
+     */
+    public int minPathSum(int[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+        int[][] dp = new int[m][n];
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (i == 0 && j == 0) dp[i][j] = grid[i][j];
+                else if (i == 0) dp[i][j] = dp[i][j - 1] + grid[i][j];
+                else if (j == 0) dp[i][j] = dp[i - 1][j] + grid[i][j];
+                else dp[i][j] = Math.min(dp[i - 1][j], dp[i][j - 1]) + grid[i][j];
+            }
+        }
+        return dp[m - 1][n - 1];
+    }
+
+    /**
+     * 70. 爬楼梯
+     * 假设你正在爬楼梯。需要 n 阶你才能到达楼顶。
+     * 每次你可以爬 1 或 2 个台阶。你有多少种不同的方法可以爬到楼顶呢？
+     * https://leetcode.cn/problems/climbing-stairs/?favorite=2cktkvj
+     */
+    public int climbStairs(int n) {
+        if (n == 1) return 1;
+        int[] dp = new int[n + 1];
+        dp[0] = 1;
+        dp[1] = 1;
+        for (int i = 2; i <= n; i++) {
+            dp[i] = dp[i - 1] + dp[i - 2];
+        }
+        return dp[n];
+    }
+
+    /**
+     * 72. 编辑距离
+     * 给你两个单词 word1 和 word2， 请返回将 word1 转换成 word2 所使用的最少操作数  。
+     * 你可以对一个单词进行如下三种操作：
+     *
+     * 插入一个字符
+     * 删除一个字符
+     * 替换一个字符
+     * https://leetcode.cn/problems/edit-distance/?favorite=2cktkvj
+     */
+    public int minDistance(String word1, String word2) {
+        int[][] dp = new int[word1.length() + 1][word2.length() + 1];
+        int m = word1.length();
+        int n = word2.length();
+        for (int i = 0; i <= m; i++) {
+            dp[i][0] = i;
+        }
+        for (int j = 0; j <= n; j++) {
+            dp[0][j] = j;
+        }
+        for (int i = 1; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
+                char c1 = word1.charAt(i - 1);
+                char c2 = word2.charAt(j - 1);
+                if (c1 == c2) dp[i][j] = dp[i - 1][j - 1];
+                else dp[i][j] = Math.min(Math.min(dp[i][j - 1], dp[i - 1][j]), dp[i - 1][j - 1]) + 1;
+            }
+        }
+        return dp[m][n];
+    }
+
+    /**
+     * 75. 颜色分类
+     * 给定一个包含红色、白色和蓝色、共 n 个元素的数组 nums ，原地对它们进行排序，使得相同颜色的元素相邻，并按照红色、白色、蓝色顺序排列。
+     * 我们使用整数 0、 1 和 2 分别表示红色、白色和蓝色。
+     * https://leetcode.cn/problems/sort-colors/?favorite=2cktkvj
+     */
+    public void sortColors(int[] nums) {
+        // 计数排序
+        int r = 0;
+        int w = 0;
+        for (int i : nums) {
+            if (i == 0) r += 1;
+            if (i == 1) w += 1;
+        }
+        for (int i = 0; i < nums.length; i++) {
+            if (i < r) nums[i] = 0;
+            else if (i < r + w) nums[i] = 1;
+            else nums[i] = 2;
+        }
+    }
+
+    /**
+     * 76. 最小覆盖子串
+     * 给你一个字符串 s 、一个字符串 t 。返回 s 中涵盖 t 所有字符的最小子串。如果 s 中不存在涵盖 t 所有字符的子串，则返回空字符串 "" 。
+     * https://leetcode.cn/problems/minimum-window-substring/?favorite=2cktkvj
+     */
+    public String minWindow(String s, String t) {
+        Map<Character, Integer> dic = new HashMap<>();
+        for (int i = 0; i < t.length(); i++) {
+            int x = dic.getOrDefault(t.charAt(i), 0);
+            dic.put(t.charAt(i), x + 1);
+        }
+        List<Integer> indexList = new ArrayList<>();
+        int k = 0;
+        int i = -1, j = 0;
+        String minStr = "";
+        while (j < s.length()) {
+            char jc = s.charAt(j);
+            if (dic.containsKey(jc)) {
+                if (i < 0) i = j;
+                indexList.add(j); // 匹配到就塞进去
+                int x = dic.get(jc);
+                dic.put(jc, x - 1); // 先-1;
+
+                if (minStr.length() == 0) {
+                    boolean done = true;
+                    for (Map.Entry<Character, Integer> entry : dic.entrySet()) {
+                        if (entry.getValue() > 0) {
+                            done = false;
+                            break;
+                        }
+                    }
+                    if (done) minStr = s.substring(i, j + 1);
+                }
+
+                // 这里处理i
+                if (dic.get(jc) < 0) {
+                    while (true) {
+                        i = indexList.get(k);
+                        char ic = s.charAt(i);
+                        if (dic.get(ic) < 0) {
+                            int y = dic.get(ic);
+                            dic.put(ic, y + 1);
+                            k++;
+                        } else {
+                            break;
+                        }
+                    }
+                }
+            }
+            minStr = j + 1 - i <= minStr.length() ? s.substring(i, j + 1) : minStr;
+            j++;
+        }
+        return minStr;
+    }
+
+    /**
+     * 78. 子集
+     * 给你一个整数数组 nums ，数组中的元素 互不相同 。返回该数组所有可能的子集（幂集）。
+     * https://leetcode.cn/problems/subsets/?favorite=2cktkvj
+     */
+    public List<List<Integer>> subsets(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+        result.add(new ArrayList<>());
+        for (int a : nums) {
+            List<List<Integer>> needAdd = new ArrayList<>();
+            for (List<Integer> set : result) {
+                List<Integer> newSet = new ArrayList<>(set);
+                newSet.add(a);
+                needAdd.add(newSet);
+            }
+            result.addAll(needAdd);
+        }
+        return result;
+    }
+
+    /**
+     * 79. 单词搜索
+     * 给定一个 m x n 二维字符网格 board 和一个字符串单词 word 。如果 word 存在于网格中，返回 true ；否则，返回 false 。
+     * https://leetcode.cn/problems/word-search/?favorite=2cktkvj
+     */
+    public boolean exist(char[][] board, String word) {
+        boolean[][] used = new boolean[board.length][board[0].length];
+        int k = 0;
+        for (int s = 0; s < board.length; s++) {
+            for (int t = 0; t < board.length; t++) {
+                boolean x = doExist(board, word, used, s, t, k);
+                if (x) return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean doExist(char[][] board, String word, boolean[][] used, int s, int t, int k) {
+        if (s >= board.length || t >= board[0].length || s < 0 || t < 0) return false;
+        if (k == word.length()) return true;
+        if (used[s][t]) return false;
+        if (!(board[s][t] == word.charAt(k))) {
+            return false;
+        }
+        used[s][t] = true;
+        boolean x = doExist(board, word, used, s, t + 1, k + 1)
+                || doExist(board, word, used, s + 1, t, k + 1)
+                || doExist(board, word, used, s - 1, t, k + 1)
+                || doExist(board, word, used, s, t - 1, k + 1);
+        if (x) return true;
+        else used[s][t] = false;
+        return false;
+    }
+
+    /**
+     * 84. 柱状图中最大的矩形
+     * 给定 n 个非负整数，用来表示柱状图中各个柱子的高度。每个柱子彼此相邻，且宽度为 1 。
+     * 求在该柱状图中，能够勾勒出来的矩形的最大面积。
+     * https://leetcode.cn/problems/largest-rectangle-in-histogram/?favorite=2cktkvj
+     */
+    public int largestRectangleArea(int[] heights) {
+        return -1;
     }
 
 }

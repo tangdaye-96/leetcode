@@ -4,8 +4,11 @@ import org.junit.Assert;
 import org.junit.Test;
 import psn.tangdaye.model.ListNode;
 import psn.tangdaye.solutions.Hot100;
+import psn.tangdaye.tool.Tools;
 
 import java.util.Arrays;
+
+import static psn.tangdaye.tool.Tools.beauty2DArray;
 
 public class Hot100Test {
     Hot100 hot = new Hot100();
@@ -150,6 +153,140 @@ public class Hot100Test {
         int[] array2 = {1, 2, 3, 4, 5, 6, 7, 8, 9};
         Assert.assertEquals(0, hot.search(array2, 1));
         Assert.assertEquals(-1, hot.search(array2, 0));
+        int[] array3 = {3, 1};
+        Assert.assertEquals(1, hot.search(array3, 1));
     }
+
+    @Test
+    public void testSearchRange() {
+        int[] array1 = {1, 1, 1, 1, 1, 6, 7, 8, 9, 9, 9, 9, 9};
+        Assert.assertEquals("[0, 4]", Arrays.toString(hot.searchRange(array1, 1)));
+        Assert.assertEquals("[8, 12]", Arrays.toString(hot.searchRange(array1, 9)));
+
+        int[] array2 = {5, 7, 7, 8, 8, 10};
+        Assert.assertEquals("[3, 4]", Arrays.toString(hot.searchRange(array2, 8)));
+    }
+
+    @Test
+    public void testCombinationSum() {
+        int[] array = {2, 3, 6, 7};
+        int target = 7;
+        Assert.assertEquals("[[2, 2, 3], [7]]", beauty2DArray(hot.combinationSum(array, target)));
+    }
+
+    @Test
+    public void testTrap() {
+        int[] height1 = {0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1};
+        int[] height2 = {4, 2, 0, 3, 2, 5};
+        Assert.assertEquals(hot.trap(height1), 6);
+        Assert.assertEquals(hot.trap(height2), 9);
+    }
+
+    @Test
+    public void testPermute() {
+        int[] h = {1, 2, 3, 4, 5};
+        Assert.assertEquals(120, hot.permute(h).size());
+    }
+
+    @Test
+    public void testRotate() {
+        int[][] matrix = {{5, 1, 9, 11}, {2, 4, 8, 10}, {13, 3, 6, 7}, {15, 14, 12, 16}};
+        hot.rotate(matrix);
+        Assert.assertEquals("[[15,13,2,5],[14,3,4,1],[12,6,8,9],[16,7,10,11]]", Tools.beauty2DArray(matrix));
+    }
+
+    @Test
+    public void testGroupAnagrams() {
+        String[] array = {"eat", "tea", "tan", "ate", "nat", "bat"};
+        Assert.assertEquals(3, hot.groupAnagrams(array).size());
+    }
+
+    @Test
+    public void testMaxSubArray() {
+        int[] array = {-2, 1, -3, 4, -1, 2, 1, -5, 4};
+        Assert.assertEquals(6, hot.maxSubArray(array));
+    }
+
+    @Test
+    public void testCanJump() {
+        int[] array1 = {2, 3, 1, 1, 4};
+        Assert.assertTrue(hot.canJump(array1));
+
+        int[] array2 = {3, 2, 5, 0, 7, 0, 0, 0, 0, 4};
+        Assert.assertTrue(hot.canJump(array2));
+
+        int[] array3 = {3, 2, 1, 0, 4};
+        Assert.assertTrue(!hot.canJump(array3));
+    }
+
+    @Test
+    public void testMerge() {
+        int[][] array1 = {{1, 3}, {2, 6}, {8, 10}, {15, 18}};
+        Assert.assertEquals("[[1,6],[8,10],[15,18]]", Tools.beauty2DArray(hot.merge(array1)));
+
+        int[][] array2 = {{1, 4}, {4, 5}};
+        Assert.assertEquals("[[1,5]]", Tools.beauty2DArray(hot.merge(array2)));
+    }
+
+    @Test
+    public void testUniquePaths() {
+        Assert.assertEquals(1916797311, hot.uniquePaths(9, 51));
+    }
+
+    @Test
+    public void testMinPathSum() {
+        int[][] array = {{1, 3, 1}, {1, 5, 1}, {4, 2, 1}};
+        Assert.assertEquals(7, hot.minPathSum(array));
+    }
+
+    @Test
+    public void testClimbStairs() {
+        Assert.assertEquals(3, hot.climbStairs(3));
+    }
+
+    @Test
+    public void testMinDistance() {
+        Assert.assertEquals(3, hot.minDistance("horse", "ros"));
+        Assert.assertEquals(5, hot.minDistance("intention", "execution"));
+    }
+
+    @Test
+    public void sortColors() {
+        int[] array = {2, 0, 2, 1, 1, 0};
+        hot.sortColors(array);
+        Assert.assertEquals("[0, 0, 1, 1, 2, 2]", Arrays.toString(array));
+    }
+
+    @Test
+    public void testMinWindow() {
+        String s = "ADOBECODEBANC", t = "ABC";
+        Assert.assertEquals("BANC", hot.minWindow(s, t));
+
+        String s1 = "abcdefxabcdyefghyzzjklmnyo", t1 = "xyz";
+        Assert.assertEquals("xabcdyefghyz", hot.minWindow(s1, t1));
+
+        String s2 = "xyzabcdefgx", t2 = "xyz";
+        Assert.assertEquals("xyz", hot.minWindow(s2, t2));
+    }
+
+    @Test
+    public void testSubSets() {
+        int[] nums = {1, 2, 3};
+        Assert.assertEquals(8, hot.subsets(nums).size());
+    }
+
+    @Test
+    public void testExist() {
+        char[][] board = {{'A', 'B', 'C', 'E'}, {'S', 'F', 'C', 'S'}, {'A', 'D', 'E', 'E'}};
+        String word = "ABCCED";
+        Assert.assertTrue(hot.exist(board, word));
+    }
+
+    @Test
+    public void testLargestRectangleArea() {
+        int[] heights = {2, 1, 5, 6, 2, 3};
+        Assert.assertEquals(10, hot.largestRectangleArea(heights));
+    }
+
 
 }

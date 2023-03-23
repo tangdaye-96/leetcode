@@ -1,4 +1,4 @@
-package psn.tangdaye.structure;
+package psn.tangdaye.structure.tree;
 
 import psn.tangdaye.tool.Tools;
 

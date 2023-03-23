@@ -1,4 +1,4 @@
-package psn.tangdaye.structure;
+package psn.tangdaye.structure.tree;
 
 /**
  * @date       : 2023/3/5 19:45

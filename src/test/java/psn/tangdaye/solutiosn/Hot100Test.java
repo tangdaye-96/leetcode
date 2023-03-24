@@ -279,13 +279,26 @@ public class Hot100Test {
     public void testExist() {
         char[][] board = {{'A', 'B', 'C', 'E'}, {'S', 'F', 'C', 'S'}, {'A', 'D', 'E', 'E'}};
         String word = "ABCCED";
+        String word2 = "ABCCEDASF";
+        String word3 = "ABCCEDASFC";
+        String word4 = "SEE";
         Assert.assertTrue(hot.exist(board, word));
+        Assert.assertTrue(hot.exist(board, word2));
+        Assert.assertFalse(hot.exist(board, word3));
+        Assert.assertTrue(hot.exist(board, word4));
+
     }
 
     @Test
     public void testLargestRectangleArea() {
         int[] heights = {2, 1, 5, 6, 2, 3};
         Assert.assertEquals(10, hot.largestRectangleArea(heights));
+    }
+
+    @Test
+    public void testMaximalRectangle() {
+        char[][] matrix = {{'0', '0', '0', '1', '1', '1'}, {'1', '1', '1', '1', '1', '1'}};
+        Assert.assertEquals(6, hot.maximalRectangle(matrix));
     }
 
 

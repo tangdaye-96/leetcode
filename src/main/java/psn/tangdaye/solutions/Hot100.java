@@ -1129,7 +1129,7 @@ public class Hot100 {
         boolean[][] used = new boolean[board.length][board[0].length];
         int k = 0;
         for (int s = 0; s < board.length; s++) {
-            for (int t = 0; t < board.length; t++) {
+            for (int t = 0; t < board[0].length; t++) {
                 boolean x = doExist(board, word, used, s, t, k);
                 if (x) return true;
             }
@@ -1138,8 +1138,8 @@ public class Hot100 {
     }
 
     private boolean doExist(char[][] board, String word, boolean[][] used, int s, int t, int k) {
-        if (s >= board.length || t >= board[0].length || s < 0 || t < 0) return false;
         if (k == word.length()) return true;
+        if (s >= board.length || t >= board[0].length || s < 0 || t < 0) return false;
         if (used[s][t]) return false;
         if (!(board[s][t] == word.charAt(k))) {
             return false;
@@ -1161,7 +1161,71 @@ public class Hot100 {
      * https://leetcode.cn/problems/largest-rectangle-in-histogram/?favorite=2cktkvj
      */
     public int largestRectangleArea(int[] heights) {
-        return -1;
+        // 右边最远比自己小[0]，左边最远比自己小[1]，记录一下，最后求最大值
+        int[][] data = new int[heights.length][2];
+        Stack<int[]> stack = new Stack<>();
+        int maxArea = Integer.MIN_VALUE;
+        for (int i = 0; i < heights.length; i++) {
+            int h = heights[i];
+            while (!stack.isEmpty() && h < stack.peek()[0]) {
+                int[] t = stack.pop();
+                data[t[1]][0] = i;
+            }
+            stack.push(new int[]{h, i});
+        }
+        while (!stack.isEmpty()) {
+            int[] t = stack.pop();
+            data[t[1]][0] = heights.length;
+        }
+        for (int i = heights.length - 1; i >= 0; i--) {
+            int h = heights[i];
+            while (!stack.isEmpty() && h < stack.peek()[0]) {
+                int[] t = stack.pop();
+                data[t[1]][1] = i;
+            }
+            stack.push(new int[]{h, i});
+        }
+        while (!stack.isEmpty()) {
+            int[] t = stack.pop();
+            data[t[1]][1] = -1;
+        }
+        for (int i = 0; i < data.length; i++) {
+            maxArea = Math.max(heights[i] * (data[i][0] - data[i][1] - 1), maxArea);
+        }
+        return maxArea;
     }
 
+
+    /**
+     * 85. 最大矩形
+     * 给定一个仅包含 0 和 1 、大小为 rows x cols 的二维二进制矩阵，找出只包含 1 的最大矩形，并返回其面积。
+     * https://leetcode.cn/problems/maximal-rectangle/?favorite=2cktkvj
+     */
+    public int maximalRectangle(char[][] matrix) {
+        int[][][] dp = new int[matrix.length][matrix[0].length][2];
+        int max = Integer.MIN_VALUE;
+//        for (int i = 0; i < matrix.length; i++) {
+//            for (int j = 0; j < matrix[0].length; j++) {
+//                if (matrix[i][j] == 0) {
+//                    dp[i][j][0] = 0;
+//                    dp[i][j][1] = 0;
+//                } else {
+//                    if (i == 0 && j == 0) {
+//                        dp[i][j][0] = 1;
+//                        dp[i][j][1] = 1;
+//                    } else if (i == 0) {
+//                        dp[i][j][0] = dp[i][j - 1][0] + 1;
+//                        dp[i][j][1] = 1;
+//                    } else if (j == 0) {
+//                        dp[i][j][0] = 1;
+//                        dp[i][j][1] = dp[i - 1][j][1] + 1;
+//                    } else {
+//                        int l1 = dp[i][j - 1][0], u1 = dp[i][j - 1][1];
+//                        int l2 = dp[i - 1][j][0], u2 = dp[i - 1][j][1];
+//                    }
+//                }
+//            }
+//        }
+        return max;
+    }
 }

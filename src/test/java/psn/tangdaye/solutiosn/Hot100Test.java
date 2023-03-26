@@ -3,6 +3,7 @@ package psn.tangdaye.solutiosn;
 import org.junit.Assert;
 import org.junit.Test;
 import psn.tangdaye.model.ListNode;
+import psn.tangdaye.model.TreeNode;
 import psn.tangdaye.solutions.Hot100;
 import psn.tangdaye.tool.Tools;
 
@@ -301,5 +302,74 @@ public class Hot100Test {
         Assert.assertEquals(6, hot.maximalRectangle(matrix));
     }
 
+    @Test
+    public void testInorderTraversal() {
+        Integer[] array = {1, null, 2, 3};
+        TreeNode root = TreeNode.fromArray(array);
+        Assert.assertEquals("[1, 3, 2]", hot.inorderTraversal(root).toString());
+    }
+
+    @Test
+    public void testNumTrees() {
+        int n = 3;
+        Assert.assertEquals(5, hot.numTrees(n));
+    }
+
+    @Test
+    public void testIsValidBST() {
+        Integer[] array = {2, 2, 2};
+        TreeNode root = TreeNode.fromArray(array);
+        Assert.assertFalse(hot.isValidBST(root));
+    }
+
+    @Test
+    public void testIsSymmetric() {
+        Integer[] array = {1, 2, 2, 3, 4, 4, 3};
+        TreeNode root = TreeNode.fromArray(array);
+        Assert.assertTrue(hot.isSymmetric(root));
+    }
+
+    @Test
+    public void testLayerOrder() {
+        Integer[] array = {1, 2, 2, 3, 4, 4, 3};
+        TreeNode root = TreeNode.fromArray(array);
+        Assert.assertEquals("[[1], [2, 2], [3, 4, 4, 3]]", Tools.beauty2DArray(hot.levelOrder(root)));
+        Assert.assertEquals("[[1]]", Tools.beauty2DArray(hot.levelOrder(new TreeNode(1))));
+        Assert.assertEquals("[]", Tools.beauty2DArray(hot.levelOrder(null)));
+    }
+
+    @Test
+    public void testMaxDepth() {
+        Integer[] array = {3, 9, 20, null, null, 15, 7};
+        TreeNode root = TreeNode.fromArray(array);
+        Assert.assertEquals(3, hot.maxDepth(root));
+    }
+
+    @Test
+    public void testBuildTree() {
+        int[] preOrder = {1, 2, 3, 4};
+        int[] inOrder = {2, 3, 4, 1};
+        Assert.assertEquals(hot.buildTree(preOrder, inOrder).left.right.right.val, 4);
+    }
+
+    @Test
+    public void testFlatten() {
+        Integer[] array = {1, 2, 5, 3, 4, null, 6};
+        TreeNode root = TreeNode.fromArray(array);
+        hot.flatten(root);
+        Assert.assertEquals(6, root.right.right.right.right.right.val);
+    }
+
+    @Test
+    public void testMaxProfit() {
+        int[] prices = {7, 1, 5, 3, 6, 4};
+        Assert.assertEquals(5, hot.maxProfit(prices));
+
+        int[] prices1 = {7, 6, 5, 4, 3, 2};
+        Assert.assertEquals(0, hot.maxProfit(prices1));
+
+        int[] prices2 = {2, 1, 4};
+        Assert.assertEquals(3, hot.maxProfit(prices2));
+    }
 
 }

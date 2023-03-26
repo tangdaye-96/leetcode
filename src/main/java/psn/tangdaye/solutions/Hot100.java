@@ -1,19 +1,10 @@
 package psn.tangdaye.solutions;
 
 import psn.tangdaye.model.ListNode;
+import psn.tangdaye.model.TreeNode;
 import psn.tangdaye.structure.Heap;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.Stack;
+import java.util.*;
 
 public class Hot100 {
 
@@ -56,7 +47,7 @@ public class Hot100 {
     /**
      * 2. 两数相加
      * 给你两个 非空 的链表，表示两个非负的整数。它们每位数字都是按照 逆序 的方式存储的，并且每个节点只能存储 一位 数字。
-     *
+     * <p>
      * 请你将两个数相加，并以相同形式返回一个表示和的链表。
      * https://leetcode.cn/problems/add-two-numbers/?favorite=2cktkvj
      */
@@ -936,11 +927,11 @@ public class Hot100 {
 
     /**
      * 62. 不同路径
-     *
+     * <p>
      * 一个机器人位于一个 m x n 网格的左上角 （起始点在下图中标记为 “Start” ）。
      * 机器人每次只能向下或者向右移动一步。机器人试图达到网格的右下角（在下图中标记为 “Finish” ）。
      * 问总共有多少条不同的路径？
-     *
+     * <p>
      * https://leetcode.cn/problems/unique-paths/?favorite=2cktkvj
      */
     public int uniquePaths(int m, int n) {
@@ -997,7 +988,7 @@ public class Hot100 {
      * 72. 编辑距离
      * 给你两个单词 word1 和 word2， 请返回将 word1 转换成 word2 所使用的最少操作数  。
      * 你可以对一个单词进行如下三种操作：
-     *
+     * <p>
      * 插入一个字符
      * 删除一个字符
      * 替换一个字符
@@ -1145,10 +1136,7 @@ public class Hot100 {
             return false;
         }
         used[s][t] = true;
-        boolean x = doExist(board, word, used, s, t + 1, k + 1)
-                || doExist(board, word, used, s + 1, t, k + 1)
-                || doExist(board, word, used, s - 1, t, k + 1)
-                || doExist(board, word, used, s, t - 1, k + 1);
+        boolean x = doExist(board, word, used, s, t + 1, k + 1) || doExist(board, word, used, s + 1, t, k + 1) || doExist(board, word, used, s - 1, t, k + 1) || doExist(board, word, used, s, t - 1, k + 1);
         if (x) return true;
         else used[s][t] = false;
         return false;
@@ -1202,30 +1190,221 @@ public class Hot100 {
      * https://leetcode.cn/problems/maximal-rectangle/?favorite=2cktkvj
      */
     public int maximalRectangle(char[][] matrix) {
-        int[][][] dp = new int[matrix.length][matrix[0].length][2];
+        int[][] up = new int[matrix.length][matrix[0].length];
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[0].length; j++) {
+                if (matrix[i][j] == '0') {
+                    up[i][j] = 0;
+                } else {
+                    if (i == 0 && j == 0) {
+                        up[i][j] = 1;
+                    } else if (i == 0) {
+                        up[i][j] = 1;
+                    } else {
+                        up[i][j] = up[i - 1][j] + 1;
+                    }
+                }
+            }
+        }
         int max = Integer.MIN_VALUE;
-//        for (int i = 0; i < matrix.length; i++) {
-//            for (int j = 0; j < matrix[0].length; j++) {
-//                if (matrix[i][j] == 0) {
-//                    dp[i][j][0] = 0;
-//                    dp[i][j][1] = 0;
-//                } else {
-//                    if (i == 0 && j == 0) {
-//                        dp[i][j][0] = 1;
-//                        dp[i][j][1] = 1;
-//                    } else if (i == 0) {
-//                        dp[i][j][0] = dp[i][j - 1][0] + 1;
-//                        dp[i][j][1] = 1;
-//                    } else if (j == 0) {
-//                        dp[i][j][0] = 1;
-//                        dp[i][j][1] = dp[i - 1][j][1] + 1;
-//                    } else {
-//                        int l1 = dp[i][j - 1][0], u1 = dp[i][j - 1][1];
-//                        int l2 = dp[i - 1][j][0], u2 = dp[i - 1][j][1];
-//                    }
-//                }
-//            }
-//        }
+        for (int[] heights : up) {
+            int maxI = largestRectangleArea(heights);
+            max = Math.max(maxI, max);
+        }
+
         return max;
     }
+
+    /**
+     * 94. 二叉树的中序遍历
+     * 给定一个二叉树的根节点 root ，返回 它的 中序 遍历 。
+     * https://leetcode.cn/problems/binary-tree-inorder-traversal/?favorite=2cktkvj
+     */
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> a = new ArrayList<>();
+        doInorderTraversal(root, a);
+        return a;
+    }
+
+    private void doInorderTraversal(TreeNode root, List<Integer> a) {
+        if (root == null) return;
+        doInorderTraversal(root.left, a);
+        a.add(root.val);
+        doInorderTraversal(root.right, a);
+    }
+
+    /**
+     * 96. 不同的二叉搜索树
+     * 给你一个整数 n ，求恰由 n 个节点组成且节点值从 1 到 n 互不相同的 二叉搜索树 有多少种？返回满足题意的二叉搜索树的种数。
+     * https://leetcode.cn/problems/unique-binary-search-trees/?favorite=2cktkvj
+     */
+    public int numTrees(int n) {
+        int[] dp = new int[n + 1];
+        dp[0] = 1;
+        for (int i = 1; i <= n; i++) {
+            dp[i] = 0;
+            for (int j = 0; j <= i - 1; j++) {
+                dp[i] += dp[j] * dp[i - 1 - j];
+            }
+        }
+        return dp[n];
+    }
+
+    /**
+     * 98. 验证二叉搜索树
+     * 给你一个二叉树的根节点 root ，判断其是否是一个有效的二叉搜索树。
+     * https://leetcode.cn/problems/validate-binary-search-tree/?favorite=2cktkvj
+     */
+
+    public boolean isValidBST(TreeNode root) {
+        List<Integer> a = inorderTraversal(root);
+        for (int i = 0; i < a.size() - 1; i++) {
+            if (a.get(i) >= a.get(i + 1)) return false;
+        }
+        return true;
+    }
+
+    /**
+     * 101. 对称二叉树
+     * 给你一个二叉树的根节点 root ， 检查它是否轴对称。
+     * https://leetcode.cn/problems/symmetric-tree/?favorite=2cktkvj
+     */
+    public boolean isSymmetric(TreeNode root) {
+        return doSymmetric(root.left, root.right);
+    }
+
+    public boolean doSymmetric(TreeNode a, TreeNode b) {
+        if (a == null && b == null) return true;
+        if (a == null) return false;
+        if (b == null) return false;
+        return a.val == b.val && doSymmetric(a.left, b.right) && doSymmetric(a.right, b.left);
+    }
+
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        List<TreeNode> currentLevel = new ArrayList<>() {{
+            add(root);
+        }};
+        List<List<Integer>> result = new ArrayList<>();
+        while (true) {
+            List<Integer> currentResult = new ArrayList<>();
+            List<TreeNode> nextLevel = new ArrayList<>();
+            for (TreeNode current : currentLevel) {
+                if (current != null) {
+                    currentResult.add(current.val);
+                    nextLevel.add(current.left);
+                    nextLevel.add(current.right);
+                }
+            }
+            if (!currentResult.isEmpty()) result.add(currentResult);
+            if (nextLevel.isEmpty()) break;
+            currentLevel = nextLevel;
+        }
+        return result;
+    }
+
+    /**
+     * 104. 二叉树的最大深度
+     * 给定一个二叉树，找出其最大深度。
+     * 二叉树的深度为根节点到最远叶子节点的最长路径上的节点数。
+     * https://leetcode.cn/problems/maximum-depth-of-binary-tree/?favorite=2cktkvj
+     */
+    public int maxDepth(TreeNode root) {
+        if (root == null) return 0;
+        return Math.max(maxDepth(root.left), maxDepth(root.right)) + 1;
+    }
+
+    /**
+     * 105. 从前序与中序遍历序列构造二叉树
+     * 给定两个整数数组 preorder 和 inorder ，其中 preorder 是二叉树的先序遍历， inorder 是同一棵树的中序遍历，请构造二叉树并返回其根节点。
+     * https://leetcode.cn/problems/construct-binary-tree-from-preorder-and-inorder-traversal/?favorite=2cktkvj
+     */
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        Map<Integer, Integer> preOrderMap = new HashMap<>();
+        for (int i = 0; i < inorder.length; i++) {
+            preOrderMap.put(preorder[i], i);
+        }
+        Map<Integer, Integer> inorderMap = new HashMap<>();
+        for (int i = 0; i < inorder.length; i++) {
+            inorderMap.put(inorder[i], i);
+        }
+        return generateRoot(preorder, inorderMap, 0, 0, preorder.length);
+    }
+
+    private TreeNode generateRoot(int[] preorder, Map<Integer, Integer> inorderMap, int preStart, int inStart, int length) {
+        if (length <= 0 || preStart < 0 || preStart + length > preorder.length) return null;
+        TreeNode root = new TreeNode(preorder[preStart]);
+        int inIndex = inorderMap.get(root.val); //root在中序遍历中的位置
+        int leftInStart = inStart;
+        int leftPreStart = preStart + 1;
+        int leftLength = inIndex - inStart;
+
+        int rightInStart = inIndex + 1;
+        int rightPreStart = preStart + leftLength + 1;
+        int rightLength = length - 1 - leftLength;
+
+        root.left = generateRoot(preorder, inorderMap, leftPreStart, leftInStart, leftLength);
+        root.right = generateRoot(preorder, inorderMap, rightPreStart, rightInStart, rightLength);
+
+        return root;
+    }
+
+    /**
+     * 114. 二叉树展开为链表
+     * 给你二叉树的根结点 root ，请你将它展开为一个单链表：
+     * 展开后的单链表应该同样使用 TreeNode ，其中 right 子指针指向链表中下一个结点，而左子指针始终为 null 。
+     * 展开后的单链表应该与二叉树 先序遍历 顺序相同。
+     * <p>
+     * https://leetcode.cn/problems/flatten-binary-tree-to-linked-list/?favorite=2cktkvj
+     */
+    public void flatten(TreeNode root) {
+        Stack<TreeNode> stack = new Stack<>();
+        stack.push(root);
+        TreeNode current = new TreeNode(-1);
+        while (!stack.isEmpty()) {
+            TreeNode node = stack.pop();
+            if (node != null) {
+                current.left = null;
+                current.right = node;
+                current = current.right;
+                stack.push(node.right);
+                stack.push(node.left);
+            }
+        }
+    }
+
+    /**
+     * 121. 买卖股票的最佳时机
+     * 给定一个数组 prices ，它的第i个元素prices[i] 表示一支给定股票第 i 天的价格。
+     * 你只能选择 某一天 买入这只股票，并选择在 未来的某一个不同的日子 卖出该股票。设计一个算法来计算你所能获取的最大利润。
+     * https://leetcode.cn/problems/best-time-to-buy-and-sell-stock/?favorite=2cktkvj
+     */
+    public int maxProfit(int[] prices) {
+        int sale = prices[0];
+        int profit = 0;
+        int max = 0;
+        for (int price : prices) {
+            if (price >= sale) {
+                profit += price - sale;
+                sale = price;
+            } else if (price < (sale - profit)) {
+                profit = 0;
+                sale = price;
+            }
+            max = Math.max(max, profit);
+        }
+        return max;
+    }
+
+    /**
+     * 124. 二叉树中的最大路径和
+     * 路径 被定义为一条从树中任意节点出发，沿父节点-子节点连接，达到任意节点的序列。同一个节点在一条路径序列中 至多出现一次 。该路径 至少包含一个 节点，且不一定经过根节点。
+     * 路径和 是路径中各节点值的总和。
+     * 给你一个二叉树的根节点 root ，返回其 最大路径和 。
+     * <p>
+     * https://leetcode.cn/problems/binary-tree-maximum-path-sum/?favorite=2cktkvj
+     */
+    public int maxPathSum(TreeNode root) {
+
+    }
+
 }

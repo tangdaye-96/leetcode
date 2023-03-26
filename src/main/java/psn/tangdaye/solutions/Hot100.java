@@ -1404,7 +1404,100 @@ public class Hot100 {
      * https://leetcode.cn/problems/binary-tree-maximum-path-sum/?favorite=2cktkvj
      */
     public int maxPathSum(TreeNode root) {
-
+        Map<TreeNode, int[]> postorder = new HashMap<>();
+        doPostorderTraversal(postorder, root);
+        int max = Integer.MIN_VALUE;
+        for (Map.Entry<TreeNode, int[]> entry : postorder.entrySet()) {
+            max = Math.max(entry.getValue()[0] + entry.getValue()[1] - entry.getKey().val, max);
+        }
+        return max;
     }
 
+    private void doPostorderTraversal(Map<TreeNode, int[]> postorder, TreeNode root) {
+        if (root == null) return;
+        int leftSum = root.val;
+        int rightSum = root.val;
+        if (root.left != null) {
+            doPostorderTraversal(postorder, root.left);
+            int[] temp = postorder.get(root.left);
+            int leftVal = Math.max(temp[0], temp[1]);
+            if (leftVal > 0) leftSum += leftVal;
+        }
+        if (root.right != null) {
+            doPostorderTraversal(postorder, root.right);
+            int[] temp = postorder.get(root.right);
+            int rightVal = Math.max(temp[0], temp[1]);
+            if (rightVal > 0) rightSum += rightVal;
+        }
+        postorder.put(root, new int[]{leftSum, rightSum});
+    }
+
+
+    /**
+     * 128. 最长连续序列
+     * 给定一个未排序的整数数组 nums ，找出数字连续的最长序列（不要求序列元素在原数组中连续）的长度。
+     * https://leetcode.cn/problems/longest-consecutive-sequence/?favorite=2cktkvj
+     */
+    public int longestConsecutive(int[] nums) {
+        Map<Integer, Boolean> map = new HashMap<>();
+        for (int num : nums) map.put(num, true);
+        int max = 0;
+        for (Map.Entry<Integer, Boolean> entry : map.entrySet()) {
+            if (!entry.getValue()) continue;
+            int k = entry.getKey();
+            int k1 = k, k2 = k;
+            while (map.containsKey(k1)) {
+                map.put(k1, false);
+                k1++;
+            }
+            while (map.containsKey(k2)) {
+                map.put(k2, false);
+                k2--;
+            }
+            max = Math.max(max, k1 - k2 - 1);
+        }
+        return max;
+    }
+
+    /**
+     * 136. 只出现一次的数字
+     * 给你一个 非空 整数数组 nums ，除了某个元素只出现一次以外，其余每个元素均出现两次。找出那个只出现了一次的元素。
+     * https://leetcode.cn/problems/single-number/?favorite=2cktkvj
+     */
+    public int singleNumber(int[] nums) {
+        int x = 0;
+        for (int n : nums) {
+            x = x ^ n;
+        }
+        return x;
+    }
+
+    /**
+     * 139. 单词拆分
+     * 给你一个字符串 s 和一个字符串列表 wordDict 作为字典。请你判断是否可以利用字典中出现的单词拼接出 s 。
+     * 注意：不要求字典中出现的单词全部都使用，并且字典中的单词可以重复使用。
+     * https://leetcode.cn/problems/word-break/?favorite=2cktkvj
+     */
+    public boolean wordBreak(String s, List<String> wordDict) {
+        // 先把dict整理一下
+        wordDict.sort(Comparator.comparingInt(String::length));
+        LinkedList<String> newDict = new LinkedList<>();
+        newDict.add(wordDict.get(0));
+        for (int i = 1; i < wordDict.size(); i++) {
+            boolean t = doWordBreak(wordDict.get(i), newDict, 0);
+            if (!t) newDict.addFirst(wordDict.get(i));
+        }
+        return doWordBreak(s, newDict, 0);
+    }
+
+    private boolean doWordBreak(String s, List<String> wordDict, int i) {
+        if (i == s.length()) return true;
+        for (String word : wordDict) {
+            if (s.startsWith(word, i)) {
+                boolean t = doWordBreak(s, wordDict, i + word.length());
+                if (t) return true;
+            }
+        }
+        return false;
+    }
 }

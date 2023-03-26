@@ -8,6 +8,7 @@ import psn.tangdaye.solutions.Hot100;
 import psn.tangdaye.tool.Tools;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static psn.tangdaye.tool.Tools.beauty2DArray;
 
@@ -371,5 +372,40 @@ public class Hot100Test {
         int[] prices2 = {2, 1, 4};
         Assert.assertEquals(3, hot.maxProfit(prices2));
     }
+
+    @Test
+    public void testMaxPathSum() {
+        Integer[] array = {-10, 9, 20, null, null, 15, 7};
+        TreeNode treeNode = TreeNode.fromArray(array);
+        Assert.assertEquals(42, hot.maxPathSum(treeNode));
+    }
+
+    @Test
+    public void testLongestConsecutive() {
+        int[] array = {0, 3, 7, 2, 5, 8, 4, 6, 0, 1};
+        Assert.assertEquals(9, hot.longestConsecutive(array));
+
+        int[] array1 = {9, 1, 4, 7, 3, -1, 0, 5, 8, -1, 6};
+        Assert.assertEquals(7, hot.longestConsecutive(array1));
+    }
+
+    @Test
+    public void testSingleNumber() {
+        int[] array = {4, 1, 2, 1, 2};
+        Assert.assertEquals(4, hot.singleNumber(array));
+    }
+
+    @Test
+    public void testWordBreak() {
+//        String s = "catsandog";
+//        List<String> dic = Arrays.asList("cats", "dog", "sand", "and", "cat");
+//        Assert.assertFalse(hot.wordBreak(s, dic));
+
+        String s1 = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+        List<String> dic1 = Arrays.asList("aa", "aaa", "aaaa", "aaaaa", "aaaaaa", "aaaaaaa", "aaaaaaaa", "aaaaaaaaa", "aaaaaaaaaa", "ba");
+        Assert.assertFalse(hot.wordBreak(s1, dic1));
+
+    }
+
 
 }

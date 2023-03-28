@@ -117,23 +117,23 @@ public class CommonTreeNode<T> {
     }
 
 //    @SuppressWarnings("unchecked")
-//    public static void main(String[] args) {
-//        CommonTreeNode<Integer> a = new CommonTreeNode<>(1,
-//                new CommonTreeNode<>(2,
-//                        null, new CommonTreeNode<>(5)
-//                ),
-//                new CommonTreeNode<>(3,
-//                        new CommonTreeNode<>(6), new CommonTreeNode<>(7)
-//                )
-//        );
-//        for (CommonTreeNode<Integer> x : a.preOrder()) {
-//            System.out.println(String.valueOf(x));
-//        }
-//        System.out.println("=======");
-//
-//        for (CommonTreeNode<Integer> x : a.layerOrder()) {
-//            System.out.println(String.valueOf(x));
-//        }
-//    }
+    public static void main(String[] args) {
+        CommonTreeNode<Integer> a = new CommonTreeNode<>(1,
+                new CommonTreeNode<>(2,
+                        null, new CommonTreeNode<>(5)
+                ),
+                new CommonTreeNode<>(3,
+                        new CommonTreeNode<>(6), new CommonTreeNode<>(7)
+                )
+        );
+        for (CommonTreeNode<Integer> x : a.preOrder()) {
+            System.out.println(String.valueOf(x));
+        }
+        System.out.println("=======");
+
+        for (CommonTreeNode<Integer> x : a.layerOrder()) {
+            System.out.println(String.valueOf(x));
+        }
+    }
 
 }

@@ -2,6 +2,7 @@ package psn.tangdaye.solutiosn;
 
 import org.junit.Assert;
 import org.junit.Test;
+import psn.tangdaye.model.LRUCache;
 import psn.tangdaye.model.ListNode;
 import psn.tangdaye.model.TreeNode;
 import psn.tangdaye.solutions.Hot100;
@@ -397,15 +398,44 @@ public class Hot100Test {
 
     @Test
     public void testWordBreak() {
-//        String s = "catsandog";
-//        List<String> dic = Arrays.asList("cats", "dog", "sand", "and", "cat");
-//        Assert.assertFalse(hot.wordBreak(s, dic));
+        String s = "catsandog";
+        List<String> dic = Arrays.asList("cats", "dog", "sand", "and", "cat");
+        Assert.assertFalse(hot.wordBreak(s, dic));
 
         String s1 = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
         List<String> dic1 = Arrays.asList("aa", "aaa", "aaaa", "aaaaa", "aaaaaa", "aaaaaaa", "aaaaaaaa", "aaaaaaaaa", "aaaaaaaaaa", "ba");
         Assert.assertFalse(hot.wordBreak(s1, dic1));
-
     }
 
+    @Test
+    public void testHasCycle() {
+        ListNode h = ListNode.fromArray(new int[]{1, 2, 3, 4});
+        h.next.next.next.next = h;
+        Assert.assertTrue(hot.hasCycle(h));
+    }
 
+    @Test
+    public void testDetectCycle() {
+        ListNode h = ListNode.fromArray(new int[]{1, 2, 3, 4});
+        h.next.next.next.next = h;
+        Assert.assertEquals(1, hot.detectCycle(h).val);
+
+        ListNode h2 = ListNode.fromArray(new int[]{1, 2});
+        Assert.assertNull(hot.detectCycle(h2));
+    }
+
+    @Test
+    public void testLRUCache() {
+        LRUCache l = new LRUCache(2);
+        l.put(1, 1);
+        l.put(2, 2);
+        l.put(3, 3);
+        l.put(4, 4);
+        l.put(5, 5);
+        l.put(6, 6);
+        l.put(7, 7);
+        Assert.assertEquals(-1, l.get(2));
+        Assert.assertEquals(-1, l.get(3));
+        Assert.assertEquals(7, l.get(7));
+    }
 }

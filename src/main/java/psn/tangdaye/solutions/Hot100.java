@@ -4,7 +4,17 @@ import psn.tangdaye.model.ListNode;
 import psn.tangdaye.model.TreeNode;
 import psn.tangdaye.structure.Heap;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.Stack;
 
 public class Hot100 {
 
@@ -1183,7 +1193,6 @@ public class Hot100 {
         return maxArea;
     }
 
-
     /**
      * 85. 最大矩形
      * 给定一个仅包含 0 和 1 、大小为 rows x cols 的二维二进制矩阵，找出只包含 1 的最大矩形，并返回其面积。
@@ -1281,7 +1290,7 @@ public class Hot100 {
     }
 
     public List<List<Integer>> levelOrder(TreeNode root) {
-        List<TreeNode> currentLevel = new ArrayList<>() {{
+        List<TreeNode> currentLevel = new ArrayList<TreeNode>() {{
             add(root);
         }};
         List<List<Integer>> result = new ArrayList<>();
@@ -1432,7 +1441,6 @@ public class Hot100 {
         postorder.put(root, new int[]{leftSum, rightSum});
     }
 
-
     /**
      * 128. 最长连续序列
      * 给定一个未排序的整数数组 nums ，找出数字连续的最长序列（不要求序列元素在原数组中连续）的长度。
@@ -1479,25 +1487,70 @@ public class Hot100 {
      * https://leetcode.cn/problems/word-break/?favorite=2cktkvj
      */
     public boolean wordBreak(String s, List<String> wordDict) {
-        // 先把dict整理一下
-        wordDict.sort(Comparator.comparingInt(String::length));
-        LinkedList<String> newDict = new LinkedList<>();
-        newDict.add(wordDict.get(0));
-        for (int i = 1; i < wordDict.size(); i++) {
-            boolean t = doWordBreak(wordDict.get(i), newDict, 0);
-            if (!t) newDict.addFirst(wordDict.get(i));
-        }
-        return doWordBreak(s, newDict, 0);
-    }
-
-    private boolean doWordBreak(String s, List<String> wordDict, int i) {
-        if (i == s.length()) return true;
-        for (String word : wordDict) {
-            if (s.startsWith(word, i)) {
-                boolean t = doWordBreak(s, wordDict, i + word.length());
-                if (t) return true;
+        boolean[] dp = new boolean[s.length() + 1];
+        dp[0] = true;
+        for (int i = 1; i <= s.length(); i++) {
+            dp[i] = false;
+            for (String word : wordDict) {
+                int start = i - word.length();
+                if (start >= 0 && word.equals(s.substring(start, i)) && dp[start]) {
+                    dp[i] = true;
+                    break;
+                }
             }
         }
+        return dp[s.length()];
+    }
+
+    /**
+     * 141. 环形链表
+     * 给你一个链表的头节点 head ，判断链表中是否有环。
+     * https://leetcode.cn/problems/linked-list-cycle/?favorite=2cktkvj
+     */
+    public boolean hasCycle(ListNode head) {
+        ListNode one = head;
+        ListNode two = head;
+        while (one != null && two != null) {
+            one = one.next;
+            if (two.next == null) break;
+            two = two.next.next;
+            if (one == two) return true;
+        }
         return false;
+    }
+
+
+    /**
+     * 142. 环形链表 II
+     * 给定一个链表的头节点  head ，返回链表开始入环的第一个节点。 如果链表无环，则返回 null。
+     * https://leetcode.cn/problems/linked-list-cycle-ii/?favorite=2cktkvj
+     */
+    public ListNode detectCycle(ListNode head) {
+        ListNode one = head;
+        ListNode two = head;
+        // 两次相遇中间隔了一个循环节r
+        int first = -1, second = -1;
+        int k = 0;
+        while (one != null && two != null) {
+            one = one.next;
+            if (two.next == null) return null;
+            two = two.next.next;
+            if (one == two) {
+                if (second > 0) break;
+                else if (first > 0) second = k;
+                else first = k;
+            }
+            k++;
+        }
+        if (one == null || two == null) return null;
+        int r = second - first;
+        ListNode a = head;
+        ListNode b = head;
+        for (int i = 0; i < r; i++) b = b.next;
+        while (a != b) {
+            a = a.next;
+            b = b.next;
+        }
+        return a;
     }
 }

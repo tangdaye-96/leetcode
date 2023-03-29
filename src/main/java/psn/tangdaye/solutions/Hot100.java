@@ -16,6 +16,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
+/**
+ * https://leetcode.cn/problem-list/2cktkvj/
+ */
 public class Hot100 {
 
     /**
@@ -1519,7 +1522,6 @@ public class Hot100 {
         return false;
     }
 
-
     /**
      * 142. 环形链表 II
      * 给定一个链表的头节点  head ，返回链表开始入环的第一个节点。 如果链表无环，则返回 null。
@@ -1552,5 +1554,30 @@ public class Hot100 {
             b = b.next;
         }
         return a;
+    }
+
+    /**
+     * 148. 排序链表
+     * 给你链表的头结点 head ，请将其按 升序 排列并返回 排序后的链表 。
+     * https://leetcode.cn/problems/sort-list/?favorite=2cktkvj
+     */
+    public ListNode sortList(ListNode head) {
+        if (head == null) return null;
+        if (head.next == null) return head;
+        int l = 0;
+        ListNode current = head;
+        while (current != null) {
+            current = current.next;
+            l++;
+        }
+        current = head;
+        for (int i = 1; i < l / 2; i++) {
+            current = current.next;
+        }
+        ListNode newHead = current.next;
+        current.next = null;
+        ListNode head1 = sortList(head);
+        ListNode head2 = sortList(newHead);
+        return mergeTwoLists(head1, head2);
     }
 }

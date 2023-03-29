@@ -438,4 +438,15 @@ public class Hot100Test {
         Assert.assertEquals(-1, l.get(3));
         Assert.assertEquals(7, l.get(7));
     }
+
+    @Test
+    public void testSortList() {
+        ListNode head = ListNode.fromArray(new int[]{-1, 5, 3, 4, 0});
+        hot.sortList(head);
+        Assert.assertEquals("[-1, 0, 3, 4, 5]", String.valueOf(head));
+
+        ListNode head2 = ListNode.fromArray(new int[]{-1, 5, 3, 4});
+        hot.sortList(head2);
+        Assert.assertEquals("[-1, 3, 4, 5]", String.valueOf(head2));
+    }
 }

@@ -1,5 +1,6 @@
 package psn.tangdaye.solutions;
 
+import org.junit.Assert;
 import psn.tangdaye.model.ListNode;
 import psn.tangdaye.model.TreeNode;
 import psn.tangdaye.structure.Heap;
@@ -1557,6 +1558,107 @@ public class Hot100 {
     }
 
     /**
+     * 146. LRU 缓存
+     * 请你设计并实现一个满足 LRU (最近最少使用) 缓存 约束的数据结构。
+     * https://leetcode.cn/problems/lru-cache/?favorite=2cktkvj
+     */
+    public static class LRUCache {
+
+        private int maxSize;
+        private Map<Integer, DoubleLinkNode> data;
+        private DoubleLinkNode head; // head.pre = null 这是最先使用的
+        private DoubleLinkNode tail; // tail.next = null 这是最近使用的
+
+        public LRUCache(int capacity) {
+            maxSize = capacity;
+            data = new HashMap<>(capacity);
+            head = null;
+            tail = null;
+        }
+
+        public int get(int key) {
+            if (!data.containsKey(key)) return -1;
+            DoubleLinkNode node = data.get(key);
+            move2Tail(node);
+            return node.val;
+        }
+
+        public void put(int key, int value) {
+            if (data.containsKey(key)) {
+                DoubleLinkNode node = data.get(key);
+                node.val = value;
+                move2Tail(node);
+            } else {
+                DoubleLinkNode node = new DoubleLinkNode(key, value);
+                if (data.size() == 0) {
+                    head = node;
+                    tail = node;
+                } else {
+                    if (data.size() >= maxSize) {
+                        data.remove(head.key);
+                        head = head.next;
+                        if (head != null) {
+                            head.pre = null;
+                        }
+                    }
+                    move2Tail(node);
+                }
+                data.put(key, node);
+            }
+        }
+
+        private class DoubleLinkNode {
+            int key;
+            int val;
+            DoubleLinkNode pre;
+            DoubleLinkNode next;
+
+            DoubleLinkNode(int key, int val) {
+                this.key = key;
+                this.val = val;
+            }
+
+            @Override
+            public String toString() {
+                List<Integer> x = new ArrayList<>();
+                x.add(val);
+                DoubleLinkNode current = this;
+                while (current.next != null && current.next != this) {
+                    x.add(current.next.val);
+                    current = current.next;
+                }
+                return x.toString();
+            }
+
+        }
+
+        private void move2Tail(DoubleLinkNode node) {
+            if (node == tail) return;
+            if (head == node) {
+                head = head.next;
+                if (head != null) {
+                    head.pre = null;
+                }
+            }
+            if (head == null) {
+                head = node;
+            }
+            if (node.pre != null) {
+                node.pre.next = node.next;
+            }
+            if (node.next != null) {
+                node.next.pre = node.pre;
+            }
+            if (tail != null) {
+                tail.next = node;
+            }
+            node.pre = tail;
+            node.next = null;
+            tail = node;
+        }
+    }
+
+    /**
      * 148. 排序链表
      * 给你链表的头结点 head ，请将其按 升序 排列并返回 排序后的链表 。
      * https://leetcode.cn/problems/sort-list/?favorite=2cktkvj
@@ -1580,4 +1682,259 @@ public class Hot100 {
         ListNode head2 = sortList(newHead);
         return mergeTwoLists(head1, head2);
     }
+
+    /**
+     * 152. 乘积最大子数组
+     * 给你一个整数数组 nums ，请你找出数组中乘积最大的非空连续子数组（该子数组中至少包含一个数字），并返回该子数组所对应的乘积。
+     * https://leetcode.cn/problems/maximum-product-subarray/?favorite=2cktkvj
+     */
+    public int maxProduct(int[] nums) {
+        int[][] dp = new int[nums.length][2];
+        // dp[i][0]是包含自身最大
+        // dp[i][1]是包含自身最小
+        int max = nums[0];
+        dp[0][0] = nums[0];
+        dp[0][1] = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            int n = nums[i];
+            if (n > 0) {
+                if (dp[i - 1][0] > 0) dp[i][0] = n * dp[i - 1][0];
+                else dp[i][0] = n;
+                if (dp[i - 1][1] < 0) dp[i][1] = n * dp[i - 1][1];
+                else dp[i][1] = n;
+            } else if (n < 0) {
+                if (dp[i - 1][0] > 0) dp[i][1] = n * dp[i - 1][0];
+                else dp[i][1] = n;
+                if (dp[i - 1][1] < 0) dp[i][0] = n * dp[i - 1][1];
+                else dp[i][0] = n;
+            } else {
+                dp[i][0] = 0;
+                dp[i][1] = 0;
+            }
+            max = Math.max(max, dp[i][0]);
+        }
+        return max;
+    }
+
+    /**
+     * 155. 最小栈
+     * 设计一个支持 push ，pop ，top 操作，并能在常数时间内检索到最小元素的栈。
+     * https://leetcode.cn/problems/min-stack/?favorite=2cktkvj
+     */
+    public static class MinStack {
+        private Stack<Integer> data;
+        private Stack<Integer> minSince;
+
+        public MinStack() {
+            data = new Stack<>();
+            minSince = new Stack<>();
+        }
+
+        public void push(int val) {
+            data.push(val);
+            if (minSince.isEmpty() || val <= minSince.peek()) minSince.push(val);
+        }
+
+        public void pop() {
+            int val = data.pop();
+            if (val == minSince.peek()) minSince.pop();
+        }
+
+        public int top() {
+            return data.peek();
+        }
+
+        public int getMin() {
+            return minSince.peek();
+        }
+    }
+
+    /**
+     * 160. 相交链表
+     * 给你两个单链表的头节点 headA 和 headB ，请你找出并返回两个单链表相交的起始节点。如果两个链表不存在相交节点，返回 null 。
+     * https://leetcode.cn/problems/intersection-of-two-linked-lists/?favorite=2cktkvj
+     */
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        int m = 0;
+        int n = 0;
+        ListNode c1 = headA;
+        ListNode c2 = headB;
+        while (c1 != null) {
+            m++;
+            c1 = c1.next;
+        }
+        while (c2 != null) {
+            n++;
+            c2 = c2.next;
+        }
+        c1 = headA;
+        c2 = headB;
+        while (m > n) {
+            c1 = c1.next;
+            m--;
+        }
+        while (n > m) {
+            c2 = c2.next;
+            n--;
+        }
+        while (c1 != c2) {
+            c1 = c1.next;
+            c2 = c2.next;
+        }
+        return c1;
+    }
+
+    /**
+     * 169. 多数元素
+     * 给定一个大小为 n 的数组 nums ，返回其中的多数元素。多数元素是指在数组中出现次数 大于 ⌊ n/2 ⌋ 的元素。
+     * https://leetcode.cn/problems/majority-element/?favorite=2cktkvj
+     */
+    public int majorityElement(int[] nums) {
+        int x = 0;
+        int v = 0;
+        for (int n : nums) {
+            if (v == 0) x = n;
+            if (x == n) v++;
+            else v--;
+        }
+        return x;
+    }
+
+    /**
+     * 229. 多数元素 II
+     * 给定一个大小为 n 的整数数组，找出其中所有出现超过 ⌊ n/3 ⌋ 次的元素。
+     * https://leetcode.cn/problems/majority-element-ii/
+     */
+    public List<Integer> majorityElement2(int[] nums) {
+        // 如果有三个不一样的数字，这三个数字不会影响最终结果
+        int x = 0, y = 0;
+        int v1 = 0, v2 = 0;
+        for (int n : nums) {
+            if (n != x && n != y) {
+                v1 -= 1;
+                v2 -= 1;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 198. 打家劫舍
+     * 你是一个专业的小偷，计划偷窃沿街的房屋。每间房内都藏有一定的现金，影响你偷窃的唯一制约因素就是相邻的房屋装有相互连通的防盗系统，如果两间相邻的房屋在同一晚上被小偷闯入，系统会自动报警。
+     * https://leetcode.cn/problems/house-robber/?favorite=2cktkvj
+     */
+    public int rob(int[] nums) {
+        int[] dp = new int[1 + nums.length];
+        boolean[] stolen = new boolean[1 + nums.length];
+        dp[0] = 0;
+        dp[1] = nums[0];
+        stolen[0] = false;
+        stolen[1] = true;
+        for (int i = 2; i <= nums.length; i++) {
+            if (stolen[i - 1]) {
+                if (dp[i - 1] >= dp[i - 2] + nums[i - 1]) {
+                    dp[i] = dp[i - 1];
+                    stolen[i] = false;
+                } else {
+                    dp[i] = dp[i - 2] + nums[i - 1];
+                    stolen[i] = true;
+                }
+            } else {
+                dp[i] = dp[i - 1] + nums[i - 1];
+                stolen[i] = true;
+            }
+        }
+        return dp[nums.length];
+    }
+
+    /**
+     * 200. 岛屿数量
+     * 给你一个由 '1'（陆地）和 '0'（水）组成的的二维网格，请你计算网格中岛屿的数量。
+     * https://leetcode.cn/problems/number-of-islands/?favorite=2cktkvj
+     */
+    public int numIslands(char[][] grid) {
+        int k = 0;
+        Stack<int[]> stack = new Stack<>();
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+                if (grid[i][j] == '1') {
+                    k++;
+                    stack.push(new int[]{i, j});
+                    while (!stack.isEmpty()) {
+                        int[] location = stack.pop();
+                        int x = location[0];
+                        int y = location[1];
+                        grid[x][y] = '0';
+                        if (x - 1 >= 0 && grid[x - 1][y] == '1') {
+                            stack.push(new int[]{x - 1, y});
+                        }
+                        if (x + 1 < grid.length && grid[x + 1][y] == '1') {
+                            stack.push(new int[]{x + 1, y});
+                        }
+                        if (y + 1 < grid[0].length && grid[x][y + 1] == '1') {
+                            stack.push(new int[]{x, y + 1});
+                        }
+                        if (y - 1 >= 0 && grid[x][y - 1] == '1') {
+                            stack.push(new int[]{x, y - 1});
+                        }
+                    }
+                }
+            }
+        }
+        return k;
+    }
+
+    /**
+     * 206. 反转链表
+     * 给你单链表的头节点 head ，请你反转链表，并返回反转后的链表。
+     * https://leetcode.cn/problems/reverse-linked-list/?favorite=2cktkvj
+     */
+    public ListNode reverseList(ListNode head) {
+        ListNode pre = null;
+        ListNode current = head;
+        while (current != null) {
+            ListNode next = current.next;
+            current.next = pre;
+            pre = current;
+            current = next;
+        }
+        return pre;
+    }
+
+    /**
+     * 207. 课程表
+     * 你这个学期必须选修 numCourses 门课程，记为 0 到 numCourses - 1 。
+     * 在选修某些课程之前需要一些先修课程。 先修课程按数组prerequisites 给出，其中prerequisites[i] = [ai, bi] ，表示如果要学习课程ai 则 必须 先学习课程 bi 。
+     * 请你判断是否可能完成所有课程的学习？如果可以，返回 true ；否则，返回 false 。
+     * https://leetcode.cn/problems/course-schedule/?favorite=2cktkvj
+     */
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        return false;
+    }
+
+    /**
+     * 239. 滑动窗口最大值
+     * 给你一个整数数组 nums，有一个大小为k的滑动窗口从数组的最左侧移动到数组的最右侧。你只可以看到在滑动窗口内的 k个数字。滑动窗口每次只向右移动一位。
+     * 返回 滑动窗口中的最大值 。
+     * https://leetcode.cn/problems/sliding-window-maximum/?favorite=2cktkvj
+     */
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        if (nums.length == 0) return nums;
+        if (k == 1) return nums;
+        LinkedList<Integer> q = new LinkedList<>();
+        int[] result = new int[nums.length + 1 - k];
+        for (int i = 0; i < nums.length; i++) {
+            int current = nums[i];
+            while (!q.isEmpty() && nums[q.getLast()] < current) q.removeLast();
+            q.add(i);
+            while (q.getFirst() <= i - k) q.removeFirst();
+
+            if (i >= k - 1) {
+                result[i + 1 - k] = nums[q.getFirst()];
+            }
+        }
+        return result;
+    }
+
+
 }

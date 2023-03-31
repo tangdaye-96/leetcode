@@ -2,7 +2,6 @@ package psn.tangdaye.solutiosn;
 
 import org.junit.Assert;
 import org.junit.Test;
-import psn.tangdaye.model.LRUCache;
 import psn.tangdaye.model.ListNode;
 import psn.tangdaye.model.TreeNode;
 import psn.tangdaye.solutions.Hot100;
@@ -426,7 +425,7 @@ public class Hot100Test {
 
     @Test
     public void testLRUCache() {
-        LRUCache l = new LRUCache(2);
+        Hot100.LRUCache l = new Hot100.LRUCache(2);
         l.put(1, 1);
         l.put(2, 2);
         l.put(3, 3);
@@ -449,4 +448,71 @@ public class Hot100Test {
         hot.sortList(head2);
         Assert.assertEquals("[-1, 3, 4, 5]", String.valueOf(head2));
     }
+
+    @Test
+    public void testMaxProduct() {
+        int[] nums = {2, 3, -2, 4};
+        Assert.assertEquals(6, hot.maxProduct(nums));
+
+        int[] nums2 = {-3, 2, 3, -4};
+        Assert.assertEquals(72, hot.maxProduct(nums2));
+    }
+
+    @Test
+    public void testMinStack() {
+        Hot100.MinStack minStack = new Hot100.MinStack();
+        minStack.push(1);
+        minStack.push(2);
+        minStack.push(1);
+        minStack.pop();
+        Assert.assertEquals(minStack.getMin(), 1);
+    }
+
+    @Test
+    public void testGetIntersectionNode() {
+        ListNode headA = ListNode.fromArray(new int[]{5, 6, 1, 8, 4, 5});
+        ListNode headB = new ListNode(4);
+        headB.next = new ListNode(1);
+        headB.next.next = headA.next.next.next;
+        Assert.assertEquals(headB.next.next, hot.getIntersectionNode(headA, headB));
+    }
+
+    @Test
+    public void testMajorityElement() {
+        int[] array = {1, 1, 1, 2, 2, 2, 2};
+        Assert.assertEquals(2, hot.majorityElement(array));
+    }
+
+    @Test
+    public void testMajorityElement2() {
+        int[] array = {1, 1, 1, 2, 2, 2, 2};
+        List<Integer> result = hot.majorityElement2(array);
+        Assert.assertEquals(2, result.size());
+    }
+
+    @Test
+    public void testRob() {
+        int[] nums = {2, 7, 9, 3, 1};
+        Assert.assertEquals(12, hot.rob(nums));
+    }
+
+    @Test
+    public void testNumsIslands() {
+        char[][] grid = {{'1', '1', '1'}, {'0', '1', '0'}, {'1', '1', '1'},};
+        Assert.assertEquals(1, hot.numIslands(grid));
+    }
+
+    @Test
+    public void testReverseList() {
+        ListNode head = ListNode.fromArray(new int[]{1, 2, 3, 4, 5});
+        Assert.assertEquals("[5, 4, 3, 2, 1]", hot.reverseList(head).toString());
+    }
+
+    @Test
+    public void testMaxSlidingWindow() {
+        int[] nums = {1, 3, -1, -3, 5, 3, 6, 7};
+        int k = 3;
+        Assert.assertEquals("[3, 3, 5, 5, 6, 7]", Arrays.toString(hot.maxSlidingWindow(nums, k)));
+    }
+
 }

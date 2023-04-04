@@ -1,6 +1,5 @@
 package psn.tangdaye.solutions;
 
-import org.junit.Assert;
 import psn.tangdaye.model.ListNode;
 import psn.tangdaye.model.TreeNode;
 import psn.tangdaye.structure.Heap;
@@ -1000,7 +999,7 @@ public class Hot100 {
 
     /**
      * 72. 编辑距离
-     * 给你两个单词 word1 和 word2， 请返回将 word1 转换成 word2 所使用的最少操作数  。
+     * 给你两个单词word1 和word2， 请返回将word1转换成word2 所使用的最少操作数 。
      * 你可以对一个单词进行如下三种操作：
      * <p>
      * 插入一个字符
@@ -1912,6 +1911,141 @@ public class Hot100 {
         return false;
     }
 
+
+    /**
+     * 221. 最大正方形
+     * 在一个由 '0' 和 '1' 组成的二维矩阵内，找到只包含 '1' 的最大正方形，并返回其面积。
+     * https://leetcode.cn/problems/maximal-square/?favorite=2cktkvj
+     */
+    public int maximalSquare(char[][] matrix) {
+        int[][] dp = new int[matrix.length][matrix[0].length];
+        int max = 0;
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[0].length; j++) {
+                int x = 0;
+                if (matrix[i][j] == '1') {
+                    if (i == 0 || j == 0) x = 1;
+                    else x = Math.min(dp[i - 1][j - 1], Math.min(dp[i - 1][j], dp[i][j - 1])) + 1;
+                }
+                dp[i][j] = x;
+                max = Math.max(max, x);
+            }
+        }
+        return max * max;
+    }
+
+    /**
+     * 226. 翻转二叉树
+     * 给你一棵二叉树的根节点 root ，翻转这棵二叉树，并返回其根节点。
+     * https://leetcode.cn/problems/invert-binary-tree/?favorite=2cktkvj
+     */
+    public TreeNode invertTree(TreeNode root) {
+        doInvert(root);
+        return root;
+    }
+
+    private void doInvert(TreeNode current) {
+        if (current == null) return;
+        TreeNode a = current.left;
+        TreeNode b = current.right;
+        doInvert(a);
+        doInvert(b);
+        current.left = b;
+        current.right = a;
+    }
+
+    /**
+     * 234. 回文链表
+     * 给你一个单链表的头节点 head ，请你判断该链表是否为回文链表。如果是，返回 true 否则返回 false 。
+     * https://leetcode.cn/problems/palindrome-linked-list/?favorite=2cktkvj
+     */
+    public boolean isPalindrome(ListNode head) {
+        ListNode current = head;
+        int len = 0;
+        while (current != null) {
+            len++;
+            current = current.next;
+        }
+        current = head;
+        ListNode pre = null;
+        for (int i = 1; i <= len / 2; i++) {
+            ListNode next = current.next;
+            current.next = pre;
+            pre = current;
+            current = next;
+        }
+        if (len % 2 == 1) {
+            current = current.next;
+        }
+        while (pre != null && current != null) {
+            if (pre.val != current.val) return false;
+            pre = pre.next;
+            current = current.next;
+        }
+        return true;
+    }
+
+    /**
+     * 236. 二叉树的最近公共祖先
+     * 给定一个二叉树, 找到该树中两个指定节点的最近公共祖先。
+     * https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-tree/?favorite=2cktkvj
+     */
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        // 写出path即可
+        String pathP = null;
+        String pathQ = null;
+        Map<TreeNode, String> paths = new HashMap<>();
+        Stack<TreeNode> stack = new Stack<>();
+        stack.push(root);
+        paths.put(root, "");
+        while (!stack.isEmpty()) {
+            TreeNode t = stack.pop();
+            if (t == p) pathP = paths.get(t);
+            if (t == q) pathQ = paths.get(t);
+            if (pathP != null && pathQ != null) break;
+            if (t.right != null) {
+                stack.push(t.right);
+                paths.put(t.right, paths.get(t) + "1");
+            }
+            if (t.left != null) {
+                stack.push(t.left);
+                paths.put(t.left, paths.get(t) + "0");
+            }
+        }
+        int n = 0;
+        while (n < pathP.length() && n < pathQ.length() && pathP.charAt(n) == pathQ.charAt(n)) {
+            n++;
+        }
+        TreeNode result = root;
+        for (int i = 0; i < n; i++) {
+            char c = pathP.charAt(i);
+            if (c == '0') result = result.left;
+            if (c == '1') result = result.right;
+        }
+        return result;
+    }
+
+    /**
+     * 238. 除自身以外数组的乘积
+     * 给你一个整数数组 nums，返回 数组 answer ，其中 answer[i] 等于 nums 中除 nums[i] 之外其余各元素的乘积 。
+     * https://leetcode.cn/problems/product-of-array-except-self/?favorite=2cktkvj
+     */
+    public int[] productExceptSelf(int[] nums) {
+        int[] answer = new int[nums.length];
+        answer[0] = 1;
+        // answer[i] = from 0 to i-1 product
+        for (int i = 1; i < nums.length; i++) {
+            answer[i] = answer[i - 1] * nums[i - 1];
+        }
+        // answer[i] = from i+1 to n-1 product
+        int product = 1;
+        for (int i = nums.length - 2; i >= 0; i--) {
+            product *= nums[i + 1];
+            answer[i] = answer[i] * product;
+        }
+        return answer;
+    }
+
     /**
      * 239. 滑动窗口最大值
      * 给你一个整数数组 nums，有一个大小为k的滑动窗口从数组的最左侧移动到数组的最右侧。你只可以看到在滑动窗口内的 k个数字。滑动窗口每次只向右移动一位。
@@ -1936,5 +2070,44 @@ public class Hot100 {
         return result;
     }
 
+    /**
+     * 240. 搜索二维矩阵 II
+     * 编写一个高效的算法来搜索mxn矩阵 matrix 中的一个目标值 target 。该矩阵具有以下特性：
+     * 每行的元素从左到右升序排列。
+     * 每列的元素从上到下升序排列。
+     * https://leetcode.cn/problems/search-a-2d-matrix-ii/?favorite=2cktkvj
+     */
+    public boolean searchMatrix(int[][] matrix, int target) {
+        int m = matrix.length, n = matrix[0].length;
+        // 先确定在哪几列
+        int rightColumn = Arrays.binarySearch(matrix[0], target);
+        if (rightColumn >= 0) return true;
+        rightColumn = -(rightColumn + 1); // target的j值小于rightColumn
+        int leftColumn = Arrays.binarySearch(matrix[m - 1], target);
+        if (leftColumn >= 0) return true;
+        leftColumn = -(leftColumn + 1); // target的j值大于等于leftColumn
+        // 每一列搜索，并且搜索的上限递减
+        int up = m;
+        for (int j = leftColumn; j < rightColumn; j++) {
+            int t = binarySearchColumn(matrix, j, 0, up, target);
+            if (t > 0) return true;
+            up = -(t + 1);
+        }
+        return false;
+    }
+
+    private int binarySearchColumn(int[][] matrix, int column, int row1, int row2, int target) {
+        int low = row1;
+        int high = row2 - 1;
+        while (low <= high) {
+            int mid = (low + high) >>> 1;
+            int midVal = matrix[mid][column];
+
+            if (midVal < target) low = mid + 1;
+            else if (midVal > target) high = mid - 1;
+            else return mid;
+        }
+        return -(low + 1);
+    }
 
 }

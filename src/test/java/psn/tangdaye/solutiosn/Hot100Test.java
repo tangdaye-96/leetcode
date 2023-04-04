@@ -509,10 +509,50 @@ public class Hot100Test {
     }
 
     @Test
+    public void testMaximalSquare() {
+        char[][] matrix = {{'1', '0', '1', '0', '0'}, {'1', '0', '1', '1', '1'}, {'1', '1', '1', '1', '1'}, {'1', '0', '0', '1', '0'}};
+        Assert.assertEquals(4, hot.maximalSquare(matrix));
+    }
+
+    @Test
+    public void testInvertTree() {
+        TreeNode root = TreeNode.fromArray(new Integer[]{4, 2, 7, 1, 3, 6, 9});
+        TreeNode node = hot.invertTree(root);
+        Assert.assertEquals("4, 7, 9, 6, 2, 3, 1", node.toString());
+    }
+
+    @Test
+    public void testIsPalindrome() {
+        ListNode node = ListNode.fromArray(new int[]{1, 2, 2, 1});
+        Assert.assertTrue(hot.isPalindrome(node));
+        ListNode node2 = ListNode.fromArray(new int[]{1, 2, 3, 2, 1});
+        Assert.assertTrue(hot.isPalindrome(node2));
+    }
+
+    @Test
+    public void lowestCommonAncestor() {
+        TreeNode root = TreeNode.fromArray(new Integer[]{3, 5, 1, 6, 2, 0, 8, null, null, 7, 4});
+        Assert.assertEquals(root.left, hot.lowestCommonAncestor(root, root.left.left, root.left.right));
+    }
+
+    @Test
+    public void testProductExceptSelf() {
+        int[] array = {1, 2, 3, 4};
+        Assert.assertEquals("[24, 12, 8, 6]", Arrays.toString(hot.productExceptSelf(array)));
+    }
+
+
+    @Test
     public void testMaxSlidingWindow() {
         int[] nums = {1, 3, -1, -3, 5, 3, 6, 7};
         int k = 3;
         Assert.assertEquals("[3, 3, 5, 5, 6, 7]", Arrays.toString(hot.maxSlidingWindow(nums, k)));
+    }
+
+    @Test
+    public void testSearchMatrix() {
+        int[][] matrix = {{1, 4, 7, 11, 15}, {2, 5, 8, 12, 19}, {3, 6, 9, 16, 22}, {10, 13, 14, 17, 24}, {18, 21, 23, 26, 30}};
+        Assert.assertTrue(hot.searchMatrix(matrix, 16));
     }
 
 }

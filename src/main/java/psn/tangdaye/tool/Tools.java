@@ -14,7 +14,7 @@ public class Tools {
         for (List<T> l : list) {
             sb.append("[");
             for (T t : l) {
-                sb.append(String.valueOf(t));
+                sb.append(t);
                 sb.append(", ");
             }
             if (sb.length() > 2) {

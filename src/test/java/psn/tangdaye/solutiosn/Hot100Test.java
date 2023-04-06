@@ -515,4 +515,24 @@ public class Hot100Test {
         Assert.assertEquals("[3, 3, 5, 5, 6, 7]", Arrays.toString(hot.maxSlidingWindow(nums, k)));
     }
 
+    @Test
+    public void testCanFinish() {
+        int[][] table = {{1, 4}, {2, 4}, {3, 1}, {3, 2}};
+        Assert.assertTrue(hot.canFinish(5, table));
+    }
+
+    @Test
+    public void testTrie() {
+        Hot100.Trie trie = new Hot100.Trie();
+        trie.insert("apple");
+        trie.insert("application");
+        Assert.assertTrue(trie.startsWith("app"));
+    }
+
+    @Test
+    public void testFindKthLargest() {
+        int[] array = {3, 2, 1, 5, 6, 4};
+        Assert.assertEquals(5, hot.findKthLargest(array, 2));
+    }
+
 }

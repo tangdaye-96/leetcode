@@ -1,11 +1,45 @@
 package psn.tangdaye.solutions;
 
+import java.util.Random;
+
 /**
- * @date       : 2023/2/21 13:48
- * @author     : shayan
+ * @author : shayan
  * MIT算法导论涉及
+ * @date : 2023/2/21 13:48
  */
 public class AlgorithmMIT {
+    static Random random = new Random();
+
+    // 排序
+    public static void quickSort(int[] array, boolean revert) {
+        doQuickSort(array, 0, array.length - 1, revert);
+    }
+
+    private static void doQuickSort(int[] array, int l, int r, boolean revert) {
+        if (l >= r) return;
+        int t = l + random.nextInt(r + 1 - l);
+
+        swap(array, t, r);
+        int pivot = array[r];
+        int i = l - 1, j = l;
+        for (; j < r; j++) {
+            if (revert ^ array[j] <= pivot) {
+                i = i + 1;
+                swap(array, i, j);
+            }
+        }
+        swap(array, i + 1, r);
+        doQuickSort(array, l, i, revert);
+        doQuickSort(array, i + 2, r, revert);
+    }
+
+
+    private static void swap(int[] array, int i, int j) {
+        if (i == j) return;
+        array[i] = array[i] ^ array[j];
+        array[j] = array[i] ^ array[j];
+        array[i] = array[i] ^ array[j];
+    }
 
 
 }

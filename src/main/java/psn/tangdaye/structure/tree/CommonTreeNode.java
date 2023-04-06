@@ -1,14 +1,10 @@
 package psn.tangdaye.structure.tree;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
- * @date       : 2023/3/5 13:37
- * @author     : shayan
+ * @author : shayan
+ * @date : 2023/3/5 13:37
  */
 public class CommonTreeNode<T> {
 

@@ -1,21 +1,10 @@
 package psn.tangdaye.solutions;
 
-import org.junit.Assert;
 import psn.tangdaye.model.ListNode;
 import psn.tangdaye.model.TreeNode;
 import psn.tangdaye.structure.Heap;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * https://leetcode.cn/problem-list/2cktkvj/
@@ -592,6 +581,7 @@ public class Hot100 {
     }
 
     private void swap(int[] array, int i, int j) {
+        if (i == j) return;
         int temp = array[i];
         array[i] = array[j];
         array[j] = temp;
@@ -1909,7 +1899,150 @@ public class Hot100 {
      * https://leetcode.cn/problems/course-schedule/?favorite=2cktkvj
      */
     public boolean canFinish(int numCourses, int[][] prerequisites) {
-        return false;
+        Map<Integer, Set<Integer>> map = new HashMap<>();
+        for (int[] p : prerequisites) {
+            int a = p[0];
+            int b = p[1];
+            if (map.containsKey(a)) map.get(a).add(b);
+            else map.put(a, new HashSet<>() {{
+                add(b);
+            }});
+        }
+        // 拓扑排序 深度优先遍历
+        // -1 未 0 正在 1结束
+        int[] visited = new int[numCourses];
+        for (int i = 0; i < numCourses; i++) visited[i] = -1;
+        for (int i = 0; i < numCourses; i++) {
+            if (visited[i] == -1) {
+                if (!doDFS(visited, i, map)) return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean doDFS(int[] visited, int i, Map<Integer, Set<Integer>> map) {
+        visited[i] = 0;
+        if (map.containsKey(i)) {
+            for (int x : map.get(i)) {
+                if (visited[x] == 0) {
+                    return false;
+                } else if (visited[x] == -1) {
+                    if (!doDFS(visited, x, map)) {
+                        return false;
+                    }
+                }
+            }
+        }
+        visited[i] = 1;
+        return true;
+    }
+
+    /**
+     * 208. 实现 Trie (前缀树)
+     * Trie（发音类似 "try"）或者说 前缀树 是一种树形数据结构，用于高效地存储和检索字符串数据集中的键。这一数据结构有相当多的应用情景，例如自动补完和拼写检查。
+     * 请你实现 Trie 类：
+     * Trie() 初始化前缀树对象。
+     * void insert(String word) 向前缀树中插入字符串 word 。
+     * boolean search(String word) 如果字符串 word 在前缀树中，返回 true（即，在检索之前已经插入）；否则，返回 false 。
+     * boolean startsWith(String prefix) 如果之前已经插入的字符串word 的前缀之一为 prefix ，返回 true ；否则，返回 false 。
+     * https://leetcode.cn/problems/implement-trie-prefix-tree/?favorite=2cktkvj
+     */
+    public static class Trie {
+        private CharTree root;
+
+        public Trie() {
+            root = new CharTree();
+        }
+
+        public void insert(String word) {
+            doInsert(word, 0, root);
+        }
+
+        private void doInsert(String word, int i, CharTree current) {
+            if (i >= word.length()) {
+                current.end = true;
+                return;
+            }
+            char x = word.charAt(i);
+
+            if (current.children == null) {
+                current.children = new HashMap<>();
+            }
+            if (!current.children.containsKey(x)) {
+                current.children.put(x, new CharTree());
+            }
+            doInsert(word, i + 1, current.children.get(x));
+        }
+
+        public boolean search(String word) {
+            CharTree current = root;
+            for (int i = 0; i < word.length(); i++) {
+                char x = word.charAt(i);
+                if (!current.children.containsKey(x)) return false;
+                current = current.children.get(x);
+            }
+            return current.end;
+        }
+
+        public boolean startsWith(String prefix) {
+            CharTree current = root;
+            for (int i = 0; i < prefix.length(); i++) {
+                char x = prefix.charAt(i);
+                if (!current.children.containsKey(x)) return false;
+                current = current.children.get(x);
+            }
+            return true;
+        }
+    }
+
+    public static class CharTree {
+        public Map<Character, CharTree> children;
+
+        public boolean end;
+
+        public CharTree() {
+            end = false;
+        }
+    }
+
+    /**
+     * 215. 数组中的第K个最大元素
+     * 给定整数数组 nums 和整数 k，请返回数组中第 k 个最大的元素。
+     * https://leetcode.cn/problems/kth-largest-element-in-an-array/?favorite=2cktkvj
+     */
+    public int findKthLargest(int[] nums, int k) {
+        // 快速排序进化版本
+        return quickSort(nums, 0, nums.length - 1, k);
+    }
+
+    private int quickSort(int[] nums, int l, int r, int k) {
+        if (l <= r) {
+            int m = doPartition(nums, l, r);
+            if (m == l + k - 1) {
+                return nums[m];
+            } else if (m < l + k - 1) {
+                // 第k大的在m的右边
+                return quickSort(nums, m + 1, r, k - (m - l + 1));
+            } else {
+                //第k大的在m的左边
+                return quickSort(nums, l, m - 1, k);
+            }
+        }
+        return -1;
+    }
+
+    private int doPartition(int[] nums, int l, int r) {
+        // 返回pivot的k
+        int pivot = nums[r];
+        int i = l - 1, j = l;
+        for (; j < r; j++) {
+            if (nums[j] > pivot) {
+                i = i + 1;
+                swap(nums, i, j);
+            }
+        }
+        swap(nums, i + 1, r);
+        return i + 1;
     }
 
     /**

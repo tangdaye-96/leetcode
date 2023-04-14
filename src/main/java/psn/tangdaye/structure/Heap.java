@@ -3,13 +3,18 @@ package psn.tangdaye.structure;
 import java.util.ArrayList;
 
 /**
- * @date       : 2023/2/27 19:24
- * @author     : shayan
+ * @author : shayan
+ * @date : 2023/2/27 19:24
  */
 public class Heap<T extends Comparable<T>> {
     private ArrayList<T> data;
 
     private boolean isMin;
+
+    public Heap(boolean isMin) {
+        this.isMin = isMin;
+        this.data = new ArrayList<>();
+    }
 
     public Heap(Iterable<T> data, boolean isMin) {
         this.isMin = isMin;

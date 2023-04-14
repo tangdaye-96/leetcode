@@ -1,5 +1,6 @@
 package psn.tangdaye.solutions;
 
+import org.jetbrains.annotations.NotNull;
 import psn.tangdaye.model.ListNode;
 import psn.tangdaye.model.TreeNode;
 import psn.tangdaye.structure.Heap;
@@ -585,6 +586,16 @@ public class Hot100 {
         int temp = array[i];
         array[i] = array[j];
         array[j] = temp;
+    }
+
+    private void swap(int[][] array, int i, int j) {
+        if (i == j) return;
+        int len = array[i].length;
+        int[] temp = new int[len];
+        System.arraycopy(array[i], 0, temp, 0, len);
+        System.arraycopy(array[j], 0, array[i], 0, len);
+        System.arraycopy(temp, 0, array[j], 0, len);
+
     }
 
     /**
@@ -1904,7 +1915,7 @@ public class Hot100 {
             int a = p[0];
             int b = p[1];
             if (map.containsKey(a)) map.get(a).add(b);
-            else map.put(a, new HashSet<>() {{
+            else map.put(a, new HashSet<Integer>() {{
                 add(b);
             }});
         }
@@ -2244,4 +2255,191 @@ public class Hot100 {
         return -(low + 1);
     }
 
+
+    /**
+     * 322. 零钱兑换
+     * 给你一个整数数组 coins ，表示不同面额的硬币；以及一个整数 amount ，表示总金额。
+     * 计算并返回可以凑成总金额所需的 最少的硬币个数 。如果没有任何一种硬币组合能组成总金额，返回-1 。
+     * https://leetcode.cn/problems/coin-change/?favorite=2cktkvj
+     */
+    public int coinChange(int[] coins, int amount) {
+        Arrays.sort(coins);
+        int[] dp = new int[1 + amount];
+        for (int i = 1; i <= amount; i++) dp[i] = -1;
+        dp[0] = 0;
+        for (int i = 1; i <= amount; i++) {
+            int min = Integer.MAX_VALUE;
+            for (int j = 0; j < coins.length && i >= coins[j]; j++) {
+                if (dp[i - coins[j]] >= 0) min = Math.min(min, dp[i - coins[j]] + 1);
+            }
+            if (min < Integer.MAX_VALUE) dp[i] = min;
+        }
+        return dp[amount];
+    }
+
+    /**
+     * 337. 打家劫舍 III
+     * 小偷又发现了一个新的可行窃的地区。这个地区只有一个入口，我们称之为root。
+     * 除了root之外，每栋房子有且只有一个“父“房子与之相连。一番侦察之后，聪明的小偷意识到“这个地方的所有房屋的排列类似于一棵二叉树”。 如果 两个直接相连的房子在同一天晚上被打劫 ，房屋将自动报警。
+     * 给定二叉树的root。返回在不触动警报的情况下，小偷能够盗取的最高金额。
+     * https://leetcode.cn/problems/house-robber-iii/?favorite=2cktkvj
+     */
+    public int rob(TreeNode root) {
+        int[] x = doRob(root);
+        return Math.max(x[0], x[1]);
+    }
+
+    public int[] doRob(TreeNode current) {
+        if (current == null) return new int[]{0, 0};
+        int[] x = doRob(current.left);
+        int[] y = doRob(current.right);
+        int rob = current.val + x[1] + y[1];
+        int notRob = Math.max(x[0], x[1]) + Math.max(y[0], y[1]);
+        return new int[]{rob, notRob};
+    }
+
+    /**
+     * 338. 比特位计数
+     * 给你一个整数 n ，对于 0 <= i <= n 中的每个 i ，计算其二进制表示中 1 的个数 ，返回一个长度为 n + 1 的数组 ans 作为答案。
+     * https://leetcode.cn/problems/counting-bits/?favorite=2cktkvj
+     */
+    public int[] countBits(int n) {
+        int[] result = new int[n + 1];
+        result[0] = 0;
+        for (int i = 1; i <= n; i++) {
+            if (i % 2 == 0) result[i] = result[i / 2];
+            if (i % 2 == 1) result[i] = result[i / 2] + 1;
+        }
+        return result;
+    }
+
+    /**
+     * 347. 前 K 个高频元素
+     * 给你一个整数数组 nums 和一个整数 k ，请你返回其中出现频率前 k 高的元素
+     * https://leetcode.cn/problems/top-k-frequent-elements/
+     */
+    public int[] topKFrequent(int[] nums, int k) {
+        Map<Integer, Integer> data = new HashMap<>();
+        int[] result = new int[k];
+        for (int n : nums) {
+            if (data.containsKey(n)) data.put(n, data.get(n) + 1);
+            else data.put(n, 1);
+        }
+        // 小顶堆
+//        Heap<MapEntry> heap = new Heap<>(true);
+//        for (Map.Entry<Integer, Integer> entry : data.entrySet()) {
+//            MapEntry mapEntry = new MapEntry();
+//            mapEntry.k = entry.getKey();
+//            mapEntry.v = entry.getValue();
+//            if (heap.size() < k) heap.add(mapEntry);
+//            else {
+//                heap.pop();
+//                heap.add(mapEntry);
+//            }
+//        }
+//        for (int s = 0; s < k; s++) {
+//            result[s] = heap.pop().k;
+//        }
+//        return result;
+
+        // 减治法
+        int[][] array = new int[data.size()][2];
+        int i = 0;
+        for (Map.Entry<Integer, Integer> entry : data.entrySet()) {
+            array[i][0] = entry.getKey();
+            array[i][1] = entry.getValue();
+            i++;
+        }
+        quickSort(array, 0, array.length - 1, k);
+        for (int s = 0; s < k; s++) {
+            result[s] = array[s][0];
+        }
+        return result;
+    }
+
+    private static class MapEntry implements Comparable<MapEntry> {
+        int k;
+        int v;
+
+        @Override
+        public int compareTo(@NotNull Hot100.MapEntry o) {
+            return v - o.v;
+        }
+    }
+
+    private void quickSort(int[][] array, int l, int r, int k) {
+        if (l <= r) {
+            int m = doPartition(array, l, r);
+            if (m < l + k - 1) {
+                // 第k大的在m的右边
+                quickSort(array, m + 1, r, k - (m - l + 1));
+            } else if (m > l + k - 1) {
+                //第k大的在m的左边
+                quickSort(array, l, m - 1, k);
+            }
+        }
+    }
+
+    private int doPartition(int[][] nums, int l, int r) {
+        // 返回pivot的k
+        int pivot = nums[r][1];
+        int i = l - 1, j = l;
+        for (; j < r; j++) {
+            if (nums[j][1] > pivot) {
+                i = i + 1;
+                swap(nums, i, j);
+            }
+        }
+        swap(nums, i + 1, r);
+        return i + 1;
+    }
+
+    /**
+     * 394. 字符串解码
+     * 给定一个经过编码的字符串，返回它解码后的字符串。
+     * 编码规则为: k[encoded_string]，表示其中方括号内部的 encoded_string 正好重复 k 次。注意 k 保证为正整数。
+     */
+    public String decodeString(String s) {
+        Stack<String> stack = new Stack<>();
+        int i = 0;
+        while (i < s.length()) {
+            char ch = s.charAt(i);
+            if (ch <= '9' && ch > '0') {
+                int k = ch - '0';
+                i++;
+                while (s.charAt(i) >= '0' && s.charAt(i) <= '9') {
+                    k = k * 10 + s.charAt(i) - '0';
+                    i++;
+                }
+                if (k > 0) stack.push(k + "");
+            } else if (ch == '[') {
+                stack.push("[");
+                i++;
+            } else if (ch == ']') {
+                String repeat = stack.pop();
+                stack.pop(); //[
+                int k = Integer.parseInt(stack.pop());
+                StringBuilder re = new StringBuilder();
+                for (int time = 0; time < k; time++) {
+                    re.append(repeat);
+                }
+                if (!stack.isEmpty() && !"[".equals(stack.peek())) {
+                    String top = stack.pop();
+                    stack.push(top + re);
+                } else {
+                    stack.push(re.toString());
+                }
+                i++;
+            } else {
+                if (stack.isEmpty() || "[".equals(stack.peek())) {
+                    stack.push(ch + "");
+                } else {
+                    String top = stack.pop();
+                    stack.push(top + ch);
+                }
+                i++;
+            }
+        }
+        return stack.pop();
+    }
 }

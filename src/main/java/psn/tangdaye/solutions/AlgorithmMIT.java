@@ -33,6 +33,43 @@ public class AlgorithmMIT {
         doQuickSort(array, i + 2, r, revert);
     }
 
+    public static void mergeSort(int[] array, boolean revert) {
+        doMergeSort(array, 0, array.length - 1, revert);
+    }
+
+    public static void doMergeSort(int[] array, int l, int r, boolean revert) {
+        if (l >= r) {
+            return;
+        }
+        int m = (l + r) / 2;
+        doMergeSort(array, l, m, revert);
+        doMergeSort(array, m + 1, r, revert);
+        merge(array, l, r, revert);
+    }
+
+    private static void merge(int[] array, int l, int r, boolean revert) {
+        int m = (l + r) / 2;
+        int i = l;
+        int j = m + 1;
+        int[] temp = new int[r - l + 1];
+        int s = 0;
+        while (l <= m && j <= r) {
+            if (array[i] <= array[j] ^ revert) {
+                temp[s] = array[i];
+                i++;
+            } else {
+                temp[s] = array[j];
+                j++;
+            }
+            s++;
+        }
+        if (i <= m) {
+            System.arraycopy(array, i, temp, s, m - i + 1);
+        } else if (j <= r) {
+            System.arraycopy(array, j, temp, s, r - j + 1);
+        }
+        System.arraycopy(temp, 0, array, l, r - l + 1);
+    }
 
     private static void swap(int[] array, int i, int j) {
         if (i == j) return;

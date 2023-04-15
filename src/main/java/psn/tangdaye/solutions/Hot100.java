@@ -480,37 +480,21 @@ public class Hot100 {
      * https://leetcode.cn/problems/generate-parentheses/?favorite=2cktkvj
      */
     public List<String> generateParenthesis(int n) {
-        List<String> result = new ArrayList<>();
-        int numsLP = 0;
-        String t = "";
-        LinkedList<Character> stack = new LinkedList<>();
-        for (int i = 0; i < 2 * n; i++) {
-            for (String preS : result) {
-                String l1 = null, l2 = null;
-                if (numsLP < n) {
-                    l1 = nextParentheses(preS, '(', stack);
-                    l2 = nextParentheses(preS, ')', stack);
-                } else {
-                    l2 = nextParentheses(preS, ')', stack);
+        Set<String> current = new HashSet<>();
+        for (int i = 0; i < n; i++) {
+            if (i == 0) current.add("()");
+            else {
+                Set<String> next = new HashSet<>();
+                for (String last : current) {
+                    last = "(" + last;
+                    for (int j = 0; j < last.length() && last.charAt(j) == '('; j++) {
+                        next.add(last.substring(0, j + 1) + ")" + last.substring(j + 1));
+                    }
                 }
-                if (l1 != null) {
-                }
+                current = next;
             }
-
         }
-        return null;
-    }
-
-    private String nextParentheses(String current, char parentheses, LinkedList<Character> stack) {
-        if (parentheses == '(') {
-            stack.add(parentheses);
-            return current + parentheses;
-        } else {
-            if (stack.isEmpty()) return null;
-            char c = stack.removeLast();
-            if (c != '(') return null;
-            return current + parentheses;
-        }
+        return new ArrayList<>(current);
     }
 
     /**
@@ -718,7 +702,7 @@ public class Hot100 {
 
     /**
      * 39. 组合总和
-     * 给你一个 无重复元素 的整数数组 candidates 和一个目标整数 target ，找出 candidates 中可以使数字和为目标数 target 的 所有 不同组合 ，并以列表形式返回。你可以按 任意顺序 返回这些组合。
+     * 给你一个 无重复元素 的整数数组candidates 和一个目标整数target，找出candidates中可以使数字和为目标数target 的 所有不同组合 ，并以列表形式返回。你可以按 任意顺序 返回这些组合。
      * https://leetcode.cn/problems/combination-sum/?favorite=2cktkvj
      */
     public List<List<Integer>> combinationSum(int[] candidates, int target) {
@@ -2242,6 +2226,245 @@ public class Hot100 {
             else return mid;
         }
         return -(low + 1);
+    }
+
+    /**
+     * 279. 完全平方数
+     * 给你一个整数 n ，返回 和为 n 的完全平方数的最少数量 。
+     * https://leetcode.cn/problems/perfect-squares/?favorite=2cktkvj
+     */
+    public int numSquares(int n) {
+        int[] f = new int[n + 1];
+        for (int i = 1; i <= n; i++) {
+            int minn = Integer.MAX_VALUE;
+            for (int j = 1; j * j <= i; j++) {
+                minn = Math.min(minn, f[i - j * j]);
+            }
+            f[i] = minn + 1;
+        }
+        return f[n];
+    }
+
+    /**
+     * 283. 移动零
+     * 给定一个数组 nums，编写一个函数将所有 0 移动到数组的末尾，同时保持非零元素的相对顺序。
+     * https://leetcode.cn/problems/move-zeroes/?favorite=2cktkvj
+     */
+    public void moveZeroes(int[] nums) {
+        // i前面处理过，不是0
+        // ij之间处理过 是0
+        // j处理中
+        // j后面未处理
+        int i = 0;
+        int j = 0;
+        while (j < nums.length) {
+            if (nums[j] != 0) {
+                swap(nums, i, j);
+                i++;
+            }
+            j++;
+        }
+    }
+
+    /**
+     * 287. 寻找重复数
+     * 给定一个包含 n + 1 个整数的数组 nums ，其数字都在 [1, n] 范围内（包括 1 和 n），可知至少存在一个重复的整数。
+     * 假设 nums 只有 一个重复的整数 ，返回 这个重复的数 。
+     * https://leetcode.cn/problems/find-the-duplicate-number/?favorite=2cktkvj
+     */
+    public int findDuplicate(int[] nums) {
+        int n = nums.length - 1;
+        int[] x = new int[32];
+        int[] y = new int[32];
+        for (int i = 1; i <= n; i++) {
+            for (int j = 0; j < 31; j++) {
+                if (((1 << j) & i) != 0) y[j] += 1;
+                if ((1 << j) > i) break;
+            }
+        }
+        for (int i = 0; i <= n; i++) {
+            int t = nums[i];
+            for (int j = 0; j < 31; j++) {
+                if (((1 << j) & t) != 0) x[j] += 1;
+                if ((1 << j) > t) break;
+            }
+        }
+        int answer = 0;
+        for (int j = 0; j < 31; j++) {
+            if (x[j] > y[j]) answer += (1 << j);
+        }
+        return answer;
+    }
+
+    /**
+     * 297. 二叉树的序列化与反序列化
+     * 序列化是将一个数据结构或者对象转换为连续的比特位的操作，进而可以将转换后的数据存储在一个文件或者内存中，同时也可以通过网络传输到另一个计算机环境，采取相反方式重构得到原数据。
+     */
+    public String serialize(TreeNode root) {
+        if (root == null) return "";
+        String t = root.layer().toString();
+        return t.substring(1, t.length() - 1);
+    }
+
+    public TreeNode deserialize(String data) {
+        if (data == null || data.length() == 0) return null;
+        String[] array = data.split(", ");
+        Integer[] nums = new Integer[array.length];
+        for (int i = 0; i < array.length; i++) {
+            if ("null".equals(array[i])) nums[i] = null;
+            else nums[i] = Integer.parseInt(array[i]);
+        }
+        return TreeNode.fromArray(nums);
+    }
+
+    /**
+     * 300. 最长递增子序列
+     * 二分查找比动态规划更快
+     * https://leetcode.cn/problems/longest-increasing-subsequence/?favorite=2cktkvj
+     */
+    public int lengthOfLIS(int[] nums) {
+        int[] array = new int[nums.length];
+        int end = 0;
+        for (int n : nums) {
+            if (end == 0 || array[end - 1] < n) {
+                array[end] = n;
+                end++;
+            } else {
+                int t = Arrays.binarySearch(array, 0, end, n);
+                if (t < 0) t = -(t + 1);
+                array[t] = n;
+            }
+        }
+        return end;
+    }
+
+    /**
+     * 301. 删除无效的括号
+     * 给你一个由若干括号和字母组成的字符串 s ，删除最小数量的无效括号，使得输入的字符串有效。
+     * https://leetcode.cn/problems/remove-invalid-parentheses/?favorite=2cktkvj
+     */
+    public List<String> removeInvalidParentheses(String s) {
+        int leftNum = 0;
+        int rightNum = 0;
+        List<String> res = new ArrayList<String>();
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (c == '(') {
+                leftNum++;
+            }
+            if (c == ')') {
+                if (leftNum > 0) leftNum--;
+                else rightNum++;
+            }
+        }
+        doRemove(s, 0, leftNum, rightNum, res);
+        return res;
+    }
+
+    private void doRemove(String str, int start, int leftNum, int rightNum, List<String> res) {
+        if (leftNum == 0 && rightNum == 0) {
+            if (valid(str)) {
+                res.add(str);
+            }
+            return;
+        }
+
+        for (int i = start; i < str.length(); i++) {
+            if (i != start && str.charAt(i) == str.charAt(i - 1)) {
+                continue;
+            }
+            // 如果剩余的字符无法满足去掉的数量要求，直接返回
+            if (leftNum + rightNum > str.length() - i) {
+                return;
+            }
+            // 尝试去掉一个左括号
+            if (leftNum > 0 && str.charAt(i) == '(') {
+                doRemove(str.substring(0, i) + str.substring(i + 1), i, leftNum - 1, rightNum, res);
+            }
+            // 尝试去掉一个右括号
+            if (rightNum > 0 && str.charAt(i) == ')') {
+                doRemove(str.substring(0, i) + str.substring(i + 1), i, leftNum, rightNum - 1, res);
+            }
+        }
+    }
+
+    private boolean valid(String str) {
+        int cnt = 0;
+        for (int i = 0; i < str.length(); i++) {
+            if (str.charAt(i) == '(') {
+                cnt++;
+            } else if (str.charAt(i) == ')') {
+                cnt--;
+                if (cnt < 0) {
+                    return false;
+                }
+            }
+        }
+
+        return cnt == 0;
+    }
+
+
+    /**
+     * 309. 最佳买卖股票时机含冷冻期
+     * 给定一个整数数组prices，其中第  prices[i] 表示第 i 天的股票价格 。
+     * https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-with-cooldown/?favorite=2cktkvj
+     */
+    public int maxProfitWithFrozen(int[] prices) {
+        int[] dp = new int[3];
+        dp[0] = Integer.MIN_VALUE;
+        dp[1] = Integer.MIN_VALUE;
+        dp[2] = 0;
+        for (int price : prices) {
+            int a = dp[0];
+            int b = dp[1];
+            int c = dp[2];
+            dp[0] = Math.max(a, c - price);
+            dp[1] = a + price;
+            dp[2] = Math.max(b, c);
+        }
+        return Math.max(dp[0], Math.max(dp[1], dp[2]));
+    }
+
+    /**
+     * 122. 买卖股票的最佳时机 II
+     * 给你一个整数数组 prices ，其中prices[i] 表示某支股票第 i 天的价格。
+     * 在每一天，你可以决定是否购买和/或出售股票。你在任何时候最多只能持有 一股 股票。你也可以先购买，然后在 同一天 出售。
+     * 返回 你能获得的 最大 利润。
+     * https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-ii/
+     */
+    public int maxProfit2(int[] prices) {
+        // 第二天跌，今天不买
+        // 第二天涨，今天不卖
+        boolean hold = false;
+        int profit = 0;
+        for (int i = 0; i < prices.length - 1; i++) {
+            int today = prices[i];
+            int tomorrow = prices[i + 1];
+            if (!hold) {
+                if (tomorrow > today) {
+                    hold = true;
+                    profit -= today;
+                }
+            } else {
+                if (tomorrow < today) {
+                    hold = false;
+                    profit += today;
+                }
+            }
+        }
+        if (hold) profit += prices[prices.length - 1];
+        return profit;
+    }
+
+    /**
+     * 312. 戳气球
+     * 有 n 个气球，编号为0 到 n - 1，每个气球上都标有一个数字，这些数字存在数组 nums 中。
+     * 现在要求你戳破所有的气球。戳破第 i 个气球，你可以获得nums[i - 1] * nums[i] * nums[i + 1] 枚硬币。这里的 i - 1 和 i + 1 代表和i相邻的两个气球的序号。如果 i - 1或 i + 1 超出了数组的边界，那么就当它是一个数字为 1 的气球。
+     * https://leetcode.cn/problems/burst-balloons/?favorite=2cktkvj
+     */
+    public int maxCoins(int[] nums) {
+        return -1;
     }
 
 }

@@ -109,6 +109,11 @@ public class Hot100Test {
     }
 
     @Test
+    public void testGenerateParenthesis() {
+        Assert.assertEquals(5, hot.generateParenthesis(3).size());
+    }
+
+    @Test
     public void testMergeKLists() {
         int[] array1 = {1, 4, 7, 10, 20};
         int[] array2 = {2, 5, 8, 11, 14, 17, 20};
@@ -568,9 +573,63 @@ public class Hot100Test {
         Assert.assertEquals("[3, 3, 5, 5, 6, 7]", Arrays.toString(hot.maxSlidingWindow(nums, k)));
     }
 
+    @Test
     public void testSearchMatrix() {
         int[][] matrix = {{1, 4, 7, 11, 15}, {2, 5, 8, 12, 19}, {3, 6, 9, 16, 22}, {10, 13, 14, 17, 24}, {18, 21, 23, 26, 30}};
         Assert.assertTrue(hot.searchMatrix(matrix, 16));
     }
 
+    @Test
+    public void testNumSquares() {
+        Assert.assertEquals(1, hot.numSquares(16));
+        Assert.assertEquals(2, hot.numSquares(13));
+    }
+
+    @Test
+    public void testMoveZeroes() {
+        int[] array = {0, 0, 1, 2, 3};
+        hot.moveZeroes(array);
+        Assert.assertEquals("[1, 2, 3, 0, 0]", Arrays.toString(array));
+    }
+
+    @Test
+    public void testFindDuplicate() {
+        int[] array = {1, 3, 4, 2, 2};
+        Assert.assertEquals(2, hot.findDuplicate(array));
+    }
+
+    @Test
+    public void testSerialize() {
+        TreeNode root = TreeNode.fromArray(new Integer[]{3, 5, 1, 6, 2, 0, 8, null, null, 7, 4});
+        TreeNode root2 = hot.deserialize(hot.serialize(root));
+        Assert.assertEquals(root, root2);
+    }
+
+    @Test
+    public void testLengthOfLIS() {
+        int[] array = {10, 9, 2, 5, 3, 7, 101, 18};
+        Assert.assertEquals(4, hot.lengthOfLIS(array));
+    }
+
+    @Test
+    public void testRemoveInvalidParentheses() {
+        String s = "(()())())"; // 2 4 7
+        Assert.assertEquals(3, hot.removeInvalidParentheses(s).size());
+    }
+
+    @Test
+    public void testMaxProfitWithFrozen() {
+        Assert.assertEquals(3, hot.maxProfitWithFrozen(new int[]{1, 2, 3, 0, 2}));
+    }
+
+    @Test
+    public void testMaxProfit2() {
+        Assert.assertEquals(7, hot.maxProfit2(new int[]{7, 1, 5, 3, 6, 4}));
+        Assert.assertEquals(4, hot.maxProfit2(new int[]{1, 2, 3, 4, 5}));
+    }
+
+    @Test
+    public void testMaxCoins() {
+        Assert.assertEquals(167, hot.maxCoins(new int[]{3, 1, 5, 8}));
+    }
 }

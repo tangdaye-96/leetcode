@@ -121,4 +121,13 @@ public class TreeNode {
         if (b == null) return false;
         return preDFS(this, b) || (left != null && left.contains(b)) || (right != null && right.contains(b));
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof TreeNode)) return false;
+        TreeNode t = (TreeNode) obj;
+        return val == t.val
+                && ((left != null && left.equals(t.left) || (left == null && t.left == null)))
+                && ((right != null && right.equals(t.right) || (right == null && t.right == null)));
+    }
 }

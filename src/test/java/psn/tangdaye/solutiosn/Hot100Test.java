@@ -632,4 +632,37 @@ public class Hot100Test {
     public void testMaxCoins() {
         Assert.assertEquals(167, hot.maxCoins(new int[]{3, 1, 5, 8}));
     }
+
+    @Test
+    public void testCoinChange() {
+        int[] coins = {1, 2, 5};
+        Assert.assertEquals(3, hot.coinChange(coins, 11));
+    }
+
+    @Test
+    public void testRob2() {
+        TreeNode root = TreeNode.fromArray(new Integer[]{4, 1, null, 2, null, 3});
+        Assert.assertEquals(7, hot.rob(root));
+    }
+
+    @Test
+    public void testCountBits() {
+        int n = 3;
+        Assert.assertEquals(4, hot.countBits(n).length);
+    }
+
+    @Test
+    public void testTopKFrequent() {
+        int[] array = {2, 2, 2, 3, 3, 1};
+        int[] result = hot.topKFrequent(array, 2);
+        Arrays.sort(result);
+        Assert.assertEquals("[2, 3]", Arrays.toString(result));
+    }
+
+    @Test
+    public void testDecodeString() {
+        String s = "h2[c11[a3[ab]]]";
+        Assert.assertEquals(78 * 2 + 1, hot.decodeString(s).length());
+    }
+
 }

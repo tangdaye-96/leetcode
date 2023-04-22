@@ -1,6 +1,5 @@
 package psn.tangdaye.solutions;
 
-import org.jetbrains.annotations.NotNull;
 import psn.tangdaye.model.ListNode;
 import psn.tangdaye.model.TreeNode;
 import psn.tangdaye.structure.Heap;
@@ -1016,8 +1015,8 @@ public class Hot100 {
 
     /**
      * 75. 颜色分类
-     * 给定一个包含红色、白色和蓝色、共 n 个元素的数组 nums ，原地对它们进行排序，使得相同颜色的元素相邻，并按照红色、白色、蓝色顺序排列。
-     * 我们使用整数 0、 1 和 2 分别表示红色、白色和蓝色。
+     * 给定一个包含红色、白色和蓝色、共n 个元素的数组nums，原地对它们进行排序，使得相同颜色的元素相邻，并按照红色、白色、蓝色顺序排列。
+     * 我们使用整数 0、1 和 2 分别表示红色、白色和蓝色。
      * https://leetcode.cn/problems/sort-colors/?favorite=2cktkvj
      */
     public void sortColors(int[] nums) {
@@ -2584,7 +2583,7 @@ public class Hot100 {
         int v;
 
         @Override
-        public int compareTo(@NotNull Hot100.MapEntry o) {
+        public int compareTo(Hot100.MapEntry o) {
             return v - o.v;
         }
     }
@@ -2620,6 +2619,7 @@ public class Hot100 {
      * 394. 字符串解码
      * 给定一个经过编码的字符串，返回它解码后的字符串。
      * 编码规则为: k[encoded_string]，表示其中方括号内部的 encoded_string 正好重复 k 次。注意 k 保证为正整数。
+     * https://leetcode.cn/problems/decode-string/?favorite=2cktkvj
      */
     public String decodeString(String s) {
         Stack<String> stack = new Stack<>();
@@ -2664,4 +2664,161 @@ public class Hot100 {
         }
         return stack.pop();
     }
+
+    /**
+     * 399. 除法求值
+     * 给你一个变量对数组 equations 和一个实数值数组 values 作为已知条件，其中 equations[i] = [Ai, Bi] 和 values[i] 共同表示等式 Ai / Bi = values[i] 。每个 Ai 或 Bi 是一个表示单个变量的字符串。
+     * 另有一些以数组 queries 表示的问题，其中 queries[j] = [Cj, Dj] 表示第 j 个问题，请你根据已知条件找出 Cj / Dj = ? 的结果作为答案。
+     * https://leetcode.cn/problems/evaluate-division/?favorite=2cktkvj
+     */
+    public double[] calcEquation(List<List<String>> equations, double[] values, List<List<String>> queries) {
+        Map<String, Map<String, String>> g = new HashMap<>();
+        for (int i = 0; i < equations.size(); i++) {
+            String a = equations.get(i).get(0);
+            String b = equations.get(i).get(1);
+            double r = values[i];
+            if (!g.containsKey(a)) g.put(a, new HashMap<>());
+            g.get(a).put(b, r + "|");
+            if (!g.containsKey(b)) g.put(b, new HashMap<>());
+            g.get(b).put(a, -r + "|");
+        }
+        double[] result = new double[queries.size()];
+        Set<String> visited = new HashSet<>();
+        for (int i = 0; i < queries.size(); i++) {
+            String a = queries.get(i).get(0);
+            String b = queries.get(i).get(1);
+            if (!g.containsKey(a) || !g.containsKey(b)) {
+                result[i] = -1;
+                continue;
+            }
+            if (a.equals(b)) {
+                result[i] = 1;
+                continue;
+            }
+            visited.clear();
+            doQuery(g, a, b, visited);
+            result[i] = calString(g.get(a).get(b));
+        }
+        return result;
+    }
+
+    private String doQuery(Map<String, Map<String, String>> g, String a, String b, Set<String> visited) {
+        visited.add(a);
+        Map<String, String> relation = new HashMap<>(g.get(a));
+        if (relation.containsKey(b)) return relation.get(b);
+        for (String k : relation.keySet()) {
+            if (visited.contains(k)) continue;
+            String v = relation.get(k);
+            String temp = doQuery(g, k, b, visited);
+            if (temp != null) g.get(a).put(b, v + temp);
+        }
+        return g.get(a).get(b);
+    }
+
+    private double calString(String s) {
+        if (s == null) return -1;
+        s = s.substring(0, s.length() - 1);
+        String[] t = s.split("\\|");
+        double a = 1;
+        double b = 1;
+        for (String k : t) {
+            double d = Double.parseDouble(k);
+            if (d > 0) a *= d;
+            if (d < 0) b *= (-d);
+        }
+        return a / b;
+    }
+
+    /**
+     * 406. 根据身高重建队列
+     * 假设有打乱顺序的一群人站成一个队列，数组 people 表示队列中一些人的属性（不一定按顺序）。每个 people[i] = [hi, ki] 表示第 i 个人的身高为 hi ，前面 正好 有 ki 个身高大于或等于 hi 的人。
+     * 请你重新构造并返回输入数组people 所表示的队列。返回的队列应该格式化为数组 queue ，其中 queue[j] = [hj, kj] 是队列中第 j 个人的属性（queue[0] 是排在队列前面的人）。
+     * https://leetcode.cn/problems/queue-reconstruction-by-height/?favorite=2cktkvj
+     */
+    public int[][] reconstructQueue(int[][] people) {
+        Arrays.sort(people, (o1, o2) -> {
+            if (o2[0] > o1[0]) return -1;
+            if (o2[0] < o1[0]) return 1;
+            return o2[1] - o1[1];
+        });
+        int n = people.length;
+        int[][] result = new int[n][2];
+        LinkedList<Integer> index = new LinkedList<>();
+        for (int i = 0; i < n; i++) {
+            index.add(i);
+        }
+        for (int[] person : people) {
+            int h = person[0];
+            int k = person[1];
+            int i = index.remove(k);
+            result[i] = new int[]{h, k};
+        }
+        return result;
+    }
+
+    /**
+     * 416. 分割等和子集
+     * 给你一个 只包含正整数 的 非空 数组 nums 。请你判断是否可以将这个数组分割成两个子集，使得两个子集的元素和相等。
+     * https://leetcode.cn/problems/partition-equal-subset-sum/?favorite=2cktkvj
+     * <p>
+     * np完全问题，没有多项式解
+     */
+    public boolean canPartition(int[] nums) {
+        int sum = 0;
+        for (int k : nums) sum += k;
+        if (sum % 2 == 1) return false;
+        int k = sum / 2;
+        boolean[][] dp = new boolean[nums.length][k + 1];
+        for (int i = 0; i < nums.length; i++) {
+            for (int j = 0; j <= k; j++) {
+                if (j == 0) dp[i][j] = true;
+                else if (i == 0) dp[i][j] = nums[i] == j;
+                else {
+                    if (dp[i - 1][j]) dp[i][j] = true;
+                    else if (j >= nums[i]) dp[i][j] = dp[i - 1][j - nums[i]];
+                }
+            }
+        }
+        return dp[nums.length - 1][k];
+    }
+
+    /**
+     *
+     */
+    public int pathSum(TreeNode root, int targetSum) {
+        Map<TreeNode, Map<Integer, Integer>> dp = new HashMap<>();
+        doPathSum(dp, root);
+        int sum = 0;
+        for (Map<Integer, Integer> v : dp.values()) {
+            sum += v.getOrDefault(targetSum, 0);
+        }
+        return sum;
+    }
+
+    private void doPathSum(Map<TreeNode, Map<Integer, Integer>> dp, TreeNode node) {
+        if (node == null) return;
+        helperAdd(dp, node, node.val, 1);
+        doPathSum(dp, node.left);
+        doPathSum(dp, node.right);
+        for (Map.Entry<Integer, Integer> entry : helperGet(dp, node.left).entrySet()) {
+            helperAdd(dp, node, node.val + entry.getKey(), entry.getValue());
+        }
+        for (Map.Entry<Integer, Integer> entry : helperGet(dp, node.right).entrySet()) {
+            helperAdd(dp, node, node.val + entry.getKey(), entry.getValue());
+        }
+    }
+
+    private Map<Integer, Integer> helperGet(Map<TreeNode, Map<Integer, Integer>> dp, TreeNode node) {
+        return dp.getOrDefault(node, Collections.emptyMap());
+    }
+
+    private void helperAdd(Map<TreeNode, Map<Integer, Integer>> dp, TreeNode node, int target, int pathNums) {
+        if (!dp.containsKey(node)) {
+            dp.put(node, new HashMap<>());
+        }
+        int ori = dp.get(node).getOrDefault(target, 0);
+        dp.get(node).put(target, ori + pathNums);
+    }
+
+
 }

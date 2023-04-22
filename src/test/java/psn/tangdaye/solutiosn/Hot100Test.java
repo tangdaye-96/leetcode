@@ -7,6 +7,7 @@ import psn.tangdaye.model.TreeNode;
 import psn.tangdaye.solutions.Hot100;
 import psn.tangdaye.tool.Tools;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -663,6 +664,48 @@ public class Hot100Test {
     public void testDecodeString() {
         String s = "h2[c11[a3[ab]]]";
         Assert.assertEquals(78 * 2 + 1, hot.decodeString(s).length());
+    }
+
+    @Test
+    public void testCalcEquation() {
+        List<List<String>> equations = new ArrayList<>();
+        equations.add(Arrays.asList("a", "b"));
+        equations.add(Arrays.asList("b", "c"));
+        equations.add(Arrays.asList("c", "d"));
+        equations.add(Arrays.asList("d", "e"));
+        double[] values = {2, 2, 2, 2};
+        List<List<String>> queries = new ArrayList<>();
+        queries.add(Arrays.asList("a", "e"));
+        queries.add(Arrays.asList("e", "a"));
+        queries.add(Arrays.asList("b", "d"));
+        queries.add(Arrays.asList("b", "x"));
+        queries.add(Arrays.asList("x", "x"));
+        double[] result = hot.calcEquation(equations, values, queries);
+        System.out.println();
+        Assert.assertEquals(16.0, result[0], 0.0);
+        Assert.assertEquals(1.0 / 16, result[1], 0.0);
+        Assert.assertEquals(4, result[2], 0.0);
+        Assert.assertEquals(-1.0, result[3], 0.0);
+        Assert.assertEquals(-1.0, result[4], 0.0);
+    }
+
+    @Test
+    public void testReconstructQueue() {
+        int[][] people = {{7, 0}, {4, 4}, {7, 1}, {5, 0}, {6, 1}, {5, 2}};
+        Assert.assertEquals("[[5,0],[7,0],[5,2],[6,1],[4,4],[7,1]]", Tools.beauty2DArray(hot.reconstructQueue(people)));
+    }
+
+    @Test
+    public void testCanPartition() {
+        int[] array = {100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 99, 99};
+        Assert.assertTrue(hot.canPartition(array));
+    }
+
+    @Test
+    public void testPathSum() {
+        Integer[] array = {10, 5, -3, 3, 2, null, 11, 3, -2, null, 1};
+        TreeNode root = TreeNode.fromArray(array);
+        Assert.assertEquals(3, hot.pathSum(root, 8));
     }
 
 }

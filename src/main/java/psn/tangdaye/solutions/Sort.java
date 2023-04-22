@@ -4,10 +4,9 @@ import java.util.Random;
 
 /**
  * @author : shayan
- * MIT算法导论涉及
  * @date : 2023/2/21 13:48
  */
-public class AlgorithmMIT {
+public class Sort {
     static Random random = new Random();
 
     // 排序

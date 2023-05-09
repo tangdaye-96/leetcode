@@ -1,6 +1,8 @@
 package psn.tangdaye.tool;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 public class Tools {
@@ -84,6 +86,15 @@ public class Tools {
             array[s + index] = array[i];
             array[i] = temp;
         }
+    }
+
+    public static Map<Character, Integer> str2dic(String s, int l, int r) {
+        Map<Character, Integer> target = new HashMap<>();
+        for (int i = l; i <= r; i++) {
+            int k = target.getOrDefault(s.charAt(i), 0);
+            target.put(s.charAt(i), k + 1);
+        }
+        return target;
     }
 
 }

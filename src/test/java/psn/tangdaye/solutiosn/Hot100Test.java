@@ -542,7 +542,10 @@ public class Hot100Test {
 
     @Test
     public void testMaximalSquare() {
-        char[][] matrix = {{'1', '0', '1', '0', '0'}, {'1', '0', '1', '1', '1'}, {'1', '1', '1', '1', '1'}, {'1', '0', '0', '1', '0'}};
+        char[][] matrix = {
+                {'1', '0', '1', '0', '0'}, {'1', '0', '1', '1', '1'}, {'1', '1', '1', '1', '1'},
+                {'1', '0', '0', '1', '0'}
+        };
         Assert.assertEquals(4, hot.maximalSquare(matrix));
     }
 
@@ -576,7 +579,9 @@ public class Hot100Test {
 
     @Test
     public void testSearchMatrix() {
-        int[][] matrix = {{1, 4, 7, 11, 15}, {2, 5, 8, 12, 19}, {3, 6, 9, 16, 22}, {10, 13, 14, 17, 24}, {18, 21, 23, 26, 30}};
+        int[][] matrix = {
+                {1, 4, 7, 11, 15}, {2, 5, 8, 12, 19}, {3, 6, 9, 16, 22}, {10, 13, 14, 17, 24}, {18, 21, 23, 26, 30}
+        };
         Assert.assertTrue(hot.searchMatrix(matrix, 16));
     }
 
@@ -697,7 +702,18 @@ public class Hot100Test {
 
     @Test
     public void testCanPartition() {
-        int[] array = {100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 99, 99};
+        int[] array = {
+                100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100,
+                100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100,
+                100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100,
+                100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100,
+                100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100,
+                100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100,
+                100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100,
+                100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100,
+                100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100,
+                100, 100, 100, 100, 100, 100, 100, 100, 100, 99, 99
+        };
         Assert.assertTrue(hot.canPartition(array));
     }
 
@@ -706,6 +722,92 @@ public class Hot100Test {
         Integer[] array = {10, 5, -3, 3, 2, null, 11, 3, -2, null, 1};
         TreeNode root = TreeNode.fromArray(array);
         Assert.assertEquals(3, hot.pathSum(root, 8));
+    }
+
+    @Test
+    public void testFindAnagrams() {
+        String s = "abab", p = "ab";
+        Assert.assertEquals("[0, 1, 2]", hot.findAnagrams(s, p).toString());
+        s = "abceba";
+        p = "abce";
+        Assert.assertEquals("[0, 2]", hot.findAnagrams(s, p).toString());
+        s = "acdcaeccde";
+        p = "c";
+        Assert.assertEquals("[1, 3, 6, 7]", hot.findAnagrams(s, p).toString());
+    }
+
+    @Test
+    public void testFindDisappearedNumbers() {
+        int[] array = {1, 1, 1, 1};
+        Assert.assertEquals("[2, 3, 4]", hot.findDisappearedNumbers(array).toString());
+    }
+
+    @Test
+    public void testHammingDistance() {
+        Assert.assertEquals(2, hot.hammingDistance(1, 4));
+    }
+
+    @Test
+    public void testFindTargetSumWays() {
+        int[] array = {1, 2, 1};
+        Assert.assertEquals(2, hot.findTargetSumWays(array, 0));
+    }
+
+    @Test
+    public void testConvertBST() {
+        Integer[] array = {4, 1, 6, 0, 2, 5, 7, null, null, null, 3, null, null, null, 8};
+        TreeNode root = TreeNode.fromArray(array);
+        TreeNode result = hot.convertBST(root);
+        Assert.assertEquals("[30, 36, 21, 36, 35, 26, 15, null, null, null, 33, null, null, null, 8]", result.layer().toString());
+    }
+
+    @Test
+    public void testDiameterOfBinaryTree() {
+        Integer[] array = {1, 2, 3};
+        Assert.assertEquals(2, hot.diameterOfBinaryTree(TreeNode.fromArray(array)));
+    }
+
+    @Test
+    public void testSubarraySum() {
+        int[] array = {1, -1, 0};
+        Assert.assertEquals(3, hot.subarraySum(array, 0));
+    }
+
+    @Test
+    public void testFindUnsortedSubarray() {
+        int[] array = {1, 3, 2, 2, 2};
+        Assert.assertEquals(4, hot.findUnsortedSubarray(array));
+        int[] array2 = {1, 2, 3, 4, 5};
+        Assert.assertEquals(0, hot.findUnsortedSubarray(array2));
+        int[] array3 = {1, 2, 3, 4, 0};
+        Assert.assertEquals(5, hot.findUnsortedSubarray(array3));
+    }
+
+    @Test
+    public void testMergeTrees() {
+        TreeNode node1 = TreeNode.fromArray(new Integer[]{1, 3, 2, 5});
+        TreeNode node2 = TreeNode.fromArray(new Integer[]{2, 1, 3, null, 4, null, 7});
+        TreeNode newOne = hot.mergeTrees(node1, node2);
+        Assert.assertEquals("[3, 4, 5, 5, 4, null, 7]", newOne.layer().toString());
+    }
+
+    @Test
+    public void testLeastInterval() {
+        char[] tasks = {'A', 'A', 'A', 'A', 'A', 'A', 'B', 'C', 'D', 'E', 'F', 'G'};
+        int n = 2;
+        Assert.assertEquals(16, hot.leastInterval(tasks, n));
+    }
+
+    @Test
+    public void testCountSubstrings() {
+        String s = "aaaaa";
+        Assert.assertEquals(15, hot.countSubstrings(s));
+    }
+
+    @Test
+    public void testdailyTemperatures() {
+        int[] temperatures = {73, 74, 75, 71, 69, 72, 76, 73};
+        Assert.assertEquals("[1, 1, 4, 2, 1, 1, 0, 0]", Arrays.toString(hot.dailyTemperatures(temperatures)));
     }
 
 }

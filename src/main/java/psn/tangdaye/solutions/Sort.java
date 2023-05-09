@@ -13,7 +13,6 @@ public class Sort {
     public static void quickSort(int[] array, boolean revert) {
         doQuickSort(array, 0, array.length - 1, revert);
     }
-
     private static void doQuickSort(int[] array, int l, int r, boolean revert) {
         if (l >= r) return;
         int t = l + random.nextInt(r + 1 - l);
@@ -35,7 +34,6 @@ public class Sort {
     public static void mergeSort(int[] array, boolean revert) {
         doMergeSort(array, 0, array.length - 1, revert);
     }
-
     public static void doMergeSort(int[] array, int l, int r, boolean revert) {
         if (l >= r) {
             return;
@@ -45,7 +43,6 @@ public class Sort {
         doMergeSort(array, m + 1, r, revert);
         merge(array, l, r, revert);
     }
-
     private static void merge(int[] array, int l, int r, boolean revert) {
         int m = (l + r) / 2;
         int i = l;

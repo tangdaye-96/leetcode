@@ -1,10 +1,13 @@
 package psn.tangdaye.solutions;
 
+import org.jetbrains.annotations.NotNull;
 import psn.tangdaye.model.ListNode;
 import psn.tangdaye.model.TreeNode;
 import psn.tangdaye.structure.Heap;
+import psn.tangdaye.tool.Tools;
 
 import java.util.*;
+import java.util.function.BinaryOperator;
 
 /**
  * https://leetcode.cn/problem-list/2cktkvj/
@@ -49,7 +52,7 @@ public class Hot100 {
 
     /**
      * 2. 两数相加
-     * 给你两个 非空 的链表，表示两个非负的整数。它们每位数字都是按照 逆序 的方式存储的，并且每个节点只能存储 一位 数字。
+     * 给你两个非空 的链表，表示两个非负的整数。它们每位数字都是按照逆序的方式存储的，并且每个节点只能存储一位数字。
      * <p>
      * 请你将两个数相加，并以相同形式返回一个表示和的链表。
      * https://leetcode.cn/problems/add-two-numbers/?favorite=2cktkvj
@@ -1040,11 +1043,7 @@ public class Hot100 {
      * https://leetcode.cn/problems/minimum-window-substring/?favorite=2cktkvj
      */
     public String minWindow(String s, String t) {
-        Map<Character, Integer> dic = new HashMap<>();
-        for (int i = 0; i < t.length(); i++) {
-            int x = dic.getOrDefault(t.charAt(i), 0);
-            dic.put(t.charAt(i), x + 1);
-        }
+        Map<Character, Integer> dic = Tools.str2dic(t, 0, t.length() - 1);
         List<Integer> indexList = new ArrayList<>();
         int k = 0;
         int i = -1, j = 0;
@@ -2547,21 +2546,21 @@ public class Hot100 {
             else data.put(n, 1);
         }
         // 小顶堆
-//        Heap<MapEntry> heap = new Heap<>(true);
-//        for (Map.Entry<Integer, Integer> entry : data.entrySet()) {
-//            MapEntry mapEntry = new MapEntry();
-//            mapEntry.k = entry.getKey();
-//            mapEntry.v = entry.getValue();
-//            if (heap.size() < k) heap.add(mapEntry);
-//            else {
-//                heap.pop();
-//                heap.add(mapEntry);
-//            }
-//        }
-//        for (int s = 0; s < k; s++) {
-//            result[s] = heap.pop().k;
-//        }
-//        return result;
+        //        Heap<MapEntry> heap = new Heap<>(true);
+        //        for (Map.Entry<Integer, Integer> entry : data.entrySet()) {
+        //            MapEntry mapEntry = new MapEntry();
+        //            mapEntry.k = entry.getKey();
+        //            mapEntry.v = entry.getValue();
+        //            if (heap.size() < k) heap.add(mapEntry);
+        //            else {
+        //                heap.pop();
+        //                heap.add(mapEntry);
+        //            }
+        //        }
+        //        for (int s = 0; s < k; s++) {
+        //            result[s] = heap.pop().k;
+        //        }
+        //        return result;
 
         // 减治法
         int[][] array = new int[data.size()][2];
@@ -2801,10 +2800,19 @@ public class Hot100 {
         doPathSum(dp, node.left);
         doPathSum(dp, node.right);
         for (Map.Entry<Integer, Integer> entry : helperGet(dp, node.left).entrySet()) {
-            helperAdd(dp, node, node.val + entry.getKey(), entry.getValue());
+            try {
+                int r = Math.addExact(node.val, entry.getKey());
+                helperAdd(dp, node, r, entry.getValue());
+            } catch (Exception ignored) {
+            }
+
         }
         for (Map.Entry<Integer, Integer> entry : helperGet(dp, node.right).entrySet()) {
-            helperAdd(dp, node, node.val + entry.getKey(), entry.getValue());
+            try {
+                int r = Math.addExact(node.val, entry.getKey());
+                helperAdd(dp, node, r, entry.getValue());
+            } catch (Exception ignored) {
+            }
         }
     }
 
@@ -2820,5 +2828,367 @@ public class Hot100 {
         dp.get(node).put(target, ori + pathNums);
     }
 
+    /**
+     * 438. 找到字符串中所有字母异位词
+     * 给定两个字符串 s 和 p，找到 s 中所有 p 的 异位词 的子串，返回这些子串的起始索引。不考虑答案输出的顺序。
+     * https://leetcode.cn/problems/find-all-anagrams-in-a-string/?favorite=2cktkvj
+     */
+    public List<Integer> findAnagrams(String s, String p) {
+        Map<Character, Integer> target = Tools.str2dic(p, 0, p.length() - 1);
+        Map<Character, Integer> current = new HashMap<>(target);
+        List<Integer> result = new ArrayList<>();
+        int i = 0, j = 0;
+        while (i <= s.length() - p.length()) {
+            char ci = s.charAt(i);
+            if (!target.containsKey(ci)) {
+                i++;
+            } else {
+                j = i;
+                while (j < s.length()) {
+                    char cj = s.charAt(j);
+                    if (!target.containsKey(cj)) {
+                        current = new HashMap<>(target);
+                        i = j + 1;
+                        break;
+                    } else {
+                        int left = current.get(cj);
+                        if (left == 0) {
+                            // 移动i,使得s[i] == cj;
+                            while (s.charAt(i) != cj) {
+                                ci = s.charAt(i);
+                                current.put(ci, current.get(ci) + 1);
+                                i++;
+                            }
+                            i++;
+                            ci = s.charAt(i);
+                        } else {
+                            current.put(cj, left - 1);
+                            if (checkForDone(current)) {
+                                result.add(i);
+                                current.put(ci, 1);
+                                i++;
+                                if (i > s.length() - p.length()) return result;
+                                ci = s.charAt(i);
+                            }
+                        }
+                        j++;
+                    }
+                }
+            }
+        }
+        return result;
+    }
 
+    private boolean checkForDone(Map<Character, Integer> current) {
+        for (int v : current.values()) {
+            if (v > 0) return false;
+        }
+        return true;
+    }
+
+    /**
+     * 找到所有数组中消失的数字
+     * https://leetcode.cn/problems/find-all-numbers-disappeared-in-an-array/?favorite=2cktkvj
+     * 给你一个含 n 个整数的数组 nums ，其中 nums[i] 在区间 [1, n] 内。请你找出所有在 [1, n] 范围内但没有出现在 nums 中的数字，并以数组的形式返回结果。
+     */
+    public List<Integer> findDisappearedNumbers(int[] nums) {
+        int i = 0;
+        while (i < nums.length) {
+            int k = nums[i];
+            if (k != nums[k - 1]) {
+                swap(nums, i, k - 1);
+            } else {
+                i++;
+            }
+        }
+        List<Integer> a = new ArrayList<>();
+        for (int j = 0; j < nums.length; j++) {
+            if (nums[j] != j + 1) a.add(j + 1);
+        }
+        return a;
+    }
+
+    /**
+     * 461. 汉明距离
+     * 两个整数之间的 汉明距离 指的是这两个数字对应二进制位不同的位置的数目。
+     * https://leetcode.cn/problems/hamming-distance/?favorite=2cktkvj
+     */
+    public int hammingDistance(int x, int y) {
+        return Integer.bitCount(x ^ y);
+    }
+
+    /**
+     * 494. 目标和
+     * 给你一个整数数组 nums 和一个整数 target 。
+     * 向数组中的每个整数前添加'+' 或 '-' ，然后串联起所有整数，可以构造一个 表达式 ：
+     * 例如，nums = [2, 1] ，可以在 2 之前添加 '+' ，在 1 之前添加 '-' ，然后串联起来得到表达式 "+2-1" 。
+     * 返回可以通过上述方法构造的、运算结果等于 target 的不同 表达式 的数目。
+     * https://leetcode.cn/problems/target-sum/?favorite=2cktkvj
+     */
+    public int findTargetSumWays(int[] nums, int target) {
+        if (nums.length == 0) return 0;
+        int sum = Arrays.stream(nums).sum();
+        if ((sum - target) % 2 == 1) return 0;
+        if (sum - target < 0) return 0;
+        int neg = (sum - target) / 2;
+        int[] last = new int[1 + neg];
+        int[] current = new int[1 + neg];
+        last[0] = 1;
+        for (int i = 1; i <= neg; i++) {
+            last[i] = 0;
+        }
+        for (int i = 0; i < nums.length; i++) {
+            for (int j = 0; j <= neg; j++) {
+                if (j < nums[i]) {
+                    current[j] = last[j];
+                } else {
+                    current[j] = last[j] + last[j - nums[i]];
+                }
+            }
+            System.arraycopy(current, 0, last, 0, 1 + neg);
+        }
+        return current[neg];
+        //        return doFindTargetSumWays(nums, 0, target);
+    }
+
+    public int doFindTargetSumWays(int[] nums, int i, int target) {
+        if (i == nums.length) {
+            if (0 == target) return 1;
+            else return 0;
+        }
+        int current = nums[i];
+        return doFindTargetSumWays(nums, i + 1, target - current) + doFindTargetSumWays(nums, i + 1, target + current);
+    }
+
+
+    /**
+     * 538. 把二叉搜索树转换为累加树
+     * 给出二叉搜索树的根节点，该树的节点值各不相同，请你将其转换为累加树（Greater Sum Tree），使每个节点 node的新值等于原树中大于或等于node.val的值之和。
+     * 提醒一下，二叉搜索树满足下列约束条件：
+     * 节点的左子树仅包含键小于节点键的节点。
+     * 节点的右子树仅包含键大于节点键的节点。
+     * 左右子树也必须是二叉搜索树。
+     * https://leetcode.cn/problems/convert-bst-to-greater-tree/?favorite=2cktkvj
+     */
+
+    public TreeNode convertBST(TreeNode root) {
+        List<TreeNode> list = new LinkedList<>();
+        rml(root, list);
+        int now = 0;
+        for (TreeNode n : list) {
+            n.val += now;
+            now += (n.val - now);
+        }
+        return root;
+    }
+
+    private void rml(TreeNode current, List<TreeNode> list) {
+        if (current.right != null) {
+            rml(current.right, list);
+        }
+        list.add(current);
+        if (current.left != null) {
+            rml(current.left, list);
+        }
+    }
+
+    /**
+     * 543. 二叉树的直径
+     * https://leetcode.cn/problems/diameter-of-binary-tree/?favorite=2cktkvj
+     * 给定一棵二叉树，你需要计算它的直径长度。一棵二叉树的直径长度是任意两个结点路径长度中的最大值。这条路径可能穿过也可能不穿过根结点。
+     */
+    public int diameterOfBinaryTree(TreeNode root) {
+        if (root == null) return 0;
+        Map<TreeNode, int[]> t = new HashMap<>();
+        travel(root, t);
+        return t.values().stream().map(result -> result[0] + result[1]).max(Comparator.comparingInt(o -> o)).get();
+    }
+
+    private void travel(TreeNode current, Map<TreeNode, int[]> t) {
+        int[] result = new int[2];
+        if (current.left != null) {
+            travel(current.left, t);
+            result[0] = Math.max(t.get(current.left)[0], t.get(current.left)[1]) + 1;
+        }
+        if (current.right != null) {
+            travel(current.right, t);
+            result[1] = Math.max(t.get(current.right)[0], t.get(current.right)[1]) + 1;
+        }
+        t.put(current, result);
+    }
+
+    /**
+     * 560. 和为 K 的子数组
+     * 给你一个整数数组 nums 和一个整数 k ，请你统计并返回 该数组中和为 k 的连续子数组的个数 。
+     * https://leetcode.cn/problems/subarray-sum-equals-k/?favorite=2cktkvj
+     */
+    public int subarraySum(int[] nums, int k) {
+        int result = 0;
+        HashMap<Integer, List<Integer>> map = new HashMap<>();
+        int[] sum = new int[1 + nums.length];
+        sum[0] = 0;
+        for (int i = 1; i <= nums.length; i++) {
+            sum[i] = nums[i - 1] + sum[i - 1];
+            List<Integer> temp = map.getOrDefault(sum[i], new ArrayList<>());
+            temp.add(i);
+            map.put(sum[i], temp);
+            if (sum[i] == k) result += 1;
+        }
+        for (int i = 1; i <= nums.length; i++) {
+            int target = k + sum[i];
+            if (map.containsKey(target)) {
+                List<Integer> temp = map.get(target);
+                int t = binarySearch(temp, i);
+                if (t < 0) t = -(t + 1);
+                else t = t + 1;
+                result += (temp.size() - t);
+            }
+        }
+        return result;
+    }
+
+    private int binarySearch(List<Integer> array, int target) {
+        int low = 0;
+        int high = array.size() - 1;
+
+        while (low <= high) {
+            int mid = (low + high) >>> 1;
+            int midVal = array.get(mid);
+            if (midVal < target) low = mid + 1;
+            else if (midVal > target) high = mid - 1;
+            else return mid;
+        }
+        return -(low + 1);
+    }
+
+    /**
+     * 581. 最短无序连续子数组
+     * 给你一个整数数组 nums ，你需要找出一个 连续子数组 ，如果对这个子数组进行升序排序，那么整个数组都会变为升序排序。
+     * https://leetcode.cn/problems/shortest-unsorted-continuous-subarray/?favorite=2cktkvj
+     */
+    public int findUnsortedSubarray(int[] nums) {
+        // 找到第一个后面有更小的下标s
+        // 找到最后一个前面有更大的下标e
+        int maxPre = Integer.MIN_VALUE;
+        int e = -1;
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] >= maxPre) maxPre = nums[i];
+            else e = i;
+        }
+
+        int minPost = Integer.MAX_VALUE;
+        int s = 0;
+        for (int i = nums.length - 1; i >= 0; i--) {
+            if (nums[i] <= minPost) minPost = nums[i];
+            else s = i;
+        }
+        return e - s + 1;
+    }
+
+    /**
+     * 617. 合并二叉树
+     * 想象一下，当你将其中一棵覆盖到另一棵之上时，两棵树上的一些节点将会重叠（而另一些不会）。你需要将这两棵树合并成一棵新二叉树。合并的规则是：如果两个节点重叠，那么将这两个节点的值相加作为合并后节点的新值；否则，不为 null 的节点将直接作为新二叉树的节点。
+     * 返回合并后的二叉树。
+     * https://leetcode.cn/problems/merge-two-binary-trees/?favorite=2cktkvj
+     */
+    public TreeNode mergeTrees(TreeNode root1, TreeNode root2) {
+        if (root1 == null && root2 == null) return null;
+        if (root1 == null) {
+            TreeNode newOne = new TreeNode(root2.val);
+            newOne.left = mergeTrees(null, root2.left);
+            newOne.right = mergeTrees(null, root2.right);
+            return newOne;
+        }
+        if (root2 == null) {
+            TreeNode newOne = new TreeNode(root1.val);
+            newOne.left = mergeTrees(root1.left, null);
+            newOne.right = mergeTrees(root1.right, null);
+            return newOne;
+        }
+        TreeNode newOne = new TreeNode(root1.val + root2.val);
+        newOne.left = mergeTrees(root1.left, root2.left);
+        newOne.right = mergeTrees(root1.right, root2.right);
+        return newOne;
+    }
+
+    /**
+     * 621. 任务调度器
+     * 给你一个用字符数组tasks 表示的 CPU 需要执行的任务列表。其中每个字母表示一种不同种类的任务。任务可以以任意顺序执行，并且每个任务都可以在 1 个单位时间内执行完。在任何一个单位时间，CPU 可以完成一个任务，或者处于待命状态。
+     * https://leetcode.cn/problems/task-scheduler/?favorite=2cktkvj
+     */
+    public int leastInterval(char[] tasks, int n) {
+        int maxTask = 0;
+        int tot = 0;
+        int[] cnt = new int[26];
+        for (char c : tasks) {
+            cnt[c - 'A']++;
+        }
+        for (int i = 0; i < 26; i++) {
+            maxTask = Math.max(maxTask, cnt[i]);
+        }
+        for (int i = 0; i < 26; i++) {
+            if (cnt[i] == maxTask) {
+                tot++; // 有多少相同的
+            }
+        }
+        return Math.max(tasks.length, (maxTask - 1) * (n + 1) + tot);
+    }
+
+    /**
+     * 647. 回文子串
+     * 给你一个字符串 s ，请你统计并返回这个字符串中 回文子串 的数目。
+     * https://leetcode.cn/problems/palindromic-substrings/?favorite=2cktkvj
+     */
+    public int countSubstrings(String s) {
+        char[] x = new char[s.length() * 2 + 1];
+        for (int i = 0; i < x.length; i++) {
+            if (i % 2 == 1) {
+                x[i] = s.charAt(i / 2);
+            } else {
+                x[i] = '$';
+            }
+        }
+        int[] dp = new int[x.length];
+        int center = -1;
+        int right = -1;
+        for (int i = 0; i < x.length; i++) {
+            if (right > i) {
+                int anotherI = 2 * center - i;
+                int minLen = Math.min(dp[anotherI], right - i);
+                dp[i] = expand(x, i - minLen, i + minLen);
+            } else {
+                dp[i] = expand(x, i, i);
+            }
+            if (i + dp[i] > right) {
+                center = i;
+                right = i + dp[i];
+            }
+        }
+        int result = 0;
+        for (int i : dp) {
+            result += (i + 1) / 2;
+        }
+        return result;
+    }
+
+    /**
+     * 739. 每日温度
+     * 给定一个整数数组temperatures，表示每天的温度，返回一个数组answer，其中answer[i]是指对于第 i 天，下一个更高温度出现在几天后。如果气温在这之后都不会升高，请在该位置用0 来代替。
+     * https://leetcode.cn/problems/daily-temperatures/?favorite=2cktkvj
+     */
+    public int[] dailyTemperatures(int[] temperatures) {
+        Stack<int[]> stack = new Stack<>();
+        int[] result = new int[temperatures.length];
+        for (int i = 0; i < temperatures.length; i++) {
+            int temperature = temperatures[i];
+            while (stack.size() > 0) {
+                if (stack.peek()[1] < temperature) {
+                    int[] day = stack.pop();
+                    result[day[0]] = i - day[0];
+                } else break;
+            }
+            stack.push(new int[]{i, temperature});
+        }
+        return result;
+    }
 }

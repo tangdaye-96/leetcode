@@ -1,13 +1,11 @@
 package psn.tangdaye.solutions;
 
-import org.jetbrains.annotations.NotNull;
 import psn.tangdaye.model.ListNode;
 import psn.tangdaye.model.TreeNode;
 import psn.tangdaye.structure.Heap;
 import psn.tangdaye.tool.Tools;
 
 import java.util.*;
-import java.util.function.BinaryOperator;
 
 /**
  * https://leetcode.cn/problem-list/2cktkvj/
@@ -2471,9 +2469,34 @@ public class Hot100 {
      * 有 n 个气球，编号为0 到 n - 1，每个气球上都标有一个数字，这些数字存在数组 nums 中。
      * 现在要求你戳破所有的气球。戳破第 i 个气球，你可以获得nums[i - 1] * nums[i] * nums[i + 1] 枚硬币。这里的 i - 1 和 i + 1 代表和i相邻的两个气球的序号。如果 i - 1或 i + 1 超出了数组的边界，那么就当它是一个数字为 1 的气球。
      * https://leetcode.cn/problems/burst-balloons/?favorite=2cktkvj
+     * 动态规划的最优子结构是什么？
+     * f(i,j) = max([f(i,t)+f(t,j)+a(i)*a(t)*a(j)])
      */
     public int maxCoins(int[] nums) {
-        return -1;
+        int[][] dp = new int[nums.length + 2][nums.length + 2];
+        for (int i = 0; i < nums.length + 2; i++) {
+            for (int j = 0; j < nums.length + 2; j++) {
+                if (i < j - 1) dp[i][j] = -1;
+            }
+        }
+        f(0, nums.length + 1, dp, nums);
+        return dp[0][nums.length + 1];
+    }
+
+    private int f(int i, int j, int[][] dp, int[] nums) {
+        if (dp[i][j] >= 0) return dp[i][j];
+        int max = Integer.MIN_VALUE;
+        int a = i > 0 ? nums[i - 1] : 1;
+        int c = j <= nums.length ? nums[j - 1] : 1;
+        for (int bIndex = i + 1; bIndex < j; bIndex++) {
+            int b = nums[bIndex - 1];
+            int t = f(i, bIndex, dp, nums) + f(bIndex, j, dp, nums) + a * b * c;
+            if (max < t) {
+                max = t;
+            }
+        }
+        dp[i][j] = max;
+        return max;
     }
 
     /**

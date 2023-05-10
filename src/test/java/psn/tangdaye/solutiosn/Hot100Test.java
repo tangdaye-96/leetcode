@@ -64,7 +64,7 @@ public class Hot100Test {
         String[] s2 = {"a", "sdf", "ff"};
         String[] p2 = {"aaa*", "d*s*f", "f"};
         for (int i = 0; i < s2.length; i++) {
-            Assert.assertTrue(!hot.isMatch(s2[i], p2[i]));
+            Assert.assertFalse(hot.isMatch(s2[i], p2[i]));
         }
     }
 
@@ -224,7 +224,7 @@ public class Hot100Test {
         Assert.assertTrue(hot.canJump(array2));
 
         int[] array3 = {3, 2, 1, 0, 4};
-        Assert.assertTrue(!hot.canJump(array3));
+        Assert.assertFalse(hot.canJump(array3));
     }
 
     @Test
@@ -637,6 +637,8 @@ public class Hot100Test {
     @Test
     public void testMaxCoins() {
         Assert.assertEquals(167, hot.maxCoins(new int[]{3, 1, 5, 8}));
+        Assert.assertEquals(4, hot.maxCoins(new int[]{1, 2}));
+
     }
 
     @Test
@@ -805,7 +807,7 @@ public class Hot100Test {
     }
 
     @Test
-    public void testdailyTemperatures() {
+    public void testDailyTemperatures() {
         int[] temperatures = {73, 74, 75, 71, 69, 72, 76, 73};
         Assert.assertEquals("[1, 1, 4, 2, 1, 1, 0, 0]", Arrays.toString(hot.dailyTemperatures(temperatures)));
     }

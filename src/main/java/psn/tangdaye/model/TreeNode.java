@@ -33,9 +33,16 @@ public class TreeNode {
         return root;
     }
 
+    public int high() {
+        if (left == null && right == null) return 1;
+        if (left == null) return 1 + right.high();
+        if (right == null) return 1 + left.high();
+        return 1 + Math.max(left.high(), right.high());
+    }
+
     public LinkedList<Integer> layer() {
         LinkedList<TreeNode> q = new LinkedList<>();
-        q.push(this);
+        q.add(this);
         LinkedList<Integer> result = new LinkedList<>();
         while (!q.isEmpty()) {
             TreeNode current = q.pop();
@@ -126,8 +133,6 @@ public class TreeNode {
     public boolean equals(Object obj) {
         if (!(obj instanceof TreeNode)) return false;
         TreeNode t = (TreeNode) obj;
-        return val == t.val
-                && ((left != null && left.equals(t.left) || (left == null && t.left == null)))
-                && ((right != null && right.equals(t.right) || (right == null && t.right == null)));
+        return val == t.val && ((left != null && left.equals(t.left) || (left == null && t.left == null))) && ((right != null && right.equals(t.right) || (right == null && t.right == null)));
     }
 }

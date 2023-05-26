@@ -7,6 +7,8 @@ import psn.tangdaye.model.TreeNode;
 import psn.tangdaye.solutions.Interview;
 import psn.tangdaye.tool.Tools;
 
+import java.util.Arrays;
+
 /**
  * @author : shayan
  * @date : 2023/5/12 13:43
@@ -218,4 +220,77 @@ public class InterviewTest {
         TreeNode node = TreeNode.fromArray(new Integer[]{1, 2, 3, 4, 5, 6, 7});
         Assert.assertEquals(3, interview.listOfDepth(node).length);
     }
+
+    @Test
+    public void testIsBalanced() {
+        TreeNode node = TreeNode.fromArray(new Integer[]{1, 2, 3, 4, 5, 6, 7});
+        Assert.assertTrue(interview.isBalanced(node));
+    }
+
+    @Test
+    public void testIsValidBST() {
+        TreeNode node = TreeNode.fromArray(new Integer[]{4, 2, 6, 1, 3, 5, 7});
+        Assert.assertTrue(interview.isValidBST(node));
+    }
+
+    @Test
+    public void testInorderSuccessor() {
+        TreeNode node = TreeNode.fromArray(new Integer[]{4, 2, 6, 1, 3, 5, 7});
+        Assert.assertEquals(node.right.left, interview.inorderSuccessor(node, node));
+    }
+
+    @Test
+    public void testLowestCommonAncestor() {
+        TreeNode node = TreeNode.fromArray(new Integer[]{4, 2, 6, 1, 3, 5, 7});
+        Assert.assertEquals(node, interview.lowestCommonAncestor(node, node.left.right, node.right.left));
+    }
+
+    @Test
+    public void testBSTSequences() {
+        TreeNode node = TreeNode.fromArray(new Integer[]{4, 2, 6, 1, 3, 5, 7});
+        Assert.assertEquals(80, interview.BSTSequences(node).size());
+    }
+
+    @Test
+    public void testCheckSubTree() {
+        TreeNode node1 = TreeNode.fromArray(new Integer[]{4, 2, 6, 1, 3, 5, 7});
+        TreeNode node2 = TreeNode.fromArray(new Integer[]{2, 1, 3});
+        Assert.assertTrue(interview.checkSubTree(node1, node2));
+    }
+
+    @Test
+    public void testPathSum() {
+        Integer[] array = {10, 5, -3, 3, 2, null, 11, 3, -2, null, 1};
+        TreeNode root = TreeNode.fromArray(array);
+        Assert.assertEquals(3, interview.pathSum(root, 8));
+    }
+
+    @Test
+    public void testInsertBits() {
+        Assert.assertEquals(44, interview.insertBits(12, 2, 4, 7));
+    }
+
+    @Test
+    public void testPrintBin() {
+        Assert.assertEquals("0.111", interview.printBin(0.875));
+    }
+
+    @Test
+    public void testReverseBits() {
+        Assert.assertEquals(8, interview.reverseBits(1775));
+    }
+
+    @Test
+    public void testFindClosedNumbers() {
+        Assert.assertEquals("[19, 13]", Arrays.toString(interview.findClosedNumbers(14)));
+        Assert.assertEquals("[69, 56]", Arrays.toString(interview.findClosedNumbers(67)));
+        Assert.assertEquals("[72, 66]", Arrays.toString(interview.findClosedNumbers(68)));
+    }
+
+    @Test
+    public void testConvertInteger() {
+        Assert.assertEquals(2, interview.convertInteger(1, 2));
+    }
+
+
 }

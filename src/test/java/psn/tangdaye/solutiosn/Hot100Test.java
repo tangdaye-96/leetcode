@@ -490,13 +490,6 @@ public class Hot100Test {
     }
 
     @Test
-    public void testMajorityElement2() {
-        int[] array = {1, 1, 1, 2, 2, 2, 2};
-        List<Integer> result = hot.majorityElement2(array);
-        Assert.assertEquals(2, result.size());
-    }
-
-    @Test
     public void testRob() {
         int[] nums = {2, 7, 9, 3, 1};
         Assert.assertEquals(12, hot.rob(nums));

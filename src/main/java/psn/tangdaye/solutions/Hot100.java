@@ -1782,24 +1782,6 @@ public class Hot100 {
     }
 
     /**
-     * 229. 多数元素 II
-     * 给定一个大小为 n 的整数数组，找出其中所有出现超过 ⌊ n/3 ⌋ 次的元素。
-     * https://leetcode.cn/problems/majority-element-ii/
-     */
-    public List<Integer> majorityElement2(int[] nums) {
-        // 如果有三个不一样的数字，这三个数字不会影响最终结果
-        int x = 0, y = 0;
-        int v1 = 0, v2 = 0;
-        for (int n : nums) {
-            if (n != x && n != y) {
-                v1 -= 1;
-                v2 -= 1;
-            }
-        }
-        return null;
-    }
-
-    /**
      * 198. 打家劫舍
      * 你是一个专业的小偷，计划偷窃沿街的房屋。每间房内都藏有一定的现金，影响你偷窃的唯一制约因素就是相邻的房屋装有相互连通的防盗系统，如果两间相邻的房屋在同一晚上被小偷闯入，系统会自动报警。
      * https://leetcode.cn/problems/house-robber/?favorite=2cktkvj

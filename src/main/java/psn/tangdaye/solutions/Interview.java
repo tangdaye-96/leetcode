@@ -810,4 +810,411 @@ public class Interview {
         }
         return t;
     }
+
+    /**
+     * 面试题 04.04. 检查平衡性
+     * <p>
+     * 实现一个函数，检查二叉树是否平衡。在这个问题中，平衡树的定义如下：任意一个节点，其两棵子树的高度差不超过 1。
+     * <p>
+     * https://leetcode.cn/problems/check-balance-lcci/?envType=featured-list&envId=xb9lfcwi
+     */
+    public boolean isBalanced(TreeNode root) {
+        Map<TreeNode, Integer> h = new HashMap<>();
+        h.put(null, 0);
+        calH(root, h);
+        return handleIsBalanced(root, h);
+    }
+
+    private boolean handleIsBalanced(TreeNode root, Map<TreeNode, Integer> h) {
+        if (root == null) return true;
+        int delta = h.get(root.left) - h.get(root.right);
+        return (delta <= 1 && delta >= -1) && handleIsBalanced(root.left, h) && handleIsBalanced(root.right, h);
+    }
+
+    private int calH(TreeNode root, Map<TreeNode, Integer> h) {
+        if (root == null) return 0;
+        int height = 1 + Math.max(calH(root.left, h), calH(root.right, h));
+        h.put(root, height);
+        return height;
+    }
+
+    /**
+     * 面试题 04.05. 合法二叉搜索树
+     * <p>
+     * 实现一个函数，检查一棵二叉树是否为二叉搜索树。
+     * <p>
+     * https://leetcode.cn/problems/legal-binary-search-tree-lcci/?envType=featured-list&envId=xb9lfcwi
+     */
+    public boolean isValidBST(TreeNode node) {
+        // 中序递增
+        Stack<TreeNode> stack = new Stack<>();
+        TreeNode head = node;
+        long now = Long.MIN_VALUE;
+        while (!stack.isEmpty() || head != null) {
+            if (head != null) {
+                stack.push(head);
+                head = head.left;
+            } else {
+                head = stack.pop();
+                if (head.val < now) return false;
+                now = head.val;
+                head = head.right;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 面试题 04.06. 后继者
+     * <p>
+     * 设计一个算法，找出二叉搜索树中指定节点的“下一个”节点（也即中序后继）。
+     * <p>
+     * https://leetcode.cn/problems/successor-lcci/?envType=featured-list&envId=xb9lfcwi
+     */
+    public TreeNode inorderSuccessor(TreeNode root, TreeNode p) {
+        Stack<TreeNode> stack = new Stack<>();
+        TreeNode head = root;
+        boolean flag = false;
+        while (!stack.isEmpty() || head != null) {
+            if (head != null) {
+                stack.push(head);
+                head = head.left;
+            } else {
+                head = stack.pop();
+                if (flag) return head;
+                if (head == p) flag = true;
+                head = head.right;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 面试题 04.08. 首个共同祖先
+     * <p>
+     * 设计并实现一个算法，找出二叉树中某两个节点的第一个共同祖先。不得将其他的节点存储在另外的数据结构中。注意：这不一定是二叉搜索树。
+     * <p>
+     * https://leetcode.cn/problems/first-common-ancestor-lcci/?envType=featured-list&envId=xb9lfcwi
+     */
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        Stack<TreeNode> stack = new Stack<>();
+        Map<TreeNode, String> map = new HashMap<>();
+        stack.push(root);
+        map.put(root, "");
+        String pt = null, qt = null;
+        while (!stack.isEmpty()) {
+            TreeNode current = stack.pop();
+            if (current == p) pt = map.get(current);
+            if (current == q) qt = map.get(current);
+            if (pt != null && qt != null) break;
+            if (current.right != null) {
+                stack.push(current.right);
+                map.put(current.right, map.get(current) + "1");
+            }
+            if (current.left != null) {
+                stack.push(current.left);
+                map.put(current.left, map.get(current) + "0");
+            }
+        }
+        TreeNode result = root;
+        for (int i = 0; i < pt.length() && i < qt.length(); i++) {
+            if (pt.charAt(i) != qt.charAt(i)) return result;
+            if (pt.charAt(i) == '1') result = result.right;
+            else result = result.left;
+        }
+        return result;
+    }
+
+    /**
+     * 面试题 04.09. 二叉搜索树序列
+     * <p>
+     * 从左向右遍历一个数组，通过不断将其中的元素插入树中可以逐步地生成一棵二叉搜索树。
+     * 给定一个由不同节点组成的二叉搜索树 root，输出所有可能生成此树的数组。
+     * <p>
+     * https://leetcode.cn/problems/bst-sequences-lcci/?envType=featured-list&envId=xb9lfcwi
+     */
+    public List<List<Integer>> BSTSequences(TreeNode root) {
+        if (root == null) return Collections.singletonList(new ArrayList<>());
+        List<List<Integer>> l = BSTSequences(root.left);
+        List<List<Integer>> r = BSTSequences(root.right);
+        return mergeSequences(root.val, l, r);
+    }
+
+    private List<List<Integer>> mergeSequences(int val, List<List<Integer>> l, List<List<Integer>> r) {
+        List<List<Integer>> res = new ArrayList<>();
+
+        int m = l.get(0).size();
+        int n = r.get(0).size();
+        if (m == 0) {
+            for (List<Integer> rt : r) {
+                res.add(new ArrayList<Integer>() {{
+                    add(val);
+                    addAll(rt);
+                }});
+            }
+            return res;
+        }
+        if (n == 0) {
+            for (List<Integer> lt : l) {
+                res.add(new ArrayList<Integer>() {{
+                    add(val);
+                    addAll(lt);
+                }});
+            }
+            return res;
+        }
+        // val必须在前，l和r保持各自顺序任意合并
+        List<LinkedList<IntegerHolder>> combine = combine(m + n, m);
+        for (int i = 0; i < l.size() * r.size() * combine.size(); i++) {
+            res.add(new ArrayList<Integer>() {{
+                add(val);
+            }});
+        }
+        int t = 0;
+        for (List<Integer> lt : l) {
+            for (List<Integer> rt : r) {
+                for (LinkedList<IntegerHolder> choice : combine) {
+                    List<Integer> thisOne = new ArrayList<>(m + n);
+                    for (int i = 0; i < m + n; i++) {
+                        thisOne.add(null);
+                    }
+                    int j = 0;
+                    for (IntegerHolder i : choice) {
+                        thisOne.set(i.getV(), lt.get(j));
+                        j++;
+                    }
+                    j = 0;
+                    for (int i = 0; i < thisOne.size(); i++) {
+                        if (thisOne.get(i) == null) {
+                            thisOne.set(i, rt.get(j));
+                            j++;
+                        }
+                    }
+                    res.get(t).addAll(thisOne);
+                    t++;
+                }
+            }
+        }
+        return res;
+    }
+
+    /**
+     * 返回0~m-1所有可能n个下标集合 (m>=n)
+     * <p>
+     * 例如: C(4,3) ==> [[0,1,2],[0,2,3],[0,1,3],[1,2,3]]
+     * <p>
+     * C(m,n) = C(m-1,n-1)+C(m-2,n-1)+...+C(n-1,n-1)
+     */
+    private static List<LinkedList<IntegerHolder>> combine(int m, int n) {
+        if (n == 0) {
+            return Collections.singletonList(new LinkedList<>());
+        }
+        if (m == n) {
+            LinkedList<IntegerHolder> t = new LinkedList<>();
+            for (int i = 0; i < m; i++) t.add(new IntegerHolder(i));
+            return Collections.singletonList(t);
+        }
+        List<LinkedList<IntegerHolder>> res = new ArrayList<>();
+        for (int i = m - 1; i >= n - 1; i--) {
+            List<LinkedList<IntegerHolder>> x = combine(i, n - 1);
+            for (LinkedList<IntegerHolder> t : x) {
+                for (IntegerHolder y : t) y.inc(m - i);
+                t.addFirst(new IntegerHolder(m - 1 - i));
+            }
+            res.addAll(x);
+        }
+        return res;
+    }
+
+    public static class IntegerHolder {
+        private int v;
+
+        public IntegerHolder(int v) {
+            this.v = v;
+        }
+
+        public int getV() {
+            return v;
+        }
+
+        public void inc(int delta) {
+            v += delta;
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(v);
+        }
+    }
+
+    /**
+     * 面试题 04.10. 检查子树
+     * <p>
+     * 检查子树。你有两棵非常大的二叉树：T1，有几万个节点；T2，有几万个节点。设计一个算法，判断 T2 是否为 T1 的子树。
+     * <p>
+     * https://leetcode.cn/problems/check-subtree-lcci/?envType=featured-list&envId=xb9lfcwi
+     */
+    public boolean checkSubTree(TreeNode t1, TreeNode t2) {
+        if (t1 == null) return t2 == null;
+        return checkEqualsTree(t1, t2) || checkSubTree(t1.left, t2) || checkSubTree(t1.right, t2);
+    }
+
+    private boolean checkEqualsTree(TreeNode t1, TreeNode t2) {
+        if (t1 == null && t2 == null) return true;
+        return t1 != null && t2 != null && t1.val == t2.val && checkEqualsTree(t1.left, t2.left) && checkEqualsTree(t1.right, t2.right);
+    }
+
+    /**
+     * 面试题 04.12. 求和路径
+     * <p>
+     * 给定一棵二叉树，其中每个节点都含有一个整数数值(该值或正或负)。设计一个算法，打印节点数值总和等于某个给定值的所有路径的数量。注意，路径不一定非得从二叉树的根节点或叶节点开始或结束，但是其方向必须向下(只能从父节点指向子节点方向)。
+     * <p>
+     * https://leetcode.cn/problems/paths-with-sum-lcci/?envType=featured-list&envId=xb9lfcwi
+     */
+    public int pathSum(TreeNode root, int sum) {
+        if (root == null) return 0;
+        return handleSum(root, sum) + pathSum(root.left, sum) + pathSum(root.right, sum);
+    }
+
+    private int handleSum(TreeNode root, int target) {
+        if (root == null) return 0;
+        return (root.val == target ? 1 : 0) + handleSum(root.left, target - root.val) + handleSum(root.right, target - root.val);
+    }
+
+    /**
+     * 面试题 05.01. 插入
+     * <p>
+     * 给定两个整型数字 N 与 M，以及表示比特位置的 i 与 j（i <= j，且从 0 位开始计算）。
+     * <p>
+     * 编写一种方法，使 M 对应的二进制数字插入 N 对应的二进制数字的第 i ~ j 位区域，不足之处用 0 补齐
+     * <p>
+     * https://leetcode.cn/problems/insert-into-bits-lcci/?envType=featured-list&envId=xb9lfcwi
+     * <p>
+     */
+    public int insertBits(int n, int m, int i, int j) {
+        int a = 1 << (j - i + 1);
+        int b = a - 1;
+        int c = b << i;
+        int d = ~c;
+        int e = n & d;
+        int f = m << i;
+        return e | f;
+    }
+
+    /**
+     * 面试题 05.02. 二进制数转字符串
+     * <p>
+     * 二进制数转字符串。给定一个介于0和1之间的实数（如0.72），类型为double，打印它的二进制表达式。如果该数字无法精确地用32位以内的二进制表示，则打印“ERROR”。
+     * <p>
+     * https://leetcode.cn/problems/binary-number-to-string-lcci/?envType=featured-list&envId=xb9lfcwi
+     */
+    public String printBin(double num) {
+        StringBuilder sb = new StringBuilder("0.");
+        for (int i = 0; i < 30; i++) {
+            num = num * 2;
+            if (num > 1) {
+                sb.append("1");
+                num -= 1;
+            } else if (num < 1) {
+                sb.append("0");
+            } else {
+                sb.append("1");
+                return sb.toString();
+            }
+        }
+        return "ERROR";
+    }
+
+    /**
+     * 面试题 05.03. 翻转数位
+     * <p>
+     * 给定一个32位整数 num，你可以将一个数位从0变为1。请编写一个程序，找出你能够获得的最长的一串1的长度。
+     * <p>
+     * https://leetcode.cn/problems/reverse-bits-lcci/?envType=featured-list&envId=xb9lfcwi
+     */
+    public int reverseBits(int num) {
+        int max = Integer.MIN_VALUE;
+        int flag = -1;
+        int i = 0, j = 0;
+        while (i < 32) {
+            if ((num & (1 << i)) == 0) {
+                if (flag >= 0) {
+                    max = Math.max(max, i - j);
+                    j = flag + 1;
+                }
+                flag = i;
+            }
+            i++;
+        }
+        return Math.max(max, i - j);
+    }
+
+    /**
+     * 面试题 05.04. 下一个数
+     * <p>
+     * 下一个数。给定一个正整数，找出与其二进制表达式中1的个数相同且大小最接近的那两个数（一个略大，一个略小）。
+     * <p>
+     * https://leetcode.cn/problems/closed-number-lcci/?envType=featured-list&envId=xb9lfcwi
+     */
+    public int[] findClosedNumbers(int num) {
+        // 找到最右边左边是0的1，将其左移1位，再把它右边连续的1移动到最低位置
+        if (num == 0) return new int[]{-1, -1};
+        if (num == Integer.MAX_VALUE) return new int[]{-1, -1};
+        int i = 0, k = 0;
+        while (i < 30) {
+            int j = i + 1;
+            if ((num & (1 << i)) != 0) {
+                if ((num & (1 << j)) == 0) break;
+                k += 1;
+            }
+            i++;
+        }
+        int bigger = num | (1 << (i + 1));
+        bigger &= (-(1 << (i + 1)));
+        bigger += ((1 << k) - 1);
+        // 找到最右边右边是0的1，将其右移1位，并且把它右边所有连续的1移到最高位
+        int smaller = -1;
+        i = 1;
+        while (i < 31) {
+            int j = i - 1;
+            if (((num & (1 << i)) != 0) && ((num & (1 << j)) == 0)) break;
+            i++;
+        }
+        if (i != 31) {
+            smaller = num;
+            smaller |= (1 << (i - 1));
+            smaller ^= (1 << i);
+            k = 0;
+            while (k < 31 && ((num & (1 << k)) != 0)) k++;
+            if (k > 0) {
+                int t = (1 << k) - 1;
+                smaller -= t;
+                smaller += t << (i - 1 - k);
+            }
+        }
+
+        return new int[]{bigger, smaller};
+    }
+
+    /**
+     * 面试题 05.06. 整数转换
+     * <p>
+     * 整数转换。编写一个函数，确定需要改变几个位才能将整数A转成整数B。
+     * <p>
+     * https://leetcode.cn/problems/convert-integer-lcci/?envType=featured-list&envId=xb9lfcwi
+     */
+    public int convertInteger(int a, int b) {
+        return Integer.bitCount(a ^ b);
+    }
+
+    /**
+     * 面试题 05.07. 配对交换
+     * <p>
+     * 配对交换。编写程序，交换某个整数的奇数位和偶数位，尽量使用较少的指令（也就是说，位0与位1交换，位2与位3交换，以此类推）。
+     * <p>
+     * https://leetcode.cn/problems/exchange-lcci/?envType=featured-list&envId=xb9lfcwi
+     */
+    public int exchangeBits(int num) {
+
+    }
 }

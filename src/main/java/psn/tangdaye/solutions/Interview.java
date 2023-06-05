@@ -1215,6 +1215,320 @@ public class Interview {
      * https://leetcode.cn/problems/exchange-lcci/?envType=featured-list&envId=xb9lfcwi
      */
     public int exchangeBits(int num) {
+        // 偶数位左移+奇数位右移
+        int a = 0b01010101010101010101010101010101 & num;
+        int b = 0b10101010101010101010101010101010 & num;
+        return (a << 1) + (b >> 1);
+    }
 
+    /**
+     * 面试题 05.08. 绘制直线
+     * <p>
+     * 已知一个由像素点组成的单色屏幕，每行均有 w 个像素点，所有像素点初始为 0，左上角位置为 (0,0)。
+     * <p>
+     * 现将每行的像素点按照「每 32 个像素点」为一组存放在一个 int 中，再依次存入长度为 length 的一维数组中。
+     * <p>
+     * 我们将在屏幕上绘制一条从点 (x1,y) 到点 (x2,y) 的直线（即像素点修改为 1），请返回绘制过后的数组。
+     * <p>
+     * https://leetcode.cn/problems/draw-line-lcci/?envType=featured-list&envId=xb9lfcwi
+     */
+    public int[] drawLine(int length, int w, int x1, int x2, int y) {
+        int t = w / 32;
+        int height = length / t;
+        int[] result = new int[t * height];
+        for (int i = 0; i < y * t; i++) result[i] = 0;
+        for (int i = (y + 1) * t; i < result.length; i++) result[i] = 0;
+        boolean[] x = new boolean[w];
+        for (int i = 0; i < w; i++) x[i] = i >= x1 && i <= x2;
+        int j = y * t;
+        int e = 0;
+        for (int i = 0; i < w; i++) {
+            int s = 31 - i % 32;
+            if (x[i]) e += (1 << s);
+            if (s == 0) {
+                result[j + i / 32] = e;
+                e = 0;
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 面试题 08.01. 三步问题
+     * <p>
+     * 三步问题。有个小孩正在上楼梯，楼梯有n阶台阶，小孩一次可以上1阶、2阶或3阶。实现一种方法，计算小孩有多少种上楼梯的方式。结果可能很大，你需要对结果模1000000007。
+     * <p>
+     * https://leetcode.cn/problems/three-steps-problem-lcci/?envType=featured-list&envId=xb9lfcwi
+     */
+    public int waysToStep(int n) {
+        if (n == 1) return 1;
+        if (n == 2) return 2;
+        if (n == 3) return 4;
+        long a = 1, b = 2, c = 4, d = 0;
+        for (int i = 4; i <= n; i++) {
+            d = (a + b + c) % 1000000007L;
+            a = b;
+            b = c;
+            c = d;
+        }
+        return (int) d;
+    }
+
+    /**
+     * 面试题 08.02. 迷路的机器人
+     * <p>
+     * 设想有个机器人坐在一个网格的左上角，网格 r 行 c 列。机器人只能向下或向右移动，但不能走到一些被禁止的网格（有障碍物）。设计一种算法，寻找机器人从左上角移动到右下角的路径。
+     * <p>
+     * https://leetcode.cn/problems/robot-in-a-grid-lcci/?envType=featured-list&envId=xb9lfcwi
+     */
+    public List<List<Integer>> pathWithObstacles(int[][] obstacleGrid) {
+        int r = obstacleGrid.length, c = obstacleGrid[0].length;
+        if (obstacleGrid[0][0] == 1 || obstacleGrid[r - 1][c - 1] == 1) return Collections.emptyList();
+        // -1表示左边来的，1表示上边来的，0表示无法到达
+        byte[][] dp = new byte[r][c];
+        dp[0][0] = -1;
+        for (int j = 1; j < c; j++) {
+            if (obstacleGrid[0][j] == 1) dp[0][j] = 0;
+            else dp[0][j] = dp[0][j - 1];
+        }
+        for (int i = 1; i < r; i++) {
+            for (int j = 0; j < c; j++) {
+                if (obstacleGrid[i][j] == 1) dp[i][j] = 0;
+                else {
+                    if (j == 0) {
+                        if (dp[i - 1][j] != 0) dp[i][j] = 1;
+                        else dp[i][j] = 0;
+                    } else {
+                        if (dp[i][j - 1] != 0) dp[i][j] = -1;
+                        else if (dp[i - 1][j] != 0) dp[i][j] = 1;
+                        else dp[i][j] = 0;
+                    }
+                }
+            }
+        }
+        if (dp[r - 1][c - 1] == 0) return Collections.emptyList();
+        else {
+            LinkedList<List<Integer>> result = new LinkedList<>();
+            int i = r - 1, j = c - 1;
+            while (i != 0 || j != 0) {
+                result.addFirst(Arrays.asList(i, j));
+                byte direction = dp[i][j];
+                if (direction == 1) i -= 1;
+                if (direction == -1) j -= 1;
+            }
+            result.addFirst(Arrays.asList(0, 0));
+            return result;
+        }
+    }
+
+    /**
+     * 面试题 08.03. 魔术索引
+     * <p>
+     * 魔术索引。 在数组A[0...n-1]中，有所谓的魔术索引，满足条件A[i] = i。给定一个有序整数数组，编写一种方法找出魔术索引，若有的话，在数组A中找出一个魔术索引，如果没有，则返回-1。若有多个魔术索引，返回索引值最小的一个。
+     * <p>
+     * https://leetcode.cn/problems/magic-index-lcci/?envType=featured-list&envId=xb9lfcwi
+     */
+    public int findMagicIndex(int[] nums) {
+        for (int i = 0; i < nums.length; i++) if (nums[i] == i) return i;
+        return -1;
+    }
+
+    /**
+     * 面试题 08.04. 幂集
+     * <p>
+     * 幂集。编写一种方法，返回某集合的所有子集。集合中不包含重复的元素。
+     * <p>
+     * https://leetcode.cn/problems/power-set-lcci/
+     */
+    public List<List<Integer>> subsets(int[] nums) {
+        int t = nums.length;
+        List<List<Integer>> list = new LinkedList<>();
+        for (int i = 0; i < (1 << t); i++) {
+            List<Integer> x = new ArrayList<>();
+            for (int j = 0; j < t; j++) {
+                if ((i & (1 << j)) != 0) {
+                    x.add(nums[j]);
+                }
+            }
+            list.add(x);
+        }
+        return list;
+    }
+
+    /**
+     * 面试题 08.05. 递归乘法
+     * <p>
+     * 递归乘法。 写一个递归函数，不使用 * 运算符， 实现两个正整数的相乘。可以使用加号、减号、位移，但要吝啬一些。
+     * <p>
+     * https://leetcode.cn/problems/recursive-mulitply-lcci/?envType=featured-list&envId=xb9lfcwi
+     */
+    public int multiply(int a, int b) {
+        int result = 0;
+        for (int i = 0; i < 32 && ((1 << i) <= b); i++) {
+            if ((b & (1 << i)) != 0) {
+                result += (a << i);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 面试题 08.06. 汉诺塔问题
+     * <p>
+     * 在经典汉诺塔问题中，有 3 根柱子及 N 个不同大小的穿孔圆盘，盘子可以滑入任意一根柱子。一开始，所有盘子自上而下按升序依次套在第一根柱子上(即每一个盘子只能放在更大的盘子上面)。移动圆盘时受到以下限制:
+     * <p>
+     * (1) 每次只能移动一个盘子;
+     * <p>
+     * (2) 盘子只能从柱子顶端滑出移到下一根柱子;
+     * <p>
+     * (3) 盘子只能叠在比它大的盘子上。
+     * <p>
+     * https://leetcode.cn/problems/hanota-lcci/?envType=featured-list&envId=xb9lfcwi
+     */
+    public void hanota(List<Integer> a, List<Integer> b, List<Integer> c) {
+        move(new List[]{a, b, c}, a.size(), 0, 2);
+    }
+
+    private void move(List<Integer>[] set, int k, int from, int to) {
+        if (k == 0) return;
+        int other;
+        if (from == 0 && to == 1) other = 2;
+        else if (from == 0 && to == 2) other = 1;
+        else if (from == 1 && to == 2) other = 0;
+        else if (from == 1 && to == 0) other = 2;
+        else if (from == 2 && to == 0) other = 1;
+        else other = 0;
+        move(set, k - 1, from, other);
+        set[to].add(set[from].remove(set[from].size() - 1));
+        move(set, k - 1, other, to);
+    }
+
+    /**
+     * 面试题 08.07. 无重复字符串的排列组合
+     * <p>
+     * 面试题 08.08. 有重复字符串的排列组合
+     * <p>
+     * https://leetcode.cn/problems/permutation-i-lcci/?envType=featured-list&envId=xb9lfcwi
+     * <p>
+     * https://leetcode.cn/problems/permutation-ii-lcci/?envType=featured-list&envId=xb9lfcwi
+     * <p>
+     * 字符串的排列组合，编写一种方法，计算某字符串的所有排列组合
+     */
+    public String[] permutation(String s) {
+        char[] value = s.toCharArray();
+        int[] t = new int[s.length()];
+        for (int i = 0; i < s.length(); i++) {
+            t[i] = value[i] - 'a';
+        }
+        Arrays.sort(t);
+        List<String> result = new ArrayList<>();
+        do {
+            result.add(genString(t));
+        } while (nextPermutation(t));
+        String[] k = new String[result.size()];
+        result.toArray(k);
+        return k;
+    }
+
+    private String genString(int[] t) {
+        StringBuilder sb = new StringBuilder();
+        for (int i : t) {
+            sb.append((char) (i + 'a'));
+        }
+        return sb.toString();
+    }
+
+    private boolean nextPermutation(int[] nums) {
+        if (nums.length == 1) return true;
+        //1. 从后向前，找到破坏升序的第一个数字（等于不是破坏）
+        int index = nums.length - 2;
+        for (; index >= 0; index--) {
+            int next = index + 1;
+            if (nums[index] < nums[next]) break;
+        }
+        if (index < 0) {
+            // 如果没有破坏反向升序的，说明原序列是完全降序，revert
+            return false;
+        } else {
+            // 如果有破坏升序的 index， 找到后面最小的比它大的，交换，然后revert
+            // x x x 5 9 8 6 5 4 3 2 1 ==> x x x 6 9 8 5 5 4 3 2 1 ==> x x x 6 1 2 3 4 5 5 8 9
+            int i = index + 1;
+            while (i < nums.length && nums[i] > nums[index]) i++;
+            i = i - 1;
+            swap(nums, index, i);
+            revert(nums, index + 1, nums.length - 1);
+            return true;
+        }
+    }
+
+    private void revert(int[] array, int i, int j) {
+        int left = i, right = j;
+        while (left < right && array[left] != array[right]) {
+            swap(array, left, right);
+            left++;
+            right--;
+        }
+    }
+
+    private void swap(int[] array, int i, int j) {
+        if (i == j) return;
+        int temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+
+    /**
+     * 面试题 08.09. 括号
+     * <p>
+     * 括号。设计一种算法，打印n对括号的所有合法的（例如，开闭一一对应）组合。
+     * <p>
+     * https://leetcode.cn/problems/bracket-lcci/?envType=featured-list&envId=xb9lfcwi
+     */
+    public List<String> generateParenthesis(int n) {
+        Set<String> current = new HashSet<>();
+        for (int i = 0; i < n; i++) {
+            if (i == 0) current.add("()");
+            else {
+                Set<String> next = new HashSet<>();
+                for (String last : current) {
+                    last = "(" + last;
+                    for (int j = 0; j < last.length() && last.charAt(j) == '('; j++) {
+                        next.add(last.substring(0, j + 1) + ")" + last.substring(j + 1));
+                    }
+                }
+                current = next;
+            }
+        }
+        return new ArrayList<>(current);
+    }
+
+    /**
+     * 面试题 08.10. 颜色填充
+     * <p>
+     * 编写函数，实现许多图片编辑软件都支持的「颜色填充」功能。
+     * <p>
+     * 待填充的图像用二维数组 image 表示，元素为初始颜色值。初始坐标点的行坐标为 sr 列坐标为 sc。需要填充的新颜色为 newColor 。
+     * <p>
+     * 「周围区域」是指颜色相同且在上、下、左、右四个方向上存在相连情况的若干元素。
+     * <p>
+     * 请用新颜色填充初始坐标点的周围区域，并返回填充后的图像。
+     * <p>
+     * https://leetcode.cn/problems/color-fill-lcci/?envType=featured-list&envId=xb9lfcwi
+     */
+    public int[][] floodFill(int[][] image, int sr, int sc, int newColor) {
+        boolean[][] done = new boolean[image.length][image[0].length];
+        doFill(image, sr, sc, newColor, image[sr][sc], done);
+        return image;
+    }
+
+    private void doFill(int[][] image, int sr, int sc, int newColor, int originColor, boolean[][] done) {
+        if (sr < 0 || sr >= image.length || sc < 0 || sc >= image[0].length || image[sr][sc] != originColor || done[sr][sc])
+            return;
+        image[sr][sc] = newColor;
+        done[sr][sc] = true;
+        doFill(image, sr + 1, sc, newColor, originColor, done);
+        doFill(image, sr - 1, sc, newColor, originColor, done);
+        doFill(image, sr, sc + 1, newColor, originColor, done);
+        doFill(image, sr, sc - 1, newColor, originColor, done);
     }
 }

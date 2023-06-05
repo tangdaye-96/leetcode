@@ -552,7 +552,7 @@ public class Hot100 {
             while (i < nums.length && nums[i] > nums[index]) i++;
             i = i - 1;
             swap(nums, index, i);
-            revert(nums, index + 2, nums.length - 1);
+            revert(nums, index + 1, nums.length - 1);
         }
     }
 

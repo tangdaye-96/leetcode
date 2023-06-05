@@ -8,6 +8,8 @@ import psn.tangdaye.solutions.Interview;
 import psn.tangdaye.tool.Tools;
 
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @author : shayan
@@ -292,5 +294,74 @@ public class InterviewTest {
         Assert.assertEquals(2, interview.convertInteger(1, 2));
     }
 
+    @Test
+    public void testExchangeBits() {
+        Assert.assertEquals(2, interview.exchangeBits(1));
+    }
+
+    @Test
+    public void testDrawLine() {
+        Assert.assertEquals(3, interview.drawLine(1, 32, 30, 31, 0)[0]);
+    }
+
+    @Test
+    public void testWaysToStep() {
+        Assert.assertEquals(752119970, interview.waysToStep(61));
+    }
+
+
+    @Test
+    public void testPathWithObstacles() {
+        int[][] grid = {{0, 0, 1}, {0, 0, 0}, {1, 0, 0}};
+        Assert.assertEquals(5, interview.pathWithObstacles(grid).size());
+    }
+
+    @Test
+    public void testFindMagicIndex() {
+        Assert.assertEquals(1, interview.findMagicIndex(new int[]{1, 1, 1}));
+    }
+
+    @Test
+    public void testSubsets() {
+        Assert.assertEquals(16, interview.subsets(new int[]{1, 2, 3, 4}).size());
+    }
+
+    @Test
+    public void testMultiply() {
+        Assert.assertEquals(42, interview.multiply(6, 7));
+    }
+
+    @Test
+    public void testHanota() {
+        List<Integer> a = new LinkedList<Integer>() {{
+            add(4);
+            add(3);
+            add(2);
+            add(1);
+        }};
+
+        List<Integer> b = new LinkedList<>();
+        List<Integer> c = new LinkedList<>();
+        interview.hanota(a, b, c);
+        Assert.assertEquals("[4, 3, 2, 1]", c.toString());
+    }
+
+    @Test
+    public void testPermutation() {
+        Assert.assertEquals("[eqw, ewq, qew, qwe, weq, wqe]", Arrays.toString(interview.permutation("qwe")));
+        Assert.assertEquals("[eqq, qeq, qqe]", Arrays.toString(interview.permutation("qqe")));
+    }
+
+    @Test
+    public void testGenerateParenthesis() {
+        Assert.assertEquals(5, interview.generateParenthesis(3).size());
+    }
+
+    @Test
+    public void testFloodFill() {
+        int[][] map = {{1, 1, 1}, {1, 1, 0}, {1, 0, 1}};
+        map = interview.floodFill(map, 1, 1, 2);
+        Assert.assertEquals("[[2,2,2],[2,2,0],[2,0,1]]", Tools.beauty2DArray(map));
+    }
 
 }

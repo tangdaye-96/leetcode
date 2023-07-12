@@ -1,10 +1,12 @@
 package psn.tangdaye.solutions;
 
+import org.jetbrains.annotations.NotNull;
 import psn.tangdaye.model.ListNode;
 import psn.tangdaye.model.TreeNode;
 import psn.tangdaye.tool.Tools;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author shayan
@@ -159,7 +161,7 @@ public class Interview {
      * <p>
      * 字符串压缩。利用字符重复出现的次数，编写一种方法，实现基本的字符串压缩功能。比如，字符串aabcccccaaa会变为a2b1c5a3。若“压缩”后的字符串没有变短，则返回原先的字符串。你可以假设字符串中只包含大小写英文字母（a至z）。
      * <p>
-     * https://leetcode.cn/problems/compress-string-lcci/?favorite=xb9lfcwi
+     * <a href="https://leetcode.cn/problems/compress-string-lcci/?favorite=xb9lfcwi">https://leetcode.cn/problems/compress-string-lcci/?favorite=xb9lfcwi</a>
      */
     public String compressString(String s) {
         if (s.length() == 0) return s;
@@ -1052,7 +1054,7 @@ public class Interview {
      * <p>
      * 检查子树。你有两棵非常大的二叉树：T1，有几万个节点；T2，有几万个节点。设计一个算法，判断 T2 是否为 T1 的子树。
      * <p>
-     * https://leetcode.cn/problems/check-subtree-lcci/?envType=featured-list&envId=xb9lfcwi
+     * <a href="https://leetcode.cn/problems/check-subtree-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/check-subtree-lcci/?envType=featured-list&envId=xb9lfcwi</a>
      */
     public boolean checkSubTree(TreeNode t1, TreeNode t2) {
         if (t1 == null) return t2 == null;
@@ -1069,7 +1071,7 @@ public class Interview {
      * <p>
      * 给定一棵二叉树，其中每个节点都含有一个整数数值(该值或正或负)。设计一个算法，打印节点数值总和等于某个给定值的所有路径的数量。注意，路径不一定非得从二叉树的根节点或叶节点开始或结束，但是其方向必须向下(只能从父节点指向子节点方向)。
      * <p>
-     * https://leetcode.cn/problems/paths-with-sum-lcci/?envType=featured-list&envId=xb9lfcwi
+     * <a href="https://leetcode.cn/problems/paths-with-sum-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/paths-with-sum-lcci/?envType=featured-list&envId=xb9lfcwi</a>
      */
     public int pathSum(TreeNode root, int sum) {
         if (root == null) return 0;
@@ -1088,7 +1090,7 @@ public class Interview {
      * <p>
      * 编写一种方法，使 M 对应的二进制数字插入 N 对应的二进制数字的第 i ~ j 位区域，不足之处用 0 补齐
      * <p>
-     * https://leetcode.cn/problems/insert-into-bits-lcci/?envType=featured-list&envId=xb9lfcwi
+     * <a href="https://leetcode.cn/problems/insert-into-bits-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/insert-into-bits-lcci/?envType=featured-list&envId=xb9lfcwi</a>
      * <p>
      */
     public int insertBits(int n, int m, int i, int j) {
@@ -1106,7 +1108,7 @@ public class Interview {
      * <p>
      * 二进制数转字符串。给定一个介于0和1之间的实数（如0.72），类型为double，打印它的二进制表达式。如果该数字无法精确地用32位以内的二进制表示，则打印“ERROR”。
      * <p>
-     * https://leetcode.cn/problems/binary-number-to-string-lcci/?envType=featured-list&envId=xb9lfcwi
+     * <a href="https://leetcode.cn/problems/binary-number-to-string-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/binary-number-to-string-lcci/?envType=featured-list&envId=xb9lfcwi</a>
      */
     public String printBin(double num) {
         StringBuilder sb = new StringBuilder("0.");
@@ -1130,7 +1132,7 @@ public class Interview {
      * <p>
      * 给定一个32位整数 num，你可以将一个数位从0变为1。请编写一个程序，找出你能够获得的最长的一串1的长度。
      * <p>
-     * https://leetcode.cn/problems/reverse-bits-lcci/?envType=featured-list&envId=xb9lfcwi
+     * <a href="https://leetcode.cn/problems/reverse-bits-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/reverse-bits-lcci/?envType=featured-list&envId=xb9lfcwi</a>
      */
     public int reverseBits(int num) {
         int max = Integer.MIN_VALUE;
@@ -1154,7 +1156,7 @@ public class Interview {
      * <p>
      * 下一个数。给定一个正整数，找出与其二进制表达式中1的个数相同且大小最接近的那两个数（一个略大，一个略小）。
      * <p>
-     * https://leetcode.cn/problems/closed-number-lcci/?envType=featured-list&envId=xb9lfcwi
+     * <a href="https://leetcode.cn/problems/closed-number-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/closed-number-lcci/?envType=featured-list&envId=xb9lfcwi</a>
      */
     public int[] findClosedNumbers(int num) {
         // 找到最右边左边是0的1，将其左移1位，再把它右边连续的1移动到最低位置
@@ -1201,7 +1203,7 @@ public class Interview {
      * <p>
      * 整数转换。编写一个函数，确定需要改变几个位才能将整数A转成整数B。
      * <p>
-     * https://leetcode.cn/problems/convert-integer-lcci/?envType=featured-list&envId=xb9lfcwi
+     * <a href="https://leetcode.cn/problems/convert-integer-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/convert-integer-lcci/?envType=featured-list&envId=xb9lfcwi</a>
      */
     public int convertInteger(int a, int b) {
         return Integer.bitCount(a ^ b);
@@ -1212,7 +1214,7 @@ public class Interview {
      * <p>
      * 配对交换。编写程序，交换某个整数的奇数位和偶数位，尽量使用较少的指令（也就是说，位0与位1交换，位2与位3交换，以此类推）。
      * <p>
-     * https://leetcode.cn/problems/exchange-lcci/?envType=featured-list&envId=xb9lfcwi
+     * <a href="https://leetcode.cn/problems/exchange-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/exchange-lcci/?envType=featured-list&envId=xb9lfcwi</a>
      */
     public int exchangeBits(int num) {
         // 偶数位左移+奇数位右移
@@ -1230,7 +1232,7 @@ public class Interview {
      * <p>
      * 我们将在屏幕上绘制一条从点 (x1,y) 到点 (x2,y) 的直线（即像素点修改为 1），请返回绘制过后的数组。
      * <p>
-     * https://leetcode.cn/problems/draw-line-lcci/?envType=featured-list&envId=xb9lfcwi
+     * <a href="https://leetcode.cn/problems/draw-line-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/draw-line-lcci/?envType=featured-list&envId=xb9lfcwi</a>
      */
     public int[] drawLine(int length, int w, int x1, int x2, int y) {
         int t = w / 32;
@@ -1258,7 +1260,7 @@ public class Interview {
      * <p>
      * 三步问题。有个小孩正在上楼梯，楼梯有n阶台阶，小孩一次可以上1阶、2阶或3阶。实现一种方法，计算小孩有多少种上楼梯的方式。结果可能很大，你需要对结果模1000000007。
      * <p>
-     * https://leetcode.cn/problems/three-steps-problem-lcci/?envType=featured-list&envId=xb9lfcwi
+     * <a href="https://leetcode.cn/problems/three-steps-problem-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/three-steps-problem-lcci/?envType=featured-list&envId=xb9lfcwi</a>
      */
     public int waysToStep(int n) {
         if (n == 1) return 1;
@@ -1279,7 +1281,7 @@ public class Interview {
      * <p>
      * 设想有个机器人坐在一个网格的左上角，网格 r 行 c 列。机器人只能向下或向右移动，但不能走到一些被禁止的网格（有障碍物）。设计一种算法，寻找机器人从左上角移动到右下角的路径。
      * <p>
-     * https://leetcode.cn/problems/robot-in-a-grid-lcci/?envType=featured-list&envId=xb9lfcwi
+     * <a href="https://leetcode.cn/problems/robot-in-a-grid-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/robot-in-a-grid-lcci/?envType=featured-list&envId=xb9lfcwi</a>
      */
     public List<List<Integer>> pathWithObstacles(int[][] obstacleGrid) {
         int r = obstacleGrid.length, c = obstacleGrid[0].length;
@@ -1326,7 +1328,7 @@ public class Interview {
      * <p>
      * 魔术索引。 在数组A[0...n-1]中，有所谓的魔术索引，满足条件A[i] = i。给定一个有序整数数组，编写一种方法找出魔术索引，若有的话，在数组A中找出一个魔术索引，如果没有，则返回-1。若有多个魔术索引，返回索引值最小的一个。
      * <p>
-     * https://leetcode.cn/problems/magic-index-lcci/?envType=featured-list&envId=xb9lfcwi
+     * <a href="https://leetcode.cn/problems/magic-index-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/magic-index-lcci/?envType=featured-list&envId=xb9lfcwi</a>
      */
     public int findMagicIndex(int[] nums) {
         for (int i = 0; i < nums.length; i++) if (nums[i] == i) return i;
@@ -1338,7 +1340,7 @@ public class Interview {
      * <p>
      * 幂集。编写一种方法，返回某集合的所有子集。集合中不包含重复的元素。
      * <p>
-     * https://leetcode.cn/problems/power-set-lcci/
+     * <a href="https://leetcode.cn/problems/power-set-lcci/">https://leetcode.cn/problems/power-set-lcci/</a>
      */
     public List<List<Integer>> subsets(int[] nums) {
         int t = nums.length;
@@ -1360,7 +1362,7 @@ public class Interview {
      * <p>
      * 递归乘法。 写一个递归函数，不使用 * 运算符， 实现两个正整数的相乘。可以使用加号、减号、位移，但要吝啬一些。
      * <p>
-     * https://leetcode.cn/problems/recursive-mulitply-lcci/?envType=featured-list&envId=xb9lfcwi
+     * <a href="https://leetcode.cn/problems/recursive-mulitply-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/recursive-mulitply-lcci/?envType=featured-list&envId=xb9lfcwi</a>
      */
     public int multiply(int a, int b) {
         int result = 0;
@@ -1383,7 +1385,7 @@ public class Interview {
      * <p>
      * (3) 盘子只能叠在比它大的盘子上。
      * <p>
-     * https://leetcode.cn/problems/hanota-lcci/?envType=featured-list&envId=xb9lfcwi
+     * <a href="https://leetcode.cn/problems/hanota-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/hanota-lcci/?envType=featured-list&envId=xb9lfcwi</a>
      */
     public void hanota(List<Integer> a, List<Integer> b, List<Integer> c) {
         move(new List[]{a, b, c}, a.size(), 0, 2);
@@ -1408,9 +1410,9 @@ public class Interview {
      * <p>
      * 面试题 08.08. 有重复字符串的排列组合
      * <p>
-     * https://leetcode.cn/problems/permutation-i-lcci/?envType=featured-list&envId=xb9lfcwi
+     * <a href="https://leetcode.cn/problems/permutation-i-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/permutation-i-lcci/?envType=featured-list&envId=xb9lfcwi</a>
      * <p>
-     * https://leetcode.cn/problems/permutation-ii-lcci/?envType=featured-list&envId=xb9lfcwi
+     * <a href="https://leetcode.cn/problems/permutation-ii-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/permutation-ii-lcci/?envType=featured-list&envId=xb9lfcw</a>
      * <p>
      * 字符串的排列组合，编写一种方法，计算某字符串的所有排列组合
      */
@@ -1482,7 +1484,7 @@ public class Interview {
      * <p>
      * 括号。设计一种算法，打印n对括号的所有合法的（例如，开闭一一对应）组合。
      * <p>
-     * https://leetcode.cn/problems/bracket-lcci/?envType=featured-list&envId=xb9lfcwi
+     * <a href="https://leetcode.cn/problems/bracket-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/bracket-lcci/?envType=featured-list&envId=xb9lfcwi</a>
      */
     public List<String> generateParenthesis(int n) {
         Set<String> current = new HashSet<>();
@@ -1513,7 +1515,7 @@ public class Interview {
      * <p>
      * 请用新颜色填充初始坐标点的周围区域，并返回填充后的图像。
      * <p>
-     * https://leetcode.cn/problems/color-fill-lcci/?envType=featured-list&envId=xb9lfcwi
+     * <a href="https://leetcode.cn/problems/color-fill-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/color-fill-lcci/?envType=featured-list&envId=xb9lfcwi</a>
      */
     public int[][] floodFill(int[][] image, int sr, int sc, int newColor) {
         boolean[][] done = new boolean[image.length][image[0].length];
@@ -1531,4 +1533,326 @@ public class Interview {
         doFill(image, sr, sc + 1, newColor, originColor, done);
         doFill(image, sr, sc - 1, newColor, originColor, done);
     }
+
+    /**
+     * 面试题 08.11. 硬币
+     * <p>
+     * 硬币。给定数量不限的硬币，币值为25分、10分、5分和1分，编写代码计算n分有几种表示法。(结果可能会很大，你需要将结果模上1000000007)
+     * <p>
+     * <a href="https://leetcode.cn/problems/coin-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/coin-lcci/?envType=featured-list&envId=xb9lfcwi</a>
+     */
+    public int waysToChange(int n) {
+        int[] dp1 = new int[1 + n];
+        for (int i = 0; i <= n; i++) dp1[i] = 1;
+        int[] dp5 = new int[1 + n];
+        for (int i = 0; i <= n; i++) {
+            int a = i >= 5 ? dp5[i - 5] : 0;
+            dp5[i] = (dp1[i] + a) % 1000000007;
+        }
+        int[] dp10 = new int[1 + n];
+        for (int i = 0; i <= n; i++) {
+            int a = i >= 10 ? dp10[i - 10] : 0;
+            dp10[i] = (dp5[i] + a) % 1000000007;
+        }
+        int[] dp25 = new int[1 + n];
+        for (int i = 0; i <= n; i++) {
+            int a = i >= 25 ? dp25[i - 25] : 0;
+            dp25[i] = (dp10[i] + a) % 1000000007;
+        }
+        return dp25[n];
+    }
+
+    /**
+     * 面试题 08.12. 八皇后
+     * <p>
+     * 设计一种算法，打印 N 皇后在 N × N 棋盘上的各种摆法，其中每个皇后都不同行、不同列，也不在对角线上。这里的“对角线”指的是所有的对角线，不只是平分整个棋盘的那两条对角线。
+     * <p>
+     * <a href="https://leetcode.cn/problems/eight-queens-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/eight-queens-lcci/?envType=featured-list&envId=xb9lfcwi</a>
+     */
+    public List<List<String>> solveNQueens(int n) {
+        int[] column = new int[1 + n];// column[i]∈[0,1]表示第i列被占用 1...n
+        int[] queen = new int[1 + n]; // queen[i]∈(1,2,3...5)表示第i行第几列结果
+        // rup[i+j-1]=1表示(i,j)所在的反斜线被占用 反斜线上i+j是固定值, 取值范围是2到2*n
+        int[] rup = new int[2 * n]; // 最终范围是1到2n-1
+        // lup[i-j+n]=1表示(i,j)所在的正斜线被占用 正斜线上i-j是固定值, 取值范围是1-n到n-1
+        int[] lup = new int[2 * n]; // 最终范围是1到2n-1
+        List<List<String>> result = new ArrayList<>();
+        dfs(1, n, result, column, rup, lup, queen);
+        return result;
+    }
+
+    private void dfs(int i, int n, List<List<String>> result, int[] column, int[] rup, int[] lup, int[] queen) {
+        if (i > n) result.add(getQueenResult(queen, n));
+        else {
+            for (int j = 1; j <= n; j++) {
+                if ((column[j] == 0) && (rup[i + j - 1] == 0) && lup[i - j + n] == 0) {
+                    queen[i] = j;
+                    column[j] = rup[i + j - 1] = lup[i - j + n] = 1;
+                    dfs(i + 1, n, result, column, rup, lup, queen);
+                    column[j] = rup[i + j - 1] = lup[i - j + n] = 0;
+                }
+            }
+        }
+    }
+
+    private List<String> getQueenResult(int[] queen, int n) {
+        List<String> t = new ArrayList<>();
+        for (int y = 1; y <= n; y++) {
+            StringBuilder sb = new StringBuilder();
+            for (int x = 1; x <= n; x++) {
+                if (queen[y] == x) sb.append("Q");
+                else sb.append(".");
+            }
+            t.add(sb.toString());
+        }
+        return t;
+    }
+
+    /**
+     * 面试题 08.13. 堆箱子
+     * <p>
+     * 堆箱子。给你一堆n个箱子，箱子宽wi、深di、高hi。箱子不能翻转，将箱子堆起来时，下面箱子的宽度、高度和深度必须大于上面的箱子。实现一种方法，搭出最高的一堆箱子。箱堆的高度为每个箱子高度的总和。
+     * <p>
+     * 第i个箱子用[wi, di, hi]表示
+     * <p>
+     * <a href="https://leetcode.cn/problems/pile-box-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/pile-box-lcci/?envType=featured-list&envId=xb9lfcwi</a>
+     */
+    public int pileBox(int[][] box) {
+        /*
+          构建图 v1->v2表示 v1.w>v2.w && v1.d>v2.d && v1.h>v2.h
+          最终求最长路径
+         */
+        List<Box> boxes = Arrays.stream(box).map(Box::new).collect(Collectors.toList());
+        for (int i = 0; i < boxes.size(); i++) {
+            for (int j = i + 1; j < boxes.size(); j++) {
+                boxes.get(i).compareAndAdd(boxes.get(j));
+            }
+        }
+        int result = 0;
+        for (Box b : boxes) {
+            result = Math.max(b.getMax(), result);
+        }
+
+        return result;
+    }
+
+    private static class Box implements Comparable<Box> {
+        int w, d, h;
+        private Integer maxH;
+        Set<Box> children = new HashSet<>();
+
+        Box(int[] box) {
+            w = box[0];
+            d = box[1];
+            h = box[2];
+        }
+
+        void compareAndAdd(Box another) {
+            int t = this.compareTo(another);
+            if (t > 0) this.children.add(another);
+            if (t < 0) another.children.add(this);
+        }
+
+        int getMax() {
+            if (maxH != null) return maxH;
+            int max = 0;
+            for (Box b : children) {
+                max = Math.max(max, b.getMax());
+            }
+            maxH = max + h;
+            return maxH;
+        }
+
+        @Override
+        public int compareTo(@NotNull Interview.Box another) {
+            if (w > another.w && d > another.d && h > another.h) return 1;
+            if (w < another.w && d < another.d && h < another.h) return -1;
+            return 0;
+        }
+    }
+
+    /**
+     * 面试题08.14. 布尔运算
+     * <p>
+     * 给定一个布尔表达式和一个期望的不二结果result，布尔表达式由0、1、&、|和^符号组成。实现一个函数，算出有几种可使该表达式得出result值的括号方法
+     * <p>
+     * <a href="https://leetcode.cn/problems/boolean-evaluation-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/boolean-evaluation-lcci/?envType=featured-list&envId=xb9lfcwi</a>
+     */
+    public int countEval(String s, int result) {
+        char[] value = s.toCharArray();
+        Integer[][][] dp = new Integer[2][s.length()][s.length()];
+        return doCount(value, 0, value.length - 1, result, dp);
+    }
+
+    private int doCount(char[] value, int left, int right, int result, Integer[][][] dp) {
+        if (dp[result][left][right] != null) return dp[result][left][right];
+        if (left == right) {
+            int x = value[left] - '0' == result ? 1 : 0;
+            dp[result][left][right] = x;
+            return x;
+        }
+        int sum = 0;
+        for (int i = left + 1; i < right; i += 2) {
+            char op = value[i];
+            if (op == '|') {
+                if (result == 0) {
+                    sum += doCount(value, left, i - 1, 0, dp) * doCount(value, i + 1, right, 0, dp);
+
+                } else {
+                    int l0 = doCount(value, left, i - 1, 0, dp);
+                    int l1 = doCount(value, left, i - 1, 1, dp);
+                    int r0 = doCount(value, i + 1, right, 0, dp);
+                    int r1 = doCount(value, i + 1, right, 1, dp);
+                    sum += l0 * r1 + l1 * r0 + l1 * r1;
+                }
+            } else if (op == '&') {
+                if (result == 0) {
+                    int l0 = doCount(value, left, i - 1, 0, dp);
+                    int l1 = doCount(value, left, i - 1, 1, dp);
+                    int r0 = doCount(value, i + 1, right, 0, dp);
+                    int r1 = doCount(value, i + 1, right, 1, dp);
+                    sum += l0 * r1 + l1 * r0 + l0 * r0;
+                } else {
+                    sum += doCount(value, left, i - 1, 1, dp) * doCount(value, i + 1, right, 1, dp);
+                }
+            } else {
+                int l0 = doCount(value, left, i - 1, 0, dp);
+                int l1 = doCount(value, left, i - 1, 1, dp);
+                int r0 = doCount(value, i + 1, right, 0, dp);
+                int r1 = doCount(value, i + 1, right, 1, dp);
+                if (result == 0) {
+                    sum += l0 * r0 + l1 * r1;
+                } else {
+                    sum += l0 * r1 + l1 * r0;
+                }
+            }
+        }
+        dp[result][left][right] = sum;
+        return sum;
+    }
+
+    /**
+     * 面试题 10.01. 合并排序的数组
+     * <p>
+     * 给定两个排序后的数组 A 和 B，其中 A 的末端有足够的缓冲空间容纳 B。 编写一个方法，将 B 合并入 A 并排序。
+     * <p>
+     * <a href="https://leetcode.cn/problems/sorted-merge-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/sorted-merge-lcci/?envType=featured-list&envId=xb9lfcwi</a>
+     */
+    public void merge(int[] a, int m, int[] b, int n) {
+        int[] x = new int[m + n];
+        int ai = 0, bi = 0;
+        for (int i = 0; i < m + n; i++) {
+            if (ai >= m) {
+                System.arraycopy(b, bi, x, i, n - bi);
+                break;
+            }
+            if (bi >= n) {
+                System.arraycopy(a, ai, x, i, m - ai);
+                break;
+            }
+            if (a[ai] < b[bi]) {
+                x[i] = a[ai];
+                ai++;
+            } else {
+                x[i] = b[bi];
+                bi++;
+            }
+        }
+        System.arraycopy(x, 0, a, 0, m + n);
+    }
+
+    /**
+     * 面试题 10.02. 变位词组
+     * <p>
+     * 编写一种方法，对字符串数组进行排序，将所有变位词组合在一起。变位词是指字母相同，但排列不同的字符串。
+     * <p>
+     * <a href="https://leetcode.cn/problems/group-anagrams-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/group-anagrams-lcci/?envType=featured-list&envId=xb9lfcwi</a>
+     */
+    public List<List<String>> groupAnagrams(String[] strs) {
+        Map<String, List<String>> map = new HashMap<>();
+        for (String s : strs) {
+            char[] array = s.toCharArray();
+            Arrays.sort(array);
+            String key = new String(array);
+            if (map.containsKey(key)) map.get(key).add(s);
+            else map.put(key, new ArrayList<String>() {{
+                add(s);
+            }});
+        }
+        return new ArrayList<>(map.values());
+    }
+
+    /**
+     * 面试题 10.03. 搜索旋转数组
+     * <p>
+     * 搜索旋转数组。给定一个排序后的数组，包含n个整数，但这个数组已被旋转过很多次了，次数不详。请编写代码找出数组中的某个元素，假设数组元素原先是按升序排列的。若有多个相同元素，返回索引值最小的一个。
+     * <p>
+     * <a href="https://leetcode.cn/problems/search-rotate-array-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/search-rotate-array-lcci/?envType=featured-list&envId=xb9lfcwi</a>
+     */
+    public int search(int[] arr, int target) {
+        return -1;
+    }
+
+
+    /**
+     * 面试题 10.05. 稀疏数组搜索
+     * <p>
+     * 稀疏数组搜索。有个排好序的字符串数组，其中散布着一些空字符串，编写一种方法，找出给定字符串的位置。
+     * <p>
+     * <a href="https://leetcode.cn/problems/sparse-array-search-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/sparse-array-search-lcci/?envType=featured-list&envId=xb9lfcwi</a>
+     */
+    public int findString(String[] words, String s) {
+        return -1;
+    }
+
+
+    /**
+     * 面试题 10.09. 排序矩阵查找
+     * <p>
+     * 给定M×N矩阵，每一行、每一列都按升序排列，请编写代码找出某元素。
+     * <p>
+     * <a href="https://leetcode.cn/problems/sorted-matrix-search-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/sorted-matrix-search-lcci/?envType=featured-list&envId=xb9lfcwi</a>
+     */
+    public boolean searchMatrix(int[][] matrix, int target) {
+        return true;
+    }
+
+    /**
+     * 面试题 10.10. 数字流的秩
+     * <p>
+     * 假设你正在读取一串整数。每隔一段时间，你希望能找出数字 x 的秩(小于或等于 x 的值的个数)。请实现数据结构和算法来支持这些操作，也就是说：
+     * <p>
+     * - 实现 track(int x)方法，每读入一个数字都会调用该方法；
+     * <p>
+     * - 实现 getRankOfNumber(int x) 方法，返回小于或等于 x 的值的个数。
+     * <p>
+     * <a href="https://leetcode.cn/problems/rank-from-stream-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/rank-from-stream-lcci/?envType=featured-list&envId=xb9lfcwi</a>
+     */
+    public static class StreamRank {
+
+        public StreamRank() {
+
+        }
+
+        public void track(int x) {
+
+        }
+
+        public int getRankOfNumber(int x) {
+            return 0;
+        }
+    }
+
+    /**
+     * 面试题 10.11. 峰与谷
+     * <p>
+     * 在一个整数数组中，“峰”是大于或等于相邻整数的元素，相应地，“谷”是小于或等于相邻整数的元素。例如，在数组{5, 8, 4, 2, 3, 4, 6}中，{8, 6}是峰， {5, 2}是谷。现在给定一个整数数组，将该数组按峰与谷的交替顺序排序。
+     * <p>
+     * <a href="https://leetcode.cn/problems/peaks-and-valleys-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/peaks-and-valleys-lcci/?envType=featured-list&envId=xb9lfcwi</a>
+     */
+    public void wiggleSort(int[] nums) {
+
+    }
+
+
 }

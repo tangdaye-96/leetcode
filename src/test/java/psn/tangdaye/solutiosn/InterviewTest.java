@@ -51,7 +51,7 @@ public class InterviewTest {
     }
 
     @Test
-    public void test() {
+    public void testCompressString() {
         Assert.assertEquals("a2b1c5a3", interview.compressString("aabcccccaaa"));
         Assert.assertEquals("abbccd", interview.compressString("abbccd"));
     }
@@ -362,6 +362,84 @@ public class InterviewTest {
         int[][] map = {{1, 1, 1}, {1, 1, 0}, {1, 0, 1}};
         map = interview.floodFill(map, 1, 1, 2);
         Assert.assertEquals("[[2,2,2],[2,2,0],[2,0,1]]", Tools.beauty2DArray(map));
+    }
+
+    @Test
+    public void testWaysToChange() {
+        Assert.assertEquals(4, interview.waysToChange(10));
+    }
+
+    @Test
+    public void testSolveNQueens() {
+        Assert.assertEquals(1, interview.solveNQueens(1).size());
+        Assert.assertEquals(0, interview.solveNQueens(2).size());
+        Assert.assertEquals(0, interview.solveNQueens(3).size());
+        Assert.assertEquals(2, interview.solveNQueens(4).size());
+    }
+
+    @Test
+    public void testPileBox() {
+        int[][] boxes = {{1, 1, 1}, {2, 3, 2}, {3, 4, 7}, {2, 6, 100}};
+        Assert.assertEquals(101, interview.pileBox(boxes));
+    }
+
+    @Test
+    public void testCountEval() {
+        Assert.assertEquals(2, interview.countEval("1^0|0|1", 0));
+        Assert.assertEquals(3, interview.countEval("1^0|0|1", 1));
+    }
+
+    @Test
+    public void testMerge() {
+        int[] a = {1, 2, 3, 4, 0, 0, 0, 0};
+        int[] b = {3, 5, 6, 7};
+        interview.merge(a, 4, b, 4);
+        Assert.assertEquals("[1, 2, 3, 3, 4, 5, 6, 7]", Arrays.toString(a));
+    }
+
+    @Test
+    public void testGroupAnagrams() {
+        String[] words = {"cat", "tac", "like", "kile", "hello"};
+        List<List<String>> result = interview.groupAnagrams(words);
+        Assert.assertEquals(result.size(), 3);
+    }
+
+    @Test
+    public void testSearch() {
+        int[] array = {15, 16, 19, 20, 25, 1, 3, 4, 5, 7, 10, 14};
+        Assert.assertEquals(8, interview.search(array, 5));
+    }
+
+    @Test
+    public void testFindString() {
+        String[] words = {"at", "", "", "", "ball", "", "", "car", "", "", "dad", "", ""};
+        Assert.assertEquals(4, interview.findString(words, "ball"));
+    }
+
+    @Test
+    public void testSearchMatrix() {
+        int[][] matrix = {
+                {1, 4, 7, 11, 15}, {2, 5, 8, 12, 19}, {3, 6, 9, 16, 22}, {10, 13, 14, 17, 24}, {18, 21, 23, 26, 30}
+        };
+        Assert.assertTrue(interview.searchMatrix(matrix, 5));
+        Assert.assertFalse(interview.searchMatrix(matrix, 20));
+    }
+
+    @Test
+    public void testStreamRank() {
+        Interview.StreamRank streamRank = new Interview.StreamRank();
+        streamRank.track(0);
+        streamRank.track(1);
+        Assert.assertEquals(2, streamRank.getRankOfNumber(1));
+        streamRank.track(1);
+        Assert.assertEquals(3, streamRank.getRankOfNumber(1));
+    }
+
+    @Test
+    public void testWiggleSort() {
+        int[] array = {5, 3, 1, 2, 3};
+        interview.wiggleSort(array);
+        Assert.assertEquals("[5, 1, 3, 2, 3]", Arrays.toString(array));
     }
 
 }

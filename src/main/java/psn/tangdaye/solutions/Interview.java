@@ -1790,9 +1790,50 @@ public class Interview {
      * <a href="https://leetcode.cn/problems/search-rotate-array-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/search-rotate-array-lcci/?envType=featured-list&envId=xb9lfcwi</a>
      */
     public int search(int[] arr, int target) {
-        return -1;
+        // --------------x-------
+        if (target == arr[0]) return 0;
+        else {
+            int small = minIndex(arr); // 最小值下标
+            if (target > arr[0]) {
+                int t = Arrays.binarySearch(arr, 0, small, target);
+                if (t < 0) return -1;
+                // 前半部分
+                return searchFirst(arr, 0, small - 1, target);
+            } else {
+                // 后半部分
+                int t = Arrays.binarySearch(arr, small, arr.length, target);
+                if (t < 0) return -1;
+                return searchFirst(arr, small, arr.length - 1, target);
+            }
+        }
     }
 
+    private int minIndex(int[] numbers) {
+        int low = 0, high = numbers.length - 1;
+        while (low < high) {
+            if (numbers[low] < numbers[high]) break;
+            int mid = low + high >> 1;
+            if (numbers[mid] > numbers[low]) low = mid + 1;
+            else if (numbers[mid] < numbers[high]) high = mid;
+            else if (numbers[low] == numbers[high]) {
+                low++;
+                high--;
+            } else if (numbers[mid] == numbers[high]) {
+                high = mid;
+            } else if (numbers[mid] == numbers[low]) {
+                low = mid + 1;
+            }
+        }
+        return low;
+    }
+
+    private int searchFirst(int[] nums, int i, int j, int target) {
+        if (i + 1 == j) return nums[i] == target ? i : j;
+        if (nums[i] == target) return i;
+        int mid = (i + j) / 2;
+        if (nums[mid] < target) return searchFirst(nums, mid + 1, j, target);
+        else return searchFirst(nums, i, mid, target);
+    }
 
     /**
      * 面试题 10.05. 稀疏数组搜索
@@ -1802,6 +1843,32 @@ public class Interview {
      * <a href="https://leetcode.cn/problems/sparse-array-search-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/sparse-array-search-lcci/?envType=featured-list&envId=xb9lfcwi</a>
      */
     public int findString(String[] words, String s) {
+        int left = 0, right = words.length - 1;
+        while (left <= right) {
+            while (words[left].length() == 0) left++;
+            while (words[right].length() == 0) right--;
+            if (left > right) return -1;
+            int mid = (left + right) / 2;
+            if (words[mid].length() == 0) {
+                int midL = mid, midR = mid;
+                while (words[midL].length() == 0) midL--;
+                while (words[midR].length() == 0) midR++;
+                int c1 = s.compareTo(words[midL]);
+                int c2 = s.compareTo(words[midR]);
+                if (c1 < 0) {
+                    right = midL - 1;
+                } else if (c1 == 0) {
+                    return midL;
+                } else if (c2 < 0) {
+                    left = midL + 1;
+                    right = midR - 1;
+                } else if (c2 == 0) {
+                    return midR;
+                } else {
+                    left = midR + 1;
+                }
+            }
+        }
         return -1;
     }
 
@@ -1814,7 +1881,38 @@ public class Interview {
      * <a href="https://leetcode.cn/problems/sorted-matrix-search-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/sorted-matrix-search-lcci/?envType=featured-list&envId=xb9lfcwi</a>
      */
     public boolean searchMatrix(int[][] matrix, int target) {
-        return true;
+        int m = matrix.length, n = matrix[0].length;
+        // 先确定在哪几列
+        int rightColumn = Arrays.binarySearch(matrix[0], target);
+        if (rightColumn >= 0) return true;
+        rightColumn = -(rightColumn + 1); // target的j值小于rightColumn
+        int leftColumn = Arrays.binarySearch(matrix[m - 1], target);
+        if (leftColumn >= 0) return true;
+        leftColumn = -(leftColumn + 1); // target的j值大于等于leftColumn
+
+        // 每一列搜索，并且搜索的上限递减
+        int up = m;
+        for (int j = leftColumn; j < rightColumn; j++) {
+            int t = binarySearchColumn(matrix, j, 0, up, target);
+            if (t > 0) return true;
+            up = -(t + 1);
+        }
+        return false;
+    }
+
+    // 某个列中搜索
+    private int binarySearchColumn(int[][] matrix, int column, int row1, int row2, int target) {
+        int low = row1;
+        int high = row2 - 1;
+        while (low <= high) {
+            int mid = (low + high) >>> 1;
+            int midVal = matrix[mid][column];
+
+            if (midVal < target) low = mid + 1;
+            else if (midVal > target) high = mid - 1;
+            else return mid;
+        }
+        return -(low + 1);
     }
 
     /**
@@ -1830,16 +1928,19 @@ public class Interview {
      */
     public static class StreamRank {
 
-        public StreamRank() {
+        private final TreeMap<Integer, Integer> count;
 
+        public StreamRank() {
+            count = new TreeMap<>();
         }
 
         public void track(int x) {
-
+            count.put(x, count.getOrDefault(x, 0) + 1);
         }
 
         public int getRankOfNumber(int x) {
-            return 0;
+            Map<Integer, Integer> head = count.headMap(x, true);
+            return head.values().stream().reduce(Integer::sum).orElse(0);
         }
     }
 
@@ -1851,6 +1952,20 @@ public class Interview {
      * <a href="https://leetcode.cn/problems/peaks-and-valleys-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/peaks-and-valleys-lcci/?envType=featured-list&envId=xb9lfcwi</a>
      */
     public void wiggleSort(int[] nums) {
+        Arrays.sort(nums);
+        int[] n = new int[nums.length];
+        System.arraycopy(nums, 0, n, 0, nums.length);
+        int last = nums.length - 1;
+        int first = 0;
+        for (int i = 0; i < nums.length; i++) {
+            if (i % 2 == 0) {
+                nums[i] = n[first];
+                first++;
+            } else {
+                nums[i] = n[last];
+                last--;
+            }
+        }
 
     }
 

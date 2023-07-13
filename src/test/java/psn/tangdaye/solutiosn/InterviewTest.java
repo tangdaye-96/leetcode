@@ -406,7 +406,7 @@ public class InterviewTest {
 
     @Test
     public void testSearch() {
-        int[] array = {15, 16, 19, 20, 25, 1, 3, 4, 5, 7, 10, 14};
+        int[] array = {15, 16, 19, 20, 25, 1, 3, 4, 5, 5, 5, 5, 5, 7, 10, 14};
         Assert.assertEquals(8, interview.search(array, 5));
     }
 
@@ -433,13 +433,14 @@ public class InterviewTest {
         Assert.assertEquals(2, streamRank.getRankOfNumber(1));
         streamRank.track(1);
         Assert.assertEquals(3, streamRank.getRankOfNumber(1));
+        Assert.assertEquals(0, streamRank.getRankOfNumber(-1));
     }
 
     @Test
     public void testWiggleSort() {
         int[] array = {5, 3, 1, 2, 3};
         interview.wiggleSort(array);
-        Assert.assertEquals("[5, 1, 3, 2, 3]", Arrays.toString(array));
+        Assert.assertEquals("[1, 5, 2, 3, 3]", Arrays.toString(array));
     }
 
 }

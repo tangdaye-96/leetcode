@@ -9,10 +9,11 @@ import java.util.Random;
 public class Sort {
     static Random random = new Random();
 
-    // 排序
+    // 快速排序
     public static void quickSort(int[] array, boolean revert) {
         doQuickSort(array, 0, array.length - 1, revert);
     }
+
     private static void doQuickSort(int[] array, int l, int r, boolean revert) {
         if (l >= r) return;
         int t = l + random.nextInt(r + 1 - l);
@@ -31,10 +32,12 @@ public class Sort {
         doQuickSort(array, i + 2, r, revert);
     }
 
+    // 归并排序
     public static void mergeSort(int[] array, boolean revert) {
         doMergeSort(array, 0, array.length - 1, revert);
     }
-    public static void doMergeSort(int[] array, int l, int r, boolean revert) {
+
+    private static void doMergeSort(int[] array, int l, int r, boolean revert) {
         if (l >= r) {
             return;
         }
@@ -43,6 +46,7 @@ public class Sort {
         doMergeSort(array, m + 1, r, revert);
         merge(array, l, r, revert);
     }
+
     private static void merge(int[] array, int l, int r, boolean revert) {
         int m = (l + r) / 2;
         int i = l;
@@ -65,6 +69,14 @@ public class Sort {
             System.arraycopy(array, j, temp, s, r - j + 1);
         }
         System.arraycopy(temp, 0, array, l, r - l + 1);
+    }
+
+    // 冒泡排序
+    public static void bubbleSort(int[] array, boolean revert) {
+        for (int i = 0; i < array.length; i++) {
+            for (int j = i + 1; j < array.length; j++) {
+            }
+        }
     }
 
     private static void swap(int[] array, int i, int j) {

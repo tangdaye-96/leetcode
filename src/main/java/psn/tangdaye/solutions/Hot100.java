@@ -552,7 +552,7 @@ public class Hot100 {
             while (i < nums.length && nums[i] > nums[index]) i++;
             i = i - 1;
             swap(nums, index, i);
-            revert(nums, index + 2, nums.length - 1);
+            revert(nums, index + 1, nums.length - 1);
         }
     }
 
@@ -800,7 +800,7 @@ public class Hot100 {
     }
 
     /**
-     * 给定一个 n × n 的二维矩阵 matrix 表示一个图像。请你将图像顺时针旋转 90 度。
+     * 给定一个 n×n 的二维矩阵matrix 表示一个图像。请你将图像顺时针旋转 90 度。
      * 48. 旋转图像
      * https://leetcode.cn/problems/rotate-image/?favorite=2cktkvj
      */
@@ -1779,24 +1779,6 @@ public class Hot100 {
             else v--;
         }
         return x;
-    }
-
-    /**
-     * 229. 多数元素 II
-     * 给定一个大小为 n 的整数数组，找出其中所有出现超过 ⌊ n/3 ⌋ 次的元素。
-     * https://leetcode.cn/problems/majority-element-ii/
-     */
-    public List<Integer> majorityElement2(int[] nums) {
-        // 如果有三个不一样的数字，这三个数字不会影响最终结果
-        int x = 0, y = 0;
-        int v1 = 0, v2 = 0;
-        for (int n : nums) {
-            if (n != x && n != y) {
-                v1 -= 1;
-                v2 -= 1;
-            }
-        }
-        return null;
     }
 
     /**

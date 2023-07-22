@@ -130,7 +130,7 @@ public class Hot100Test {
     public void testNextPermutation() {
         int[] array = {3, 5, 3, 3, 3, 2, 1};
         hot.nextPermutation(array);
-        Assert.assertEquals("[5, 3, 1, 2, 3, 3, 3]", Arrays.toString(array));
+        Assert.assertEquals("[5, 1, 2, 3, 3, 3, 3]", Arrays.toString(array));
 
         int[] array2 = {3, 5, 3, 3, 3, 2, 1, 7};
         hot.nextPermutation(array2);
@@ -139,6 +139,10 @@ public class Hot100Test {
         int[] array3 = {5, 1, 1};
         hot.nextPermutation(array3);
         Assert.assertEquals("[1, 1, 5]", Arrays.toString(array3));
+
+        int[] array4 = {0, 2, 1};
+        hot.nextPermutation(array4);
+        Assert.assertEquals("[1, 0, 2]", Arrays.toString(array4));
     }
 
     @Test
@@ -487,13 +491,6 @@ public class Hot100Test {
     public void testMajorityElement() {
         int[] array = {1, 1, 1, 2, 2, 2, 2};
         Assert.assertEquals(2, hot.majorityElement(array));
-    }
-
-    @Test
-    public void testMajorityElement2() {
-        int[] array = {1, 1, 1, 2, 2, 2, 2};
-        List<Integer> result = hot.majorityElement2(array);
-        Assert.assertEquals(2, result.size());
     }
 
     @Test

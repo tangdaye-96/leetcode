@@ -31,7 +31,7 @@ public class ListNode implements Comparable<ListNode> {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         ListNode current = this;
-        int maxLe = 10;
+        int maxLe = 30;
         while (current != null && maxLe > 0) {
             sb.append(", ").append(current.val);
             current = current.next;

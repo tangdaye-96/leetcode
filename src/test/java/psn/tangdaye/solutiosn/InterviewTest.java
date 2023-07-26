@@ -408,12 +408,15 @@ public class InterviewTest {
     public void testSearch() {
         int[] array = {15, 16, 19, 20, 25, 1, 3, 4, 5, 5, 5, 5, 5, 7, 10, 14};
         Assert.assertEquals(8, interview.search(array, 5));
+        int[] array2 = {1, 1, 1, 1, 1, 2, 1, 1, 1};
+        Assert.assertEquals(5, interview.search(array2, 2));
     }
 
     @Test
     public void testFindString() {
         String[] words = {"at", "", "", "", "ball", "", "", "car", "", "", "dad", "", ""};
         Assert.assertEquals(4, interview.findString(words, "ball"));
+        Assert.assertEquals(-1, interview.findString(words, "ta"));
     }
 
     @Test
@@ -441,6 +444,13 @@ public class InterviewTest {
         int[] array = {5, 3, 1, 2, 3};
         interview.wiggleSort(array);
         Assert.assertEquals("[1, 5, 2, 3, 3]", Arrays.toString(array));
+    }
+
+    @Test
+    public void testSwapNumbers() {
+        int[] t = {379, -12};
+        int[] x = interview.swapNumbers(t);
+        Assert.assertEquals("[-12, 379]", Arrays.toString(x));
     }
 
 }

@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 /**
  * @author shayan
  * @date : 2023/5/12 13:40
- * https://leetcode.cn/problem-list/xb9lfcwi/
+ * @url : <a href="https://leetcode.cn/problem-list/xb9lfcwi/">https://leetcode.cn/problem-list/xb9lfcwi/</a>
  */
 public class Interview {
     /**
@@ -19,7 +19,7 @@ public class Interview {
      * <p>
      * 实现一个算法，确定一个字符串 s 的所有字符是否全都不同
      * <p>
-     * https://leetcode.cn/problems/is-unique-lcci/?favorite=xb9lfcwi
+     * <a href="https://leetcode.cn/problems/is-unique-lcci/?favorite=xb9lfcwi">https://leetcode.cn/problems/is-unique-lcci/?favorite=xb9lfcwi</a>
      */
     public boolean isUnique(String str) {
         int v = 0;
@@ -36,7 +36,7 @@ public class Interview {
      * <p>
      * 给定两个由小写字母组成的字符串 s1 和 s2，请编写一个程序，确定其中一个字符串的字符重新排列后，能否变成另一个字符串
      * <p>
-     * https://leetcode.cn/problems/check-permutation-lcci/?favorite=xb9lfcwi
+     * <a href="https://leetcode.cn/problems/check-permutation-lcci/?favorite=xb9lfcwi">https://leetcode.cn/problems/check-permutation-lcci/?favorite=xb9lfcwi</a>
      */
     public boolean checkPermutation(String s1, String s2) {
         int[] t = new int[26];
@@ -66,7 +66,7 @@ public class Interview {
      * <p>
      * URL化。编写一种方法，将字符串中的空格全部替换为%20。假定该字符串尾部有足够的空间存放新增字符，并且知道字符串的“真实”长度。（注：用Java实现的话，请使用字符数组实现，以便直接在数组上操作。）
      * <p>
-     * https://leetcode.cn/problems/string-to-url-lcci/?favorite=xb9lfcwi
+     * <a href="https://leetcode.cn/problems/string-to-url-lcci/?favorite=xb9lfcwi">https://leetcode.cn/problems/string-to-url-lcci/?favorite=xb9lfcwi</a>
      */
     public String replaceSpaces(String s, int length) {
         char[] newValue = new char[s.length()];
@@ -90,7 +90,7 @@ public class Interview {
      * <p>
      * 给定一个字符串，编写一个函数判定其是否为某个回文串的排列之一。
      * <p>
-     * https://leetcode.cn/problems/palindrome-permutation-lcci/?favorite=xb9lfcwi
+     * <a href="https://leetcode.cn/problems/palindrome-permutation-lcci/?favorite=xb9lfcwi">https://leetcode.cn/problems/palindrome-permutation-lcci/?favorite=xb9lfcwi</a>
      */
     public boolean canPermutePalindrome(String s) {
         Map<Character, Integer> map = Tools.str2dic(s, 0, s.length() - 1);
@@ -107,7 +107,7 @@ public class Interview {
      * <p>
      * 字符串有三种编辑操作:插入一个英文字符、删除一个英文字符或者替换一个英文字符。 给定两个字符串，编写一个函数判定它们是否只需要一次(或者零次)编辑。
      * <p>
-     * https://leetcode.cn/problems/one-away-lcci/?favorite=xb9lfcwi
+     * <a href="https://leetcode.cn/problems/one-away-lcci/?favorite=xb9lfcwi">https://leetcode.cn/problems/one-away-lcci/?favorite=xb9lfcwi</a>
      */
     public boolean oneEditAway(String first, String second) {
         String longOne = first.length() > second.length() ? first : second;
@@ -188,7 +188,7 @@ public class Interview {
      * <p>
      * 给你一幅由 N × N 矩阵表示的图像，其中每个像素的大小为 4 字节。请你设计一种算法，将图像旋转 90 度。
      * <p>
-     * https://leetcode.cn/problems/rotate-matrix-lcci/?favorite=xb9lfcwi
+     * <a href="https://leetcode.cn/problems/rotate-matrix-lcci/?favorite=xb9lfcwi">https://leetcode.cn/problems/rotate-matrix-lcci/?favorite=xb9lfcwi</a>
      */
     public void rotate(int[][] matrix) {
         int n = matrix.length;
@@ -210,7 +210,7 @@ public class Interview {
      * <p>
      * 编写一种算法，若M × N矩阵中某个元素为0，则将其所在的行与列清零。
      * <p>
-     * https://leetcode.cn/problems/zero-matrix-lcci/?favorite=xb9lfcwi
+     * <a href="https://leetcode.cn/problems/zero-matrix-lcci/?favorite=xb9lfcwi">https://leetcode.cn/problems/zero-matrix-lcci/?favorite=xb9lfcwi</a>
      */
     public void setZeroes(int[][] matrix) {
         Set<Integer> columns = new HashSet<>();
@@ -237,7 +237,7 @@ public class Interview {
      * <p>
      * 字符串轮转。给定两个字符串s1和s2，请编写代码检查s2是否为s1旋转而成（比如，waterbottle是erbottlewat旋转后的字符串）。
      * <p>
-     * https://leetcode.cn/problems/string-rotation-lcci/?favorite=xb9lfcwi
+     * <a href="https://leetcode.cn/problems/string-rotation-lcci/?favorite=xb9lfcwi">https://leetcode.cn/problems/string-rotation-lcci/?favorite=xb9lfcwi</a>
      */
     public boolean isFlippedString(String s1, String s2) {
         return s1.length() == s2.length() && (s2 + s2).contains(s1);
@@ -248,7 +248,7 @@ public class Interview {
      * <p>
      * 编写代码，移除未排序链表中的重复节点。保留最开始出现的节点。
      * <p>
-     * https://leetcode.cn/problems/remove-duplicate-node-lcci/?favorite=xb9lfcwi
+     * <a href="https://leetcode.cn/problems/remove-duplicate-node-lcci/?favorite=xb9lfcwi">https://leetcode.cn/problems/remove-duplicate-node-lcci/?favorite=xb9lfcwi</a>
      */
     public ListNode removeDuplicateNodes(ListNode head) {
         ListNode current1 = head;
@@ -270,7 +270,7 @@ public class Interview {
      * <p>
      * 实现一种算法，找出单向链表中倒数第 k 个节点。返回该节点的值。
      * <p>
-     * https://leetcode.cn/problems/kth-node-from-end-of-list-lcci/?favorite=xb9lfcwi
+     * <a href="https://leetcode.cn/problems/kth-node-from-end-of-list-lcci/?favorite=xb9lfcwi">https://leetcode.cn/problems/kth-node-from-end-of-list-lcci/?favorite=xb9lfcwi</a>
      */
     public int kthToLast(ListNode head, int k) {
         ListNode current = head;
@@ -292,7 +292,7 @@ public class Interview {
      * <p>
      * 假定已知链表的某一个中间节点，请实现一种算法，将该节点从链表中删除。
      * <p>
-     * https://leetcode.cn/problems/delete-middle-node-lcci/?favorite=xb9lfcwi
+     * <a href="https://leetcode.cn/problems/delete-middle-node-lcci/?favorite=xb9lfcwi">https://leetcode.cn/problems/delete-middle-node-lcci/?favorite=xb9lfcwi</a>
      */
     public void deleteNode(ListNode node) {
         node.val = node.next.val;
@@ -304,7 +304,7 @@ public class Interview {
      * <p>
      * 给你一个链表的头节点 head 和一个特定值 x ，请你对链表进行分隔，使得所有 小于 x 的节点都出现在 大于或等于 x 的节点之前。
      * <p>
-     * https://leetcode.cn/problems/partition-list-lcci/?favorite=xb9lfcwi
+     * <a href="https://leetcode.cn/problems/partition-list-lcci/?favorite=xb9lfcwi">https://leetcode.cn/problems/partition-list-lcci/?favorite=xb9lfcwi</a>
      */
     public ListNode partition(ListNode head, int x) {
         // (<x) pos (>=x) current (未比较)
@@ -350,7 +350,7 @@ public class Interview {
      * <p>
      * 给定两个用链表表示的整数，每个节点包含一个数位。这些数位是反向存放的，也就是个位排在链表首部。
      * <p>
-     * https://leetcode.cn/problems/sum-lists-lcci/?favorite=xb9lfcwi
+     * <a href="https://leetcode.cn/problems/sum-lists-lcci/?favorite=xb9lfcwi">https://leetcode.cn/problems/sum-lists-lcci/?favorite=xb9lfcwi</a>
      */
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
         ListNode current1 = l1;
@@ -383,7 +383,7 @@ public class Interview {
      * <p>
      * 编写一个函数，检查输入的链表是否是回文的。
      * <p>
-     * https://leetcode.cn/problems/palindrome-linked-list-lcci/?favorite=xb9lfcwi
+     * <a href="https://leetcode.cn/problems/palindrome-linked-list-lcci/?favorite=xb9lfcwi">https://leetcode.cn/problems/palindrome-linked-list-lcci/?favorite=xb9lfcwi</a>
      */
     public boolean isPalindrome(ListNode head) {
         int n = 0;
@@ -414,7 +414,7 @@ public class Interview {
      * <p>
      * 给你两个单链表的头节点 headA 和 headB ，请你找出并返回两个单链表相交的起始节点。如果两个链表没有交点，返回 null 。
      * <p>
-     * https://leetcode.cn/problems/intersection-of-two-linked-lists-lcci/?favorite=xb9lfcwi
+     * <a href="https://leetcode.cn/problems/intersection-of-two-linked-lists-lcci/?favorite=xb9lfcwi">https://leetcode.cn/problems/intersection-of-two-linked-lists-lcci/?favorite=xb9lfcwi</a>
      */
     public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
         int m = 0;
@@ -451,7 +451,7 @@ public class Interview {
      * <p>
      * 给定一个链表，如果它是有环链表，实现一个算法返回环路的开头节点。若环不存在，请返回 null。
      * <p>
-     * https://leetcode.cn/problems/linked-list-cycle-lcci/?favorite=xb9lfcwi
+     * <a href="https://leetcode.cn/problems/linked-list-cycle-lcci/?favorite=xb9lfcwi">https://leetcode.cn/problems/linked-list-cycle-lcci/?favorite=xb9lfcwi</a>
      */
     public ListNode detectCycle(ListNode head) {
         ListNode fast = head;
@@ -490,7 +490,7 @@ public class Interview {
      * <p>
      * 三合一。描述如何只用一个数组来实现三个栈。
      * <p>
-     * https://leetcode.cn/problems/three-in-one-lcci/?favorite=xb9lfcwi
+     * <a href="https://leetcode.cn/problems/three-in-one-lcci/?favorite=xb9lfcwi">https://leetcode.cn/problems/three-in-one-lcci/?favorite=xb9lfcwi</a>
      */
     public static class TripleInOne {
         int[] value;
@@ -539,7 +539,7 @@ public class Interview {
      * <p>
      * 请设计一个栈，除了常规栈支持的pop与push函数以外，还支持min函数，该函数返回栈元素中的最小值。执行push、pop和min操作的时间复杂度必须为O(1)。
      * <p>
-     * https://leetcode.cn/problems/min-stack-lcci/?favorite=xb9lfcwi
+     * <a href="https://leetcode.cn/problems/min-stack-lcci/?favorite=xb9lfcwi">https://leetcode.cn/problems/min-stack-lcci/?favorite=xb9lfcwi</a>
      */
     public static class MinStack {
         private Stack<Integer> value;
@@ -575,7 +575,7 @@ public class Interview {
      * <p>
      * 堆盘子。设想有一堆盘子，堆太高可能会倒下来。因此，在现实生活中，盘子堆到一定高度时，我们就会另外堆一堆盘子。请实现数据结构SetOfStacks，模拟这种行为。SetOfStacks应该由多个栈组成，并且在前一个栈填满时新建一个栈。此外，SetOfStacks.push()和SetOfStacks.pop()应该与普通栈的操作方法相同（也就是说，pop()返回的值，应该跟只有一个栈时的情况一样）。 进阶：实现一个popAt(int index)方法，根据指定的子栈，执行pop操作。
      * <p>
-     * https://leetcode.cn/problems/stack-of-plates-lcci/?favorite=xb9lfcwi
+     * <a href="https://leetcode.cn/problems/stack-of-plates-lcci/?favorite=xb9lfcwi">https://leetcode.cn/problems/stack-of-plates-lcci/?favorite=xb9lfcwi</a>
      */
     public static class StackOfPlates {
         private Stack<Stack<Integer>> values;
@@ -620,7 +620,7 @@ public class Interview {
      * <p>
      * 实现一个MyQueue类，该类用两个栈来实现一个队列。
      * <p>
-     * https://leetcode.cn/problems/implement-queue-using-stacks-lcci/?envType=featured-list&envId=xb9lfcwi
+     * <a href="https://leetcode.cn/problems/implement-queue-using-stacks-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/implement-queue-using-stacks-lcci/?envType=featured-list&envId=xb9lfcwi</a>
      */
     public static class MyQueue {
         private Stack<Integer> in;
@@ -655,7 +655,7 @@ public class Interview {
      * <p>
      * 栈排序。 编写程序，对栈进行排序使最小元素位于栈顶。最多只能使用一个其他的临时栈存放数据，但不得将元素复制到别的数据结构（如数组）中。该栈支持如下操作：push、pop、peek 和 isEmpty。当栈为空时，peek返回 -1。
      * <p>
-     * https://leetcode.cn/problems/sort-of-stacks-lcci/?envType=featured-list&envId=xb9lfcwi
+     * <a href="https://leetcode.cn/problems/sort-of-stacks-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/sort-of-stacks-lcci/?envType=featured-list&envId=xb9lfcwi</a>
      */
     public static class SortedStack {
 
@@ -693,7 +693,7 @@ public class Interview {
      * <p>
      * 动物收容所。有家动物收容所只收容狗与猫，且严格遵守“先进先出”的原则。在收养该收容所的动物时，收养人只能收养所有动物中“最老”（由其进入收容所的时间长短而定）的动物，或者可以挑选猫或狗（同时必须收养此类动物中“最老”的）。换言之，收养人不能自由挑选想收养的对象。请创建适用于这个系统的数据结构，实现各种操作方法，比如enqueue、dequeueAny、dequeueDog和dequeueCat。允许使用Java内置的LinkedList数据结构。
      * <p>
-     * https://leetcode.cn/problems/animal-shelter-lcci/?envType=featured-list&envId=xb9lfcwi
+     * <a href="https://leetcode.cn/problems/animal-shelter-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/animal-shelter-lcci/?envType=featured-list&envId=xb9lfcwi</a>
      */
     public static class AnimalShelf {
 
@@ -737,7 +737,7 @@ public class Interview {
      * <p>
      * 节点间通路。给定有向图，设计一个算法，找出两个节点之间是否存在一条路径。
      * <p>
-     * https://leetcode.cn/problems/route-between-nodes-lcci/?envType=featured-list&envId=xb9lfcwi
+     * <a href="https://leetcode.cn/problems/route-between-nodes-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/route-between-nodes-lcci/?envType=featured-list&envId=xb9lfcwi</a>
      */
     public boolean findWhetherExistsPath(int n, int[][] graph, int start, int target) {
         Set<Integer> nodes = new HashSet<>();
@@ -760,7 +760,7 @@ public class Interview {
      * <p>
      * 给定一个有序整数数组，元素各不相同且按升序排列，编写一个算法，创建一棵高度最小的二叉搜索树。
      * <p>
-     * https://leetcode.cn/problems/minimum-height-tree-lcci/?envType=featured-list&envId=xb9lfcwi
+     * <a href="https://leetcode.cn/problems/minimum-height-tree-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/minimum-height-tree-lcci/?envType=featured-list&envId=xb9lfcwi</a>
      */
     public TreeNode sortedArrayToBST(int[] nums) {
         return buildBST(nums, 0, nums.length);
@@ -781,7 +781,7 @@ public class Interview {
      * <p>
      * 给定一棵二叉树，设计一个算法，创建含有某一深度上所有节点的链表（比如，若一棵树的深度为 D，则会创建出 D 个链表）。返回一个包含所有深度的链表的数组。
      * <p>
-     * https://leetcode.cn/problems/list-of-depth-lcci/?envType=featured-list&envId=xb9lfcwi
+     * <a href="https://leetcode.cn/problems/list-of-depth-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/list-of-depth-lcci/?envType=featured-list&envId=xb9lfcwi</a>
      */
     public ListNode[] listOfDepth(TreeNode tree) {
         LinkedList<List<TreeNode>> result = new LinkedList<>();
@@ -818,7 +818,7 @@ public class Interview {
      * <p>
      * 实现一个函数，检查二叉树是否平衡。在这个问题中，平衡树的定义如下：任意一个节点，其两棵子树的高度差不超过 1。
      * <p>
-     * https://leetcode.cn/problems/check-balance-lcci/?envType=featured-list&envId=xb9lfcwi
+     * <a href="https://leetcode.cn/problems/check-balance-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/check-balance-lcci/?envType=featured-list&envId=xb9lfcwi</a>
      */
     public boolean isBalanced(TreeNode root) {
         Map<TreeNode, Integer> h = new HashMap<>();
@@ -845,7 +845,7 @@ public class Interview {
      * <p>
      * 实现一个函数，检查一棵二叉树是否为二叉搜索树。
      * <p>
-     * https://leetcode.cn/problems/legal-binary-search-tree-lcci/?envType=featured-list&envId=xb9lfcwi
+     * <a href="https://leetcode.cn/problems/legal-binary-search-tree-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/legal-binary-search-tree-lcci/?envType=featured-list&envId=xb9lfcwi</a>
      */
     public boolean isValidBST(TreeNode node) {
         // 中序递增
@@ -871,7 +871,7 @@ public class Interview {
      * <p>
      * 设计一个算法，找出二叉搜索树中指定节点的“下一个”节点（也即中序后继）。
      * <p>
-     * https://leetcode.cn/problems/successor-lcci/?envType=featured-list&envId=xb9lfcwi
+     * <a href="https://leetcode.cn/problems/successor-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/successor-lcci/?envType=featured-list&envId=xb9lfcwi</a>
      */
     public TreeNode inorderSuccessor(TreeNode root, TreeNode p) {
         Stack<TreeNode> stack = new Stack<>();
@@ -896,7 +896,7 @@ public class Interview {
      * <p>
      * 设计并实现一个算法，找出二叉树中某两个节点的第一个共同祖先。不得将其他的节点存储在另外的数据结构中。注意：这不一定是二叉搜索树。
      * <p>
-     * https://leetcode.cn/problems/first-common-ancestor-lcci/?envType=featured-list&envId=xb9lfcwi
+     * <a href="https://leetcode.cn/problems/first-common-ancestor-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/first-common-ancestor-lcci/?envType=featured-list&envId=xb9lfcwi</a>
      */
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
         Stack<TreeNode> stack = new Stack<>();
@@ -933,7 +933,7 @@ public class Interview {
      * 从左向右遍历一个数组，通过不断将其中的元素插入树中可以逐步地生成一棵二叉搜索树。
      * 给定一个由不同节点组成的二叉搜索树 root，输出所有可能生成此树的数组。
      * <p>
-     * https://leetcode.cn/problems/bst-sequences-lcci/?envType=featured-list&envId=xb9lfcwi
+     * <a href="https://leetcode.cn/problems/bst-sequences-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/bst-sequences-lcci/?envType=featured-list&envId=xb9lfcwi</a>
      */
     public List<List<Integer>> BSTSequences(TreeNode root) {
         if (root == null) return Collections.singletonList(new ArrayList<>());
@@ -1811,7 +1811,7 @@ public class Interview {
     private int minIndex(int[] numbers) {
         int low = 0, high = numbers.length - 1;
         while (low < high) {
-            if (numbers[low] < numbers[high]) break;
+            if (numbers[low] < numbers[high]) return high + 1;
             int mid = low + high >> 1;
             if (numbers[mid] > numbers[low]) low = mid + 1;
             else if (numbers[mid] < numbers[high]) high = mid;
@@ -1847,6 +1847,7 @@ public class Interview {
         while (left <= right) {
             while (words[left].length() == 0) left++;
             while (words[right].length() == 0) right--;
+            if (left == right) return words[left].equals(s) ? left : -1;
             if (left > right) return -1;
             int mid = (left + right) / 2;
             if (words[mid].length() == 0) {
@@ -1881,6 +1882,7 @@ public class Interview {
      * <a href="https://leetcode.cn/problems/sorted-matrix-search-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/sorted-matrix-search-lcci/?envType=featured-list&envId=xb9lfcwi</a>
      */
     public boolean searchMatrix(int[][] matrix, int target) {
+        if (matrix.length == 0 || matrix[0].length == 0) return false;
         int m = matrix.length, n = matrix[0].length;
         // 先确定在哪几列
         int rightColumn = Arrays.binarySearch(matrix[0], target);
@@ -1969,5 +1971,18 @@ public class Interview {
 
     }
 
+    /**
+     * 面试题 16.01. 交换数字
+     * <p>
+     * 编写一个函数，不用临时变量，直接交换numbers = [a, b]中a与b的值。
+     * <p>
+     * <a href="https://leetcode.cn/problems/swap-numbers-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/swap-numbers-lcci/?envType=featured-list&envId=xb9lfcwi</a>
+     */
+    public int[] swapNumbers(int[] numbers) {
+        numbers[0] = numbers[0] ^ numbers[1];
+        numbers[1] = numbers[0] ^ numbers[1];
+        numbers[0] = numbers[0] ^ numbers[1];
+        return numbers;
+    }
 
 }

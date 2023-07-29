@@ -7,7 +7,8 @@ import java.util.*;
 /**
  * 剑指 Offer（专项突击版）
  * <p>
- * <a href="https://leetcode.cn/problem-list/e8X3pBZi/">https://leetcode.cn/problem-list/e8X3pBZi/</a>
+ * <a href="https://leetcode.cn/problem-list/e8X3pBZi/">https://leetcode.
+ * cn/problem-list/e8X3pBZi/</a>
  */
 public class Offer2 {
     /**

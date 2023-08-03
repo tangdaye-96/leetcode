@@ -182,7 +182,6 @@ public class Interview {
         return result.length() < s.length() ? result : s;
     }
 
-
     /**
      * 面试题 01.07. 旋转矩阵
      * <p>
@@ -1983,6 +1982,173 @@ public class Interview {
         numbers[1] = numbers[0] ^ numbers[1];
         numbers[0] = numbers[0] ^ numbers[1];
         return numbers;
+    }
+
+    /**
+     * 面试题 16.02. 单词频率
+     * <p>
+     * 设计一个方法，找出任意指定单词在一本书中的出现频率。
+     * <p>
+     * <a href="https://leetcode.cn/problems/words-frequency-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/words-frequency-lcci/?envType=featured-list&envId=xb9lfcwi</a>
+     */
+    public static class WordsFrequency {
+        private final Map<String, Integer> map = new HashMap<>();
+
+        public WordsFrequency(String[] book) {
+            for (String word : book) {
+                map.put(word, map.getOrDefault(word, 0) + 1);
+            }
+        }
+
+        public int get(String word) {
+            return map.getOrDefault(word, 0);
+        }
+    }
+
+    /**
+     * 面试题 16.03. 交点
+     * <p>
+     * 给定两条线段（表示为起点start = {X1, Y1}和终点end = {X2, Y2}），如果它们有交点，请计算其交点，没有交点则返回空值。
+     * <p>
+     * <a href="https://leetcode.cn/problems/intersection-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/intersection-lcci/?envType=featured-list&envId=xb9lfcwi</a>
+     */
+    public double[] intersection(int[] start1, int[] end1, int[] start2, int[] end2) {
+        int x11 = start1[0], y11 = start1[1];
+        int x12 = end1[0], y12 = end1[1];
+        int x21 = start2[0], y21 = start2[1];
+        int x22 = end2[0], y22 = end2[1];
+        int deltaX1 = x12 - x11, deltaY1 = y12 - y11;
+        int deltaX2 = x22 - x21, deltaY2 = y22 - y21;
+        int temp = deltaY1 * deltaX2 * x11 + y21 * deltaX1 * deltaX2 - y11 * deltaX1 * deltaX2 - x21 * deltaY2 * deltaX1;
+        int k = deltaY1 * deltaX2 - deltaY2 * deltaX1;
+        if (k == 0) {
+            if (temp == 0) {
+                // 如果重叠的话需要返回x最小值（x也相同时返回y最小值）
+                int x1 = Math.min(x11, x12), x2 = Math.min(x21, x22);
+                if (x1 == x2) {
+                    int y1 = Math.min(y11, y12), y2 = Math.min(y21, y22);
+                    if (within(y1, y21, y22)) {
+                        return new double[]{x1, y1}; // y1在y21和y22中间
+                    }
+                    if (within(y2, y11, y12)) {
+                        return new double[]{x2, y2}; // y2在y11和y12中间
+                    }
+                } else if (x1 < x2) {
+                    if (within(x2, x11, x12)) {
+                        // x2在x11和x12中间
+                        if (x21 < x22) return new double[]{x21, y21};
+                        else return new double[]{x22, y22};
+                    }
+                } else {
+                    if (within(x1, x21, x22)) {
+                        // x1在x21和x22中间
+                        if (x11 < x12) return new double[]{x11, y11};
+                        else return new double[]{x21, y21};
+                    }
+                }
+            }
+            return new double[0];
+        }
+        double x = ((double) temp) / k;
+        boolean withinX1 = within(x, x11, x12);
+        boolean withinX2 = within(x, x21, x22);
+        if (withinX1 && withinX2) {
+            double y;
+            if (deltaX1 == 0) {
+                y = (double) y21 + ((double) deltaY2) / deltaX2 * (x - x21);
+            } else {
+                y = (double) y11 + ((double) deltaY1) / deltaX1 * (x - x11);
+            }
+            boolean withinY1 = within(y, y11, y12);
+            boolean withinY2 = within(y, y21, y22);
+            if (withinY1 && withinY2) return new double[]{x, y};
+        }
+        return new double[0];
+    }
+
+    private boolean within(double s, int s1, int s2) {
+        return (s >= s1 && s <= s2) || (s <= s1 && s >= s2);
+    }
+
+    /**
+     * 面试题 16.04. 井字游戏
+     * <p>
+     * 设计一个算法，判断玩家是否赢了井字游戏。输入是一个 N x N 的数组棋盘，由字符" "，"X"和"O"组成，其中字符" "代表一个空位。
+     * <p>
+     * 以下是井字游戏的规则：
+     * <p>
+     * 当有N个相同（且非空）的字符填充任何行、列或对角线时，游戏结束，对应该字符的玩家获胜。
+     * 当所有位置非空时，也算为游戏结束。
+     * 如果游戏结束，玩家不允许再放置字符。
+     * 如果游戏存在获胜者，就返回该游戏的获胜者使用的字符（"X"或"O"）；如果游戏以平局结束，则返回 "Draw"；如果仍会有行动（游戏未结束），则返回 "Pending"。
+     * <p>
+     * <a href="https://leetcode.cn/problems/tic-tac-toe-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/tic-tac-toe-lcci/?envType=featured-list&envId=xb9lfcwi</a>
+     */
+    public String tictactoe(String[] board) {
+        int n = board.length;
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < n; i++) sb.append("O");
+        for (int i = 0; i < n; i++) sb.append("X");
+        String oWin = sb.substring(0, n);
+        String xWin = sb.substring(n, n * 2);
+        for (String s : board) {
+            if (s.equals(oWin)) return "O";
+            if (s.equals(xWin)) return "X";
+        }
+
+        boolean o = true, x = true;
+        for (int i = 0; i < n; i++) {
+            char t = board[i].charAt(i);
+            if (t != 'X') x = false;
+            if (t != 'O') o = false;
+            if (!x && !o) break;
+        }
+        if (x) return "X";
+        if (o) return "O";
+
+        o = true;
+        x = true;
+        for (int i = 0; i < n; i++) {
+            char t = board[i].charAt(n - 1 - i);
+            if (t != 'X') x = false;
+            if (t != 'O') o = false;
+            if (!x && !o) break;
+        }
+        if (x) return "X";
+        if (o) return "O";
+        boolean canContinue = false;
+        for (int i = 0; i < n; i++) {
+            o = true;
+            x = true;
+            for (String s : board) {
+                char t = s.charAt(i);
+                if (t != 'X') x = false;
+                if (t != 'O') o = false;
+                if (canContinue) break;
+                if (t == ' ') canContinue = true;
+            }
+            if (x) return "X";
+            if (o) return "O";
+        }
+        if (canContinue) return "Pending";
+        return "Draw";
+    }
+
+    /**
+     * 面试题 16.05. 阶乘尾数
+     * <p>
+     * 设计一个算法，算出 n 阶乘有多少个尾随零。
+     * <p>
+     * <a href="https://leetcode.cn/problems/factorial-zeros-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/factorial-zeros-lcci/?envType=featured-list&envId=xb9lfcwi</a>
+     */
+    public int trailingZeroes(int n) {
+        int t = 5;
+        int result = 0;
+        while (t <= n) {
+            result += n / t;
+            t *= 5;
+        }
+        return result;
     }
 
 }

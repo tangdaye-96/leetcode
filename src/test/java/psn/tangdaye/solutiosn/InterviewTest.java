@@ -453,4 +453,45 @@ public class InterviewTest {
         Assert.assertEquals("[-12, 379]", Arrays.toString(x));
     }
 
+    @Test
+    public void testWordsFrequency() {
+        String[] words = {"i", "love", "you"};
+        Interview.WordsFrequency wordsFrequency = new Interview.WordsFrequency(words);
+        Assert.assertEquals(1, wordsFrequency.get("i"));
+    }
+
+    @Test
+    public void testIntersection() {
+        int[] p1 = {1, 0}, q1 = {0, 1};
+        int[] p2 = {0, 0}, q2 = {0, 1};
+        double[] inter = interview.intersection(p1, q1, p2, q2);
+        Assert.assertEquals(0, inter[0], 0.0);
+        Assert.assertEquals(1, inter[1], 0.0);
+
+        int[] s1 = {100, 0}, t1 = {100, 100};
+        int[] s2 = {0, 0}, t2 = {1, 1};
+        Assert.assertEquals(0, interview.intersection(s1, t1, s2, t2).length);
+
+        int[] u1 = {0, 1}, v1 = {0, -1};
+        int[] u2 = {-1, 1}, v2 = {1, 3};
+        Assert.assertEquals(0, interview.intersection(u1, v1, u2, v2).length);
+
+        int[] m1 = {0, 1}, n1 = {0, 3};
+        int[] m2 = {0, 0}, n2 = {0, 8};
+        inter = interview.intersection(m1, n1, m2, n2);
+        Assert.assertEquals(0, inter[0], 0.0);
+        Assert.assertEquals(1, inter[1], 0.0);
+    }
+
+    @Test
+    public void testTictactoe() {
+        String[] panel = {"XXXOO", "XOOOO", "XXXXO", "XXOOO", "XOOOO"};
+        Assert.assertEquals("X", interview.tictactoe(panel));
+    }
+
+    @Test
+    public void testTrailingZeroes() {
+        Assert.assertEquals(3, interview.trailingZeroes(16));
+    }
+
 }

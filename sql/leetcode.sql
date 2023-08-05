@@ -253,7 +253,6 @@ limit 0,1;
 
 -- 查询没有任何与名为 “RED” 的公司相关的订单的所有销售人员的姓名。
 -- 25. https://leetcode.cn/problems/sales-person/
-
 select name
 from `25_SalesPerson` s
 where s.sales_id not in (select distinct s.sales_id
@@ -262,3 +261,84 @@ where s.sales_id not in (select distinct s.sales_id
                               `25_Orders` o on o.sales_id = s.sales_id
                                   left join `25_Company` c on o.com_id = c.com_id
                          where c.name = 'RED');
+
+-- 写一个查询语句，输出所有节点的编号和节点的类型，并将结果按照节点编号排序。上面样例的结果为：
+-- 26. https://leetcode.cn/problems/tree-node/
+select distinct t1.id    as id,
+                (case
+                     when t1.p_id is null then 'Root'
+                     when t2.id is null then 'Leaf'
+                     else 'Inner'
+                    end) as 'type'
+from `26_Tree` t1
+         left join `26_Tree` t2 on t1.id = t2.p_id
+order by t1.id;
+
+
+-- 对每三个线段报告它们是否可以形成一个三角形。
+-- 27. https://leetcode.cn/problems/triangle-judgement/
+select x, y, z, (if(x > 0 and y > 0 and z > 0 and x + y > z and x + z > y and y + z > x, 'Yes', 'No')) as triangle
+from `27_Triangle` t;
+
+-- 找出最大的 单一数字 。如果不存在 单一数字 ，则返回 null 。
+-- 28. https://leetcode.cn/problems/biggest-single-number/
+select max(num) as num
+from (select num
+      from `28_MyNumbers` m
+      group by num
+      having count(*) = 1) as temp;
+
+
+-- 找出所有影片描述为非 boring (不无聊) 的并且 id 为奇数 的影片，结果请按等级 rating 排列。
+-- 29. https://leetcode.cn/problems/not-boring-movies/
+select *
+from `29_cinema`
+where description != 'boring'
+  and id % 2 = 1
+order by rating desc;
+
+-- 编写解决方案来交换每两个连续的学生的座位号。如果学生的数量是奇数，则最后一个学生的id不交换。
+-- 30. https://leetcode.cn/problems/exchange-seats/
+
+select *
+from (select s1.id as id, ifnull(s2.student, s1.student) as student
+      from `30_Seat` s1
+               left join
+           `30_Seat` s2
+           on s1.id = s2.id - 1
+      where s1.id % 2 = 1
+      union all
+      select s1.id as id, s2.student as student
+      from `30_Seat` s1,
+           `30_Seat` s2
+      where s1.id = s2.id + 1
+        and s1.id % 2 = 0) as t
+order by id;
+
+-- 请你编写一个 SQL 查询来交换所有的 'f' 和 'm' （即，将所有 'f' 变为 'm' ，反之亦然），仅使用 单个 update 语句 ，且不产生中间临时表。
+-- 31. https://leetcode.cn/problems/swap-salary/
+update `31_Salary`
+set sex= if(sex = 'm', 'f', 'm');
+
+-- 写一条 SQL 查询语句，从 Customer 表中查询购买了 Product 表中所有产品的客户的 id。
+-- 32. https://leetcode.cn/problems/customers-who-bought-all-products/
+select customer_id
+from `32_Customer`
+group by customer_id
+having count(distinct product_key) = (select count(*) from `32_Product`);
+
+
+-- 查询合作过至少三次的演员和导演的 id 对 (actor_id, director_id)
+-- 33. https://leetcode.cn/problems/actors-and-directors-who-cooperated-at-least-three-times/
+select actor_id, director_id
+from `33_ActorDirector`
+group by actor_id, director_id
+having count(*) >= 3;
+
+-- 写一条SQL 查询语句获取 Sales 表中所有产品对应的 产品名称 product_name 以及该产品的所有 售卖年份 year 和 价格 price 。
+-- https://leetcode.cn/problems/product-sales-analysis-i/
+
+select p.product_name as product_name, s.year as year, s.price as price
+from Product p,
+     Sales s
+where p.product_id = s.product_id;

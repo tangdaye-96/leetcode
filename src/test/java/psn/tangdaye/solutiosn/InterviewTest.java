@@ -494,4 +494,30 @@ public class InterviewTest {
         Assert.assertEquals(3, interview.trailingZeroes(16));
     }
 
+    @Test
+    public void testSmallestDifference() {
+        int[] a = {Integer.MIN_VALUE, 1};
+        int[] b = {Integer.MAX_VALUE, 0};
+        Assert.assertEquals(1, interview.smallestDifference(a, b));
+    }
+
+    @Test
+    public void testMaximum() {
+        Assert.assertEquals(3, interview.maximum(3, -1));
+    }
+
+    @Test
+    public void testNumberToWords() {
+        Assert.assertEquals("One Billion Two Hundred Thirty Four Million Five Hundred Sixty Seven Thousand Eight Hundred Ninety One", interview.numberToWords(1234567891));
+    }
+
+    @Test
+    public void testOperations() {
+        Interview.Operations op = new Interview.Operations();
+        Assert.assertEquals(1, op.minus(Integer.MIN_VALUE + 1, Integer.MIN_VALUE));
+        Assert.assertEquals(7, op.minus(10, 3));
+        Assert.assertEquals(30, op.multiply(10, 3));
+        Assert.assertEquals(3, op.divide(10, 3));
+    }
+
 }

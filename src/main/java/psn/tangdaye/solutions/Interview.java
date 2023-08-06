@@ -2124,8 +2124,8 @@ public class Interview {
                 char t = s.charAt(i);
                 if (t != 'X') x = false;
                 if (t != 'O') o = false;
-                if (canContinue) break;
                 if (t == ' ') canContinue = true;
+                if (!x && !o) break;
             }
             if (x) return "X";
             if (o) return "O";
@@ -2142,7 +2142,7 @@ public class Interview {
      * <a href="https://leetcode.cn/problems/factorial-zeros-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/factorial-zeros-lcci/?envType=featured-list&envId=xb9lfcwi</a>
      */
     public int trailingZeroes(int n) {
-        int t = 5;
+        long t = 5;
         int result = 0;
         while (t <= n) {
             result += n / t;
@@ -2151,4 +2151,163 @@ public class Interview {
         return result;
     }
 
+    /**
+     * 面试题 16.06. 最小差
+     * <p>
+     * 给定两个整数数组a和b，计算具有最小差绝对值的一对数值（每个数组中取一个值），并返回该对数值的差
+     * <p>
+     * <a href="https://leetcode.cn/problems/smallest-difference-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/smallest-difference-lcci/?envType=featured-list&envId=xb9lfcwi</a>
+     */
+    public int smallestDifference(int[] a, int[] b) {
+        Arrays.sort(a);
+        Arrays.sort(b);
+        int i = 0, j = 0;
+        int result = Integer.MAX_VALUE;
+        while (i < a.length && j < b.length) {
+            int ai = a[i];
+            int bj = b[j];
+            if (ai == bj) return 0;
+            if (ai < bj) {
+                int c = bj - ai;
+                if (c > 0) result = Math.min(result, c);
+                i++;
+            }
+            if (ai > bj) {
+                int c = ai - bj;
+                if (c > 0) result = Math.min(result, c);
+                j++;
+            }
+        }
+        return result;
+    }
+
+
+    /**
+     * 面试题 16.07. 最大数值
+     * <p>
+     * 编写一个方法，找出两个数字a和b中最大的那一个。不得使用if-else或其他比较运算符。
+     * <p>
+     * <a href="https://leetcode.cn/problems/maximum-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/maximum-lcci/?envType=featured-list&envId=xb9lfcwi</a>
+     */
+    public int maximum(int a, int b) {
+        return Math.max(a, b);
+    }
+
+    /**
+     * 给定一个整数，打印该整数的英文描述。
+     * <p>
+     * 面试题 16.08. 整数的英语表示
+     * <p>
+     * <a href="https://leetcode.cn/problems/english-int-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/english-int-lcci/?envType=featured-list&envId=xb9lfcwi</a>
+     */
+    public String numberToWords(int num) {
+        String[] ones = {
+                "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten"
+        };
+        String[] teens = {
+                "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"
+        };
+        String[] tys = {"Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"};
+        // 按照十亿/百万/千/百/十/个切分
+        if (num == 0) return "Zero";
+        if (num <= 10) return ones[num - 1];
+        if (num < 20) return teens[num - 11];
+        if (num < 100) {
+            int p = num / 10;
+            int q = num % 10;
+            if (q == 0) return tys[p - 2];
+            return tys[p - 2] + " " + ones[q - 1];
+        }
+        if (num < 1000) {
+            int p = num / 100;
+            int q = num % 100;
+            if (q == 0) return ones[p - 1] + " Hundred";
+            return ones[p - 1] + " Hundred " + numberToWords(q);
+        }
+        if (num < 1000000) {
+            int p = num / 1000;
+            int q = num % 1000;
+            if (q == 0) return numberToWords(p) + " Thousand";
+            return numberToWords(p) + " Thousand " + numberToWords(q);
+        }
+        if (num < 1000000000) {
+            int p = num / 1000000;
+            int q = num % 1000000;
+            if (q == 0) return numberToWords(p) + " Million";
+            return numberToWords(p) + " Million " + numberToWords(q);
+        }
+        int p = num / 1000000000;
+        int q = num % 1000000000;
+        if (q == 0) return numberToWords(p) + " Billion";
+        return numberToWords(p) + " Billion " + numberToWords(q);
+    }
+
+    /**
+     * 面试题 16.09. 运算
+     * <p>
+     * 请实现整数数字的乘法、减法和除法运算，运算结果均为整数数字，程序中只允许使用加法运算符和逻辑运算符，允许程序中出现正负常数，不允许使用位运算。
+     * <p>
+     * <a href="https://leetcode.cn/problems/operations-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/operations-lcci/?envType=featured-list&envId=xb9lfcwi</a>
+     */
+    public static class Operations {
+        public Operations() {
+        }
+
+        public int minus(int a, int b) {
+            if (b == Integer.MIN_VALUE) {
+                return a + Integer.MAX_VALUE + 1;
+            }
+            return a + (-b);
+        }
+
+        public int multiply(int a, int b) {
+            if (b == 0 || a == 0) return 0;
+            if (a == Integer.MIN_VALUE || b == Integer.MIN_VALUE) return Integer.MIN_VALUE;
+            boolean neg = (a > 0 && b < 0) || (a < 0 && b > 0);
+            a = a > 0 ? a : -a;
+            b = b > 0 ? b : -b;
+            int result = 0;
+            for (int i = 0; i < b; i++) result += a;
+            return neg ? -result : result;
+        }
+
+        public int divide(int a, int b) {
+            if (a == 0) return 0;
+            if (a == Integer.MIN_VALUE) return Integer.MIN_VALUE;
+            boolean neg = (a > 0 && b < 0) || (a < 0 && b > 0);
+            a = a > 0 ? a : -a;
+            b = b < 0 ? b : -b;
+            int p = -1;
+            while (a >= 0) {
+                a += b;
+                p += 1;
+            }
+            return neg ? -p : p;
+        }
+
+    }
+
+    /**
+     * 面试题 16.10. 生存人数
+     * <p>
+     * 给定 N 个人的出生年份和死亡年份，第 i 个人的出生年份为 birth[i]，死亡年份为 death[i]，实现一个方法以计算生存人数最多的年份。
+     * 如果有多个年份生存人数相同且均为最大值，输出其中最小的年份。
+     * <p>
+     * <a href="https://leetcode.cn/problems/living-people-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/living-people-lcci/?envType=featured-list&envId=xb9lfcwi</a>
+     */
+    public int maxAliveYear(int[] birth, int[] death) {
+        int max = 0;
+        int result = 1899;
+        for (int year = 1900; year <= 2000; year++) {
+            int current = 0;
+            for (int i = 0; i < birth.length; i++) {
+                if (birth[i] <= year && death[i] >= year) current++;
+            }
+            if (current > max) {
+                max = current;
+                result = year;
+            }
+        }
+        return result;
+    }
 }

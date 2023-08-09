@@ -1,10 +1,9 @@
-package psn.tangdaye.solutiosn;
+package psn.tangdaye.solutions;
 
 import org.junit.Assert;
 import org.junit.Test;
 import psn.tangdaye.model.ListNode;
 import psn.tangdaye.model.TreeNode;
-import psn.tangdaye.solutions.Interview;
 import psn.tangdaye.tool.Tools;
 
 import java.util.Arrays;
@@ -520,4 +519,163 @@ public class InterviewTest {
         Assert.assertEquals(3, op.divide(10, 3));
     }
 
+    @Test
+    public void testMaxAliveYear() {
+        int[] birth = {1900, 1901, 1950};
+        int[] death = {1948, 1951, 2000};
+        Assert.assertEquals(1901, interview.maxAliveYear(birth, death));
+    }
+
+    @Test
+    public void testDivingBoard() {
+        Assert.assertEquals("[3, 4, 5, 6]", Arrays.toString(interview.divingBoard(1, 2, 3)));
+    }
+
+    @Test
+    public void testCutSquares() {
+        int[] s1 = {0, 0, 2};
+        int[] s2 = {0, 0, 3};
+        double[] result = interview.cutSquares(s1, s2);
+        Assert.assertEquals(0.0, result[0], 0.0);
+        Assert.assertEquals(0.0, result[1], 0.0);
+        Assert.assertEquals(3.0, result[2], 0.0);
+        Assert.assertEquals(3.0, result[3], 0.0);
+    }
+
+    @Test
+    public void testBestLine() {
+        int[][] points = {{0, 0}, {1, 1}, {1, 2}, {2, 3}, {3, 3}};
+        Assert.assertEquals("[0, 1]", Arrays.toString(interview.bestLine(points)));
+
+        int[][] x = {{0, 0}, {1, 1}, {1, 0}, {2, 0}, {2, 2}};
+        Assert.assertEquals("[0, 1]", Arrays.toString(interview.bestLine(x)));
+
+        int[][] y = {
+                {23064, -1044},
+                {0, 22969},
+                {17805, 40898},
+                {29725, -1778},
+                {-32070, -2148},
+                {-19027, -2055},
+                {-679, -41065},
+                {12043, -16880},
+                {21838, 13404},
+                {22690, -6475},
+                {21585, -19101},
+                {7577, -14359},
+                {-20014, -40714},
+                {20942, -19286},
+                {12648, 21299},
+                {-36169, -11846},
+                {3595, -19224},
+                {27974, 26651},
+                {25899, 12871},
+                {-13881, -24276},
+                {16833, -19449},
+                {-13881, 5948},
+                {-48591, 29692},
+                {17406, -39601},
+                {24765, 7305},
+                {-41894, -12128},
+                {13645, -12514},
+                {17119, -45877},
+                {27715, -3120},
+                {10537, -33802},
+                {-36719, -39521},
+                {3328, -16834},
+                {25332, 10088},
+                {-23069, -31890},
+                {4192, 28773},
+                {20987, -7179},
+                {29525, -25688},
+                {-5450, -25263},
+                {-14571, -26940},
+                {-31236, 17820},
+                {-2435, -23250},
+                {28720, -2449},
+                {5905, 7021},
+                {-48683, -2355},
+                {-64140, -27265},
+                {20829, -17796},
+                {21104, 13825},
+                {-30954, -26421}
+        };
+        Assert.assertEquals("[3, 9]", Arrays.toString(interview.bestLine(y)));
+    }
+
+    @Test
+    public void testMasterMind() {
+        Assert.assertEquals("[2, 1]", Arrays.toString(interview.masterMind("RGGB", "YRGB")));
+    }
+
+    @Test
+    public void testSubSort() {
+        int[] array = {1, 2, 4, 7, 10, 11, 7, 12, 6, 7, 16, 18, 19};
+        Assert.assertEquals("[3, 9]", Arrays.toString(interview.subSort(array)));
+    }
+
+    @Test
+    public void testMaxSubArray() {
+        Assert.assertEquals(6, interview.maxSubArray(new int[]{-2, 1, -3, 4, -1, 2, 1, -5, 4}));
+    }
+
+    @Test
+    public void testPatternMatching() {
+        Assert.assertTrue(interview.patternMatching("ab", "aa"));
+        Assert.assertTrue(interview.patternMatching("a", "aa"));
+        Assert.assertTrue(interview.patternMatching("b", "aa"));
+        Assert.assertTrue(interview.patternMatching("ab", "catcatgocatgo"));
+        Assert.assertTrue(interview.patternMatching("abba", "dogdogdogdog"));
+        Assert.assertTrue(interview.patternMatching("a", ""));
+    }
+
+    @Test
+    public void testPondSizes() {
+        int[][] land = {
+                {0, 2, 1, 0}, {0, 1, 0, 1}, {1, 1, 0, 1}, {0, 1, 0, 1}
+        };
+        Assert.assertEquals("[1, 2, 4]", Arrays.toString(interview.pondSizes(land)));
+    }
+
+    @Test
+    public void testGetValidT9Words() {
+        Assert.assertEquals("[tree, used]", interview.getValidT9Words("8733", new String[]{"tree", "used"}).toString());
+    }
+
+    @Test
+    public void testFindSwapValues() {
+        int[] array1 = {1, 2, 3}, array2 = {4, 5, 6};
+        Assert.assertEquals("[]", Arrays.toString(interview.findSwapValues(array1, array2)));
+        int[] array3 = {1, 2, 3}, array4 = {4, 5, 5};
+        Assert.assertEquals("[1, 5]", Arrays.toString(interview.findSwapValues(array3, array4)));
+    }
+
+    @Test
+    public void testPrintKMoves() {
+        Assert.assertEquals("[R]", interview.printKMoves(0).toString());
+        Assert.assertEquals("[X, D]", interview.printKMoves(1).toString());
+        Assert.assertEquals("[_X, LX]", interview.printKMoves(2).toString());
+    }
+
+    @Test
+    public void testPairSums() {
+        Assert.assertEquals(2, interview.pairSums(new int[]{1, 2, 2, 3}, 4).size());
+    }
+
+    @Test
+    public void testLRUCache() {
+        Interview.LRUCache cache = new Interview.LRUCache(3);
+        cache.put(1, 1);
+        cache.put(2, 2);
+        cache.put(3, 3);
+        Assert.assertEquals(1, cache.get(1));
+        cache.put(4, 4);
+        Assert.assertEquals(-1, cache.get(2));
+    }
+
+    @Test
+    public void testCalculate() {
+        Assert.assertEquals(-7, interview.calculate("- 4 * 3 + 2 * 3- 4 / 3"));
+        Assert.assertEquals(46, interview.calculate("3+31+3*4"));
+    }
 }

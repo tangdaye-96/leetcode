@@ -1,4 +1,4 @@
-package psn.tangdaye.solutiosn;
+package psn.tangdaye.solutions;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -6,7 +6,6 @@ import psn.tangdaye.model.DoubleLinkedNode;
 import psn.tangdaye.model.ListNode;
 import psn.tangdaye.model.Node;
 import psn.tangdaye.model.TreeNode;
-import psn.tangdaye.solutions.Offer;
 
 import java.text.DecimalFormat;
 import java.util.Arrays;
@@ -56,8 +55,6 @@ public class OfferTest {
     public void testReversePrint() {
         ListNode head = new ListNode(1);
         head.next(2).next(3).next(4);
-        System.out.println(head);
-        System.out.println(Arrays.toString(offer.reversePrint(head)));
     }
 
     @Test

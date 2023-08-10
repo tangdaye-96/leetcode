@@ -677,5 +677,18 @@ public class InterviewTest {
     public void testCalculate() {
         Assert.assertEquals(-7, interview.calculate("- 4 * 3 + 2 * 3- 4 / 3"));
         Assert.assertEquals(46, interview.calculate("3+31+3*4"));
+        Assert.assertEquals(8, interview.calculate("14/3*2"));
+    }
+
+    @Test
+    public void testAdd() {
+        Assert.assertEquals(-8 + 4, interview.add(-8, 4));
+        Assert.assertEquals(-1, interview.add(Integer.MIN_VALUE, Integer.MAX_VALUE));
+        Assert.assertEquals(Integer.MAX_VALUE, interview.add(1, Integer.MAX_VALUE - 1));
+    }
+
+    @Test
+    public void testMissingNumber(){
+        Assert.assertEquals(2, interview.missingNumber(new int[]{0,1,3}));
     }
 }

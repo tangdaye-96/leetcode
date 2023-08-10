@@ -2853,8 +2853,7 @@ public class Interview {
      */
     public int calculate(String s) {
         Stack<Integer> ns = new Stack<>();
-        Stack<Character> os = new Stack<>();
-        if (s.charAt(0) == '-') s = "0" + s;
+        short op = 0; // 0123表示+-*/
         int i = 0;
         while (i < s.length()) {
             char c = s.charAt(i);
@@ -2869,30 +2868,50 @@ public class Interview {
                     k = k * 10 + s.charAt(i) - '0';
                     i++;
                 }
-                ns.push(k);
+                if (op == 0) ns.push(k);
+                if (op == 1) ns.push(-k);
+                if (op == 2) ns.push(ns.pop() * k);
+                if (op == 3) ns.push(ns.pop() / k);
                 continue;
             }
-            if (c == '+' || c == '-') {
-                while (!os.isEmpty()) {
-                    char op = os.pop();
-                    int a = ns.pop(), b = ns.pop();
-                    if (op == '*') ns.push(b * a);
-                    else if (op == '+') ns.push(b + a);
-                    else if (op == '/') ns.push(b / a);
-                    else ns.push(b - a);
-                }
-            }
-            os.push(c);
+            if (c == '+') op = 0;
+            if (c == '-') op = 1;
+            if (c == '*') op = 2;
+            if (c == '/') op = 3;
             i++;
         }
-        while (!os.isEmpty()) {
-            char op = os.pop();
-            int a = ns.pop(), b = ns.pop();
-            if (op == '*') ns.push(b * a);
-            else if (op == '+') ns.push(b + a);
-            else if (op == '/') ns.push(b / a);
-            else ns.push(b - a);
+        int result = 0;
+        for (int k : ns) {
+            result += k;
         }
-        return ns.pop();
+        return result;
+    }
+
+    /**
+     * <a href="https://leetcode.cn/problems/add-without-plus-lcci/?envType=featured-list&envId=xb9lfcwi">不用+实现加法</a>
+     * <p>
+     * 设计一个函数把两个数字相加。不得使用 + 或者其他算术运算符。
+     */
+    public int add(int a, int b) {
+        boolean add = false;
+        int result = 0;
+        for (int i = 0; i < 32; i++) {
+            boolean ax = (a & (1 << i)) != 0;
+            boolean bx = (b & (1 << i)) != 0;
+            boolean sx = (!ax && !bx && add) || (!ax && bx && !add) || (ax && !bx && !add) || (ax && bx && add);
+            add = !ax && bx && add || ax && !bx && add || ax && bx;
+            if (sx) result |= (1 << i);
+        }
+        return result;
+    }
+
+    /**
+     * <a href="https://leetcode.cn/problems/missing-number-lcci/?envType=featured-list&envId=xb9lfcwi">面试题 17.04. 消失的数字</a>
+     * <p>
+     * 数组nums包含从0到n的所有整数，但其中缺了一个。请编写代码找出那个缺失的整数。你有办法在O(n)时间内完成吗？
+     */
+    public int missingNumber(int[] nums) {
+        int n = nums.length;
+        return n * (n + 1) / 2 - Arrays.stream(nums).sum();
     }
 }

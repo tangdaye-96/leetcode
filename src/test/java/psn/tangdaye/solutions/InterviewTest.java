@@ -688,7 +688,24 @@ public class InterviewTest {
     }
 
     @Test
-    public void testMissingNumber(){
-        Assert.assertEquals(2, interview.missingNumber(new int[]{0,1,3}));
+    public void testMissingNumber() {
+        Assert.assertEquals(2, interview.missingNumber(new int[]{0, 1, 3}));
+    }
+
+    @Test
+    public void testFindLongestSubarray() {
+        String[] array = {
+                "A", "1", "B", "C", "D", "2", "3", "4", "E", "5", "F", "G", "6", "7", "H", "I", "J", "K", "L", "M"
+        };
+        Assert.assertEquals("[A, 1, B, C, D, 2, 3, 4, E, 5, F, G, 6, 7]", Arrays.toString(interview.findLongestSubarray(array)));
+        String[] array2 = {"a", "a", "a", "a", "1", "1", "1", "1"};
+        Assert.assertEquals("[a, a, a, a, 1, 1, 1, 1]", Arrays.toString(interview.findLongestSubarray(array2)));
+        String[] array3 = {"a", "a"};
+        Assert.assertEquals("[]", Arrays.toString(interview.findLongestSubarray(array3)));
+    }
+
+    @Test
+    public void testNumberOf2sInRange() {
+        Assert.assertEquals(6, interview.numberOf2sInRange(22));
     }
 }

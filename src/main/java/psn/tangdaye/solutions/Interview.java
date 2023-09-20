@@ -2914,4 +2914,70 @@ public class Interview {
         int n = nums.length;
         return n * (n + 1) / 2 - Arrays.stream(nums).sum();
     }
+
+    /**
+     * <a href="https://leetcode.cn/problems/find-longest-subarray-lcci/?envType=featured-list&envId=xb9lfcwi">面试题 17.05. 字母与数字</a>
+     * <p>
+     * 给定一个放有字母和数字的数组，找到最长的子数组，且包含的字母和数字的个数相同。
+     * <p>
+     * 返回该子数组，若存在多个最长子数组，返回左端点下标值最小的子数组。若不存在这样的数组，返回一个空数组。
+     */
+    public String[] findLongestSubarray(String[] array) {
+        int[] t = new int[array.length + 1];
+        t[0] = 0;
+        for (int i = 0; i < array.length; i++) {
+            t[i + 1] = t[i] + (isNum(array[i]) ? 1 : -1);
+        }
+        Map<Integer, List<Integer>> map = new HashMap<>();
+        for (int i = 0; i < t.length; i++) {
+            if (map.containsKey(t[i])) {
+                map.get(t[i]).add(i);
+            } else {
+                final int k = i;
+                map.put(t[i], new ArrayList<Integer>() {{
+                    add(k);
+                }});
+            }
+        }
+        int i = 0, j = 0, max = 0;
+        for (List<Integer> value : map.values()) {
+            if (value.size() > 1) {
+                int len = value.get(value.size() - 1) - value.get(0);
+                if (len > max) {
+                    max = len;
+                    i = value.get(0);
+                    j = value.get(value.size() - 1);
+                }
+            }
+        }
+        if (i == j && i == 0) return new String[0];
+        String[] result = new String[j - i];
+        System.arraycopy(array, i, result, 0, j - i);
+        return result;
+    }
+
+    private boolean isNum(String t) {
+        char c = t.charAt(0);
+        return c >= '0' && c <= '9';
+    }
+
+    /**
+     * <a href="https://leetcode.cn/problems/number-of-2s-in-range-lcci/?envType=featured-list&envId=xb9lfcwi">面试题 17.06. 2出现的次数</a>
+     * <p>
+     * 编写一个方法，计算从 0 到 n (含 n) 中数字 2 出现的次数。
+     */
+    public int numberOf2sInRange(int n) {
+        int result = 0;
+        int s = 1;
+        int origin = n;
+        while (n > 0) {
+            int r = n % 10;
+            n = n / 10;
+            if (r > 2) result += (n + 1) * s;
+            else result += n * s;
+            if (r == 2) result += origin - n * s * 10 - 2 * s + 1;
+            s *= 10;
+        }
+        return result;
+    }
 }

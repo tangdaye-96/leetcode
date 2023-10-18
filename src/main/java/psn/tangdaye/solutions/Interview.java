@@ -2348,13 +2348,9 @@ public class Interview {
         double yk = (c2y - c1y) / (c2x - c1x);
         double xk = (c2x - c1x) / (c2y - c1y);
         double[][] intersections = {
-                {x1, yk * (x1 - c1x) + c1y},
-                {x1 + l1, yk * (x1 + l1 - c1x) + c1y},
-                {x2, yk * (x2 - c1x) + c1y},
-                {x2 + l2, yk * (x2 + l2 - c1x) + c1y},
-                {xk * (y1 - c1y) + c1x, y1},
-                {xk * (y1 + l1 - c1y) + c1x, y1 + l1},
-                {xk * (y2 - c1y) + c1x, y2},
+                {x1, yk * (x1 - c1x) + c1y}, {x1 + l1, yk * (x1 + l1 - c1x) + c1y}, {x2, yk * (x2 - c1x) + c1y},
+                {x2 + l2, yk * (x2 + l2 - c1x) + c1y}, {xk * (y1 - c1y) + c1x, y1},
+                {xk * (y1 + l1 - c1y) + c1x, y1 + l1}, {xk * (y2 - c1y) + c1x, y2},
                 {xk * (y2 + l2 - c1y) + c1x, y2 + l2},
         };
         Arrays.sort(intersections, Comparator.comparingDouble(array -> array[0]));
@@ -2979,5 +2975,136 @@ public class Interview {
             s *= 10;
         }
         return result;
+    }
+
+    /**
+     * <a href="https://leetcode.cn/problems/baby-names-lcci/?envType=featured-list&envId=xb9lfcwi?envType=featured-list&envId=xb9lfcwi">面试题 17.07. 婴儿名字</a>
+     * <p>
+     * 每年，政府都会公布一万个最常见的婴儿名字和它们出现的频率，也就是同名婴儿的数量。有些名字有多种拼法，例如，John 和 Jon 本质上是相同的名字，但被当成了两个名字公布出来。给定两个列表，一个是名字及对应的频率，另一个是本质相同的名字对。设计一个算法打印出每个真实名字的实际频率。注意，如果 John 和 Jon 是相同的，并且 Jon 和 Johnny 相同，则 John 与 Johnny 也相同，即它们有传递和对称性。
+     * <p>
+     * 在结果列表中，选择 字典序最小 的名字作为真实名字。
+     */
+    public String[] trulyMostPopular(String[] names, String[] synonyms) {
+        Map<String, String> map = new HashMap<>();
+        Map<String, Set<String>> reverseMap = new HashMap<>();
+        for (String pair : synonyms) {
+            String[] temp = pair.substring(1, pair.length() - 1).split(",");
+            String name1 = temp[0], name2 = temp[1];
+            String key1 = map.get(name1), key2 = map.get(name2);
+            String name = name1.compareTo(name2) > 0 ? name2 : name1;
+
+            if (key1 == null && key2 == null) {
+                // 如果都不在里面，可以直接加入
+                map.put(name1, name);
+                map.put(name2, name);
+                reverseMap.put(name, new HashSet<String>() {{
+                    add(name1);
+                    add(name2);
+                }});
+            } else if (key1 == null || key2 == null) {
+                // 如果有一个在里面，另一个不在，可以找到在的那个，合并不在的一个
+                String lastKey = key1 == null ? key2 : key1;
+                Set<String> set = reverseMap.get(lastKey);
+                set.add(name1);
+                set.add(name2);
+                String newKey = lastKey.compareTo(name) > 0 ? name : lastKey;
+                if (!newKey.equals(lastKey)) {
+                    for (String eachName : set) {
+                        map.put(eachName, newKey);
+                    }
+                    reverseMap.remove(lastKey);
+                    reverseMap.put(newKey, set);
+                } else {
+                    map.put(name1, newKey);
+                    map.put(name2, newKey);
+                }
+            } else {
+                // 如果两个都在里面，分别找到之后合并
+                Set<String> set1 = reverseMap.get(key1);
+                Set<String> set2 = reverseMap.get(key2);
+                set1.addAll(set2);
+                // 找到新的最小值
+                if (key1.compareTo(key2) > 0) {
+                    reverseMap.remove(key1);
+                    reverseMap.put(key2, set1);
+                } else {
+                    reverseMap.remove(key2);
+                    reverseMap.put(key1, set1);
+                }
+                String newKey = key1.compareTo(key2) > 0 ? key2 : key1;
+                for (String eachName : set1) {
+                    map.put(eachName, newKey);
+                }
+            }
+        }
+        Map<String, Integer> result = new HashMap<>();
+        for (String nameCount : names) {
+            String[] temp = nameCount.split("[()]");
+            String name = temp[0];
+            String key = map.get(name);
+            int count = Integer.parseInt(temp[1]);
+            if (key == null) {
+                result.put(name, count);
+            } else {
+                if (result.containsKey(key)) {
+                    result.put(key, result.get(key) + count);
+                } else {
+                    result.put(key, count);
+                }
+            }
+        }
+        String[] returnValue = new String[result.size()];
+        int i = 0;
+        for (Map.Entry<String, Integer> entry : result.entrySet()) {
+            returnValue[i] = String.format("%s(%d)", entry.getKey(), entry.getValue());
+            i += 1;
+        }
+        return returnValue;
+    }
+
+
+    /**
+     * <a href="https://leetcode.cn/problems/circus-tower-lcci/?envType=featured-list&envId=xb9lfcwi?envType=featured-list&envId=xb9lfcwi">面试题 17.08. 马戏团人塔</a>
+     * <p>
+     * 有个马戏团正在设计叠罗汉的表演节目，一个人要站在另一人的肩膀上。出于实际和美观的考虑，在上面的人要比下面的人矮一点且轻一点。已知马戏团每个人的身高和体重，请编写代码计算叠罗汉最多能叠几个人。
+     */
+    public int bestSeqAtIndex(int[] height, int[] weight) {
+        int[][] k = new int[height.length][2];
+        for (int i = 0; i < height.length; i++) k[i] = new int[]{height[i], weight[i]};
+        Arrays.sort(k, (o1, o2) -> {
+            if (o1[0] < o2[0]) return -1;
+            if (o1[0] > o2[0]) return 1;
+            return Integer.compare(o1[1], o2[1]);
+        });
+        for (int i = 0; i < height.length; i++) {
+            height[i] = k[i][0];
+            weight[i] = k[i][1];
+        }
+        
+        for (int i = 1; i < height.length; i++) {
+        }
+        return LIS(weight);
+    }
+
+
+    /**
+     * Longest Increasing Subsequence
+     *
+     * @param seq 序列
+     * @return 最长严格递增子序列长度
+     */
+    private int LIS(int[] seq) {
+        int[] k = new int[seq.length];
+        int le = 0;
+        for (int t : seq) {
+            if (le == 0 || k[le - 1] < t) {
+                k[le] = t;
+                le++;
+            } else if (k[le - 1] > t) {
+                int index = Arrays.binarySearch(k, 0, le, t);
+                if (index < 0) k[-(index + 1)] = t;
+            }
+        }
+        return le;
     }
 }

@@ -1,10 +1,9 @@
-package psn.tangdaye.solutiosn;
+package psn.tangdaye.solutions;
 
 import org.junit.Assert;
 import org.junit.Test;
 import psn.tangdaye.model.ListNode;
 import psn.tangdaye.model.TreeNode;
-import psn.tangdaye.solutions.Hot100;
 import psn.tangdaye.tool.Tools;
 
 import java.util.ArrayList;
@@ -685,7 +684,6 @@ public class Hot100Test {
         queries.add(Arrays.asList("b", "x"));
         queries.add(Arrays.asList("x", "x"));
         double[] result = hot.calcEquation(equations, values, queries);
-        System.out.println();
         Assert.assertEquals(16.0, result[0], 0.0);
         Assert.assertEquals(1.0 / 16, result[1], 0.0);
         Assert.assertEquals(4, result[2], 0.0);

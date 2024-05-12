@@ -1,10 +1,9 @@
-package psn.tangdaye.solutiosn;
+package psn.tangdaye.solutions;
 
 import org.junit.Assert;
 import org.junit.Test;
 import psn.tangdaye.model.ListNode;
 import psn.tangdaye.model.TreeNode;
-import psn.tangdaye.solutions.Interview;
 import psn.tangdaye.tool.Tools;
 
 import java.util.Arrays;
@@ -453,4 +452,273 @@ public class InterviewTest {
         Assert.assertEquals("[-12, 379]", Arrays.toString(x));
     }
 
+    @Test
+    public void testWordsFrequency() {
+        String[] words = {"i", "love", "you"};
+        Interview.WordsFrequency wordsFrequency = new Interview.WordsFrequency(words);
+        Assert.assertEquals(1, wordsFrequency.get("i"));
+    }
+
+    @Test
+    public void testIntersection() {
+        int[] p1 = {1, 0}, q1 = {0, 1};
+        int[] p2 = {0, 0}, q2 = {0, 1};
+        double[] inter = interview.intersection(p1, q1, p2, q2);
+        Assert.assertEquals(0, inter[0], 0.0);
+        Assert.assertEquals(1, inter[1], 0.0);
+
+        int[] s1 = {100, 0}, t1 = {100, 100};
+        int[] s2 = {0, 0}, t2 = {1, 1};
+        Assert.assertEquals(0, interview.intersection(s1, t1, s2, t2).length);
+
+        int[] u1 = {0, 1}, v1 = {0, -1};
+        int[] u2 = {-1, 1}, v2 = {1, 3};
+        Assert.assertEquals(0, interview.intersection(u1, v1, u2, v2).length);
+
+        int[] m1 = {0, 1}, n1 = {0, 3};
+        int[] m2 = {0, 0}, n2 = {0, 8};
+        inter = interview.intersection(m1, n1, m2, n2);
+        Assert.assertEquals(0, inter[0], 0.0);
+        Assert.assertEquals(1, inter[1], 0.0);
+    }
+
+    @Test
+    public void testTictactoe() {
+        String[] panel = {"XXXOO", "XOOOO", "XXXXO", "XXOOO", "XOOOO"};
+        Assert.assertEquals("X", interview.tictactoe(panel));
+    }
+
+    @Test
+    public void testTrailingZeroes() {
+        Assert.assertEquals(3, interview.trailingZeroes(16));
+    }
+
+    @Test
+    public void testSmallestDifference() {
+        int[] a = {Integer.MIN_VALUE, 1};
+        int[] b = {Integer.MAX_VALUE, 0};
+        Assert.assertEquals(1, interview.smallestDifference(a, b));
+    }
+
+    @Test
+    public void testMaximum() {
+        Assert.assertEquals(3, interview.maximum(3, -1));
+    }
+
+    @Test
+    public void testNumberToWords() {
+        Assert.assertEquals("One Billion Two Hundred Thirty Four Million Five Hundred Sixty Seven Thousand Eight Hundred Ninety One", interview.numberToWords(1234567891));
+    }
+
+    @Test
+    public void testOperations() {
+        Interview.Operations op = new Interview.Operations();
+        Assert.assertEquals(1, op.minus(Integer.MIN_VALUE + 1, Integer.MIN_VALUE));
+        Assert.assertEquals(7, op.minus(10, 3));
+        Assert.assertEquals(30, op.multiply(10, 3));
+        Assert.assertEquals(3, op.divide(10, 3));
+    }
+
+    @Test
+    public void testMaxAliveYear() {
+        int[] birth = {1900, 1901, 1950};
+        int[] death = {1948, 1951, 2000};
+        Assert.assertEquals(1901, interview.maxAliveYear(birth, death));
+    }
+
+    @Test
+    public void testDivingBoard() {
+        Assert.assertEquals("[3, 4, 5, 6]", Arrays.toString(interview.divingBoard(1, 2, 3)));
+    }
+
+    @Test
+    public void testCutSquares() {
+        int[] s1 = {0, 0, 2};
+        int[] s2 = {0, 0, 3};
+        double[] result = interview.cutSquares(s1, s2);
+        Assert.assertEquals(0.0, result[0], 0.0);
+        Assert.assertEquals(0.0, result[1], 0.0);
+        Assert.assertEquals(3.0, result[2], 0.0);
+        Assert.assertEquals(3.0, result[3], 0.0);
+    }
+
+    @Test
+    public void testBestLine() {
+        int[][] points = {{0, 0}, {1, 1}, {1, 2}, {2, 3}, {3, 3}};
+        Assert.assertEquals("[0, 1]", Arrays.toString(interview.bestLine(points)));
+
+        int[][] x = {{0, 0}, {1, 1}, {1, 0}, {2, 0}, {2, 2}};
+        Assert.assertEquals("[0, 1]", Arrays.toString(interview.bestLine(x)));
+
+        int[][] y = {
+                {23064, -1044}, {0, 22969}, {17805, 40898}, {29725, -1778}, {-32070, -2148}, {-19027, -2055},
+                {-679, -41065}, {12043, -16880}, {21838, 13404}, {22690, -6475}, {21585, -19101}, {7577, -14359},
+                {-20014, -40714}, {20942, -19286}, {12648, 21299}, {-36169, -11846}, {3595, -19224}, {27974, 26651},
+                {25899, 12871}, {-13881, -24276}, {16833, -19449}, {-13881, 5948}, {-48591, 29692}, {17406, -39601},
+                {24765, 7305}, {-41894, -12128}, {13645, -12514}, {17119, -45877}, {27715, -3120}, {10537, -33802},
+                {-36719, -39521}, {3328, -16834}, {25332, 10088}, {-23069, -31890}, {4192, 28773}, {20987, -7179},
+                {29525, -25688}, {-5450, -25263}, {-14571, -26940}, {-31236, 17820}, {-2435, -23250}, {28720, -2449},
+                {5905, 7021}, {-48683, -2355}, {-64140, -27265}, {20829, -17796}, {21104, 13825}, {-30954, -26421}
+        };
+        Assert.assertEquals("[3, 9]", Arrays.toString(interview.bestLine(y)));
+    }
+
+    @Test
+    public void testMasterMind() {
+        Assert.assertEquals("[2, 1]", Arrays.toString(interview.masterMind("RGGB", "YRGB")));
+    }
+
+    @Test
+    public void testSubSort() {
+        int[] array = {1, 2, 4, 7, 10, 11, 7, 12, 6, 7, 16, 18, 19};
+        Assert.assertEquals("[3, 9]", Arrays.toString(interview.subSort(array)));
+    }
+
+    @Test
+    public void testMaxSubArray() {
+        Assert.assertEquals(6, interview.maxSubArray(new int[]{-2, 1, -3, 4, -1, 2, 1, -5, 4}));
+    }
+
+    @Test
+    public void testPatternMatching() {
+        Assert.assertTrue(interview.patternMatching("ab", "aa"));
+        Assert.assertTrue(interview.patternMatching("a", "aa"));
+        Assert.assertTrue(interview.patternMatching("b", "aa"));
+        Assert.assertTrue(interview.patternMatching("ab", "catcatgocatgo"));
+        Assert.assertTrue(interview.patternMatching("abba", "dogdogdogdog"));
+        Assert.assertTrue(interview.patternMatching("a", ""));
+    }
+
+    @Test
+    public void testPondSizes() {
+        int[][] land = {
+                {0, 2, 1, 0}, {0, 1, 0, 1}, {1, 1, 0, 1}, {0, 1, 0, 1}
+        };
+        Assert.assertEquals("[1, 2, 4]", Arrays.toString(interview.pondSizes(land)));
+    }
+
+    @Test
+    public void testGetValidT9Words() {
+        Assert.assertEquals("[tree, used]", interview.getValidT9Words("8733", new String[]{"tree", "used"}).toString());
+    }
+
+    @Test
+    public void testFindSwapValues() {
+        int[] array1 = {1, 2, 3}, array2 = {4, 5, 6};
+        Assert.assertEquals("[]", Arrays.toString(interview.findSwapValues(array1, array2)));
+        int[] array3 = {1, 2, 3}, array4 = {4, 5, 5};
+        Assert.assertEquals("[1, 5]", Arrays.toString(interview.findSwapValues(array3, array4)));
+    }
+
+    @Test
+    public void testPrintKMoves() {
+        Assert.assertEquals("[R]", interview.printKMoves(0).toString());
+        Assert.assertEquals("[X, D]", interview.printKMoves(1).toString());
+        Assert.assertEquals("[_X, LX]", interview.printKMoves(2).toString());
+    }
+
+    @Test
+    public void testPairSums() {
+        Assert.assertEquals(2, interview.pairSums(new int[]{1, 2, 2, 3}, 4).size());
+    }
+
+    @Test
+    public void testLRUCache() {
+        Interview.LRUCache cache = new Interview.LRUCache(3);
+        cache.put(1, 1);
+        cache.put(2, 2);
+        cache.put(3, 3);
+        Assert.assertEquals(1, cache.get(1));
+        cache.put(4, 4);
+        Assert.assertEquals(-1, cache.get(2));
+    }
+
+    @Test
+    public void testCalculate() {
+        Assert.assertEquals(-7, interview.calculate("- 4 * 3 + 2 * 3- 4 / 3"));
+        Assert.assertEquals(46, interview.calculate("3+31+3*4"));
+        Assert.assertEquals(8, interview.calculate("14/3*2"));
+    }
+
+    @Test
+    public void testAdd() {
+        Assert.assertEquals(-8 + 4, interview.add(-8, 4));
+        Assert.assertEquals(-1, interview.add(Integer.MIN_VALUE, Integer.MAX_VALUE));
+        Assert.assertEquals(Integer.MAX_VALUE, interview.add(1, Integer.MAX_VALUE - 1));
+    }
+
+    @Test
+    public void testMissingNumber() {
+        Assert.assertEquals(2, interview.missingNumber(new int[]{0, 1, 3}));
+    }
+
+    @Test
+    public void testFindLongestSubarray() {
+        String[] array = {
+                "A", "1", "B", "C", "D", "2", "3", "4", "E", "5", "F", "G", "6", "7", "H", "I", "J", "K", "L", "M"
+        };
+        Assert.assertEquals("[A, 1, B, C, D, 2, 3, 4, E, 5, F, G, 6, 7]", Arrays.toString(interview.findLongestSubarray(array)));
+        String[] array2 = {"a", "a", "a", "a", "1", "1", "1", "1"};
+        Assert.assertEquals("[a, a, a, a, 1, 1, 1, 1]", Arrays.toString(interview.findLongestSubarray(array2)));
+        String[] array3 = {"a", "a"};
+        Assert.assertEquals("[]", Arrays.toString(interview.findLongestSubarray(array3)));
+    }
+
+    @Test
+    public void testNumberOf2sInRange() {
+        Assert.assertEquals(6, interview.numberOf2sInRange(22));
+    }
+
+    @Test
+    public void testTrulyMostPopular() {
+        String[] names = {
+                "Fcclu(70)", "Ommjh(63)", "Dnsay(60)", "Qbmk(45)", "Unsb(26)", "Gauuk(75)", "Wzyyim(34)", "Bnea(55)",
+                "Kri(71)", "Qnaakk(76)", "Gnplfi(68)", "Hfp(97)", "Qoi(70)", "Ijveol(46)", "Iidh(64)", "Qiy(26)",
+                "Mcnef(59)", "Hvueqc(91)", "Obcbxb(54)", "Dhe(79)", "Jfq(26)", "Uwjsu(41)", "Wfmspz(39)", "Ebov(96)",
+                "Ofl(72)", "Uvkdpn(71)", "Avcp(41)", "Msyr(9)", "Pgfpma(95)", "Vbp(89)", "Koaak(53)", "Qyqifg(85)",
+                "Dwayf(97)", "Oltadg(95)", "Mwwvj(70)", "Uxf(74)", "Qvjp(6)", "Grqrg(81)", "Naf(3)", "Xjjol(62)",
+                "Ibink(32)", "Qxabri(41)", "Ucqh(51)", "Mtz(72)", "Aeax(82)", "Kxutz(5)", "Qweye(15)", "Ard(82)",
+                "Chycnm(4)", "Hcvcgc(97)", "Knpuq(61)", "Yeekgc(11)", "Ntfr(70)", "Lucf(62)", "Uhsg(23)", "Csh(39)",
+                "Txixz(87)", "Kgabb(80)", "Weusps(79)", "Nuq(61)", "Drzsnw(87)", "Xxmsn(98)", "Onnev(77)", "Owh(64)",
+                "Fpaf(46)", "Hvia(6)", "Kufa(95)", "Chhmx(66)", "Avmzs(39)", "Okwuq(96)", "Hrschk(30)", "Ffwni(67)",
+                "Wpagta(25)", "Npilye(14)", "Axwtno(57)", "Qxkjt(31)", "Dwifi(51)", "Kasgmw(95)", "Vgxj(11)",
+                "Nsgbth(26)", "Nzaz(51)", "Owk(87)", "Yjc(94)", "Hljt(21)", "Jvqg(47)", "Alrksy(69)", "Tlv(95)",
+                "Acohsf(86)", "Qejo(60)", "Gbclj(20)", "Nekuam(17)", "Meutux(64)", "Tuvzkd(85)", "Fvkhz(98)",
+                "Rngl(12)", "Gbkq(77)", "Uzgx(65)", "Ghc(15)", "Qsc(48)", "Siv(47)"
+        };
+        String[] synonyms = {
+                "(Gnplfi,Qxabri)", "(Uzgx,Siv)", "(Bnea,Lucf)", "(Qnaakk,Msyr)", "(Grqrg,Gbclj)", "(Uhsg,Qejo)",
+                "(Csh,Wpagta)", "(Xjjol,Lucf)", "(Qoi,Obcbxb)", "(Npilye,Vgxj)", "(Aeax,Ghc)", "(Txixz,Ffwni)",
+                "(Qweye,Qsc)", "(Kri,Tuvzkd)", "(Ommjh,Vbp)", "(Pgfpma,Xxmsn)", "(Uhsg,Csh)", "(Qvjp,Kxutz)",
+                "(Qxkjt,Tlv)", "(Wfmspz,Owk)", "(Dwayf,Chycnm)", "(Iidh,Qvjp)", "(Dnsay,Rngl)", "(Qweye,Tlv)",
+                "(Wzyyim,Kxutz)", "(Hvueqc,Qejo)", "(Tlv,Ghc)", "(Hvia,Fvkhz)", "(Msyr,Owk)", "(Hrschk,Hljt)",
+                "(Owh,Gbclj)", "(Dwifi,Uzgx)", "(Iidh,Fpaf)", "(Iidh,Meutux)", "(Txixz,Ghc)", "(Gbclj,Qsc)",
+                "(Kgabb,Tuvzkd)", "(Uwjsu,Grqrg)", "(Vbp,Dwayf)", "(Xxmsn,Chhmx)", "(Uxf,Uzgx)"
+        };
+        String[] expected = {
+                "Npilye(25)", "Drzsnw(87)", "Fpaf(219)", "Axwtno(57)", "Avmzs(39)", "Knpuq(61)", "Avcp(41)", "Naf(3)",
+                "Aeax(646)", "Kgabb(236)", "Chhmx(259)", "Dwifi(237)", "Ofl(72)", "Nzaz(51)", "Msyr(211)", "Csh(238)",
+                "Kufa(95)", "Ebov(96)", "Onnev(77)", "Chycnm(253)", "Bnea(179)", "Yjc(94)", "Koaak(53)", "Gauuk(75)",
+                "Hfp(97)", "Jfq(26)", "Dnsay(72)", "Hljt(51)", "Ibink(32)", "Obcbxb(124)", "Alrksy(69)", "Qbmk(45)",
+                "Qiy(26)", "Uvkdpn(71)", "Unsb(26)", "Weusps(79)", "Fvkhz(104)", "Fcclu(70)", "Gnplfi(109)", "Jvqg(47)",
+                "Mtz(72)", "Ucqh(51)", "Ntfr(70)", "Nsgbth(26)", "Hcvcgc(97)", "Oltadg(95)", "Nuq(61)", "Kasgmw(95)",
+                "Nekuam(17)", "Dhe(79)", "Okwuq(96)", "Qyqifg(85)", "Mcnef(59)", "Ijveol(46)", "Acohsf(86)", "Gbkq(77)",
+                "Mwwvj(70)", "Yeekgc(11)", "Ard(82)"
+        };
+        String[] t = interview.trulyMostPopular(names, synonyms);
+        Arrays.sort(expected);
+        Arrays.sort(t);
+        Assert.assertEquals(Arrays.toString(t), Arrays.toString(expected));
+    }
+
+    @Test
+    public void testBestSeqAtIndex() {
+        int[] a = {1, 2, 3, 4, 5, 6, 6, 7}, b = {2, 4, 6, 8, 10, 9, 12, 14};
+        int[] c = {1, 2, 3, 4, 5, 6, 6, 7}, d = {2, 4, 6, 8, 10, 12, 100, 14};
+        int[] e = {1, 2, 3, 4, 5, 6, 6, 7}, f = {2, 4, 6, 8, 10, 11, 12, 14};
+
+        Assert.assertEquals(7, interview.bestSeqAtIndex(a, b));
+        Assert.assertEquals(7, interview.bestSeqAtIndex(c, d));
+        Assert.assertEquals(7, interview.bestSeqAtIndex(e, f));
+    }
 }

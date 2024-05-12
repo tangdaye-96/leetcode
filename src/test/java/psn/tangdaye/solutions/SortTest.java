@@ -1,9 +1,8 @@
-package psn.tangdaye.solutiosn;
+package psn.tangdaye.solutions;
 
 
 import org.junit.Assert;
 import org.junit.Test;
-import psn.tangdaye.solutions.Sort;
 
 import java.util.Arrays;
 

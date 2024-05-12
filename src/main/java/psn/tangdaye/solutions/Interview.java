@@ -1,6 +1,5 @@
 package psn.tangdaye.solutions;
 
-import org.jetbrains.annotations.NotNull;
 import psn.tangdaye.model.ListNode;
 import psn.tangdaye.model.TreeNode;
 import psn.tangdaye.tool.Tools;
@@ -182,7 +181,6 @@ public class Interview {
         return result.length() < s.length() ? result : s;
     }
 
-
     /**
      * 面试题 01.07. 旋转矩阵
      * <p>
@@ -230,7 +228,6 @@ public class Interview {
             for (int i = 0; i < matrix.length; i++) matrix[i][j] = 0;
         }
     }
-
 
     /**
      * 面试题 01.09. 字符串轮转
@@ -1664,7 +1661,7 @@ public class Interview {
         }
 
         @Override
-        public int compareTo(@NotNull Interview.Box another) {
+        public int compareTo(Interview.Box another) {
             if (w > another.w && d > another.d && h > another.h) return 1;
             if (w < another.w && d < another.d && h < another.h) return -1;
             return 0;
@@ -1985,4 +1982,1129 @@ public class Interview {
         return numbers;
     }
 
+    /**
+     * 面试题 16.02. 单词频率
+     * <p>
+     * 设计一个方法，找出任意指定单词在一本书中的出现频率。
+     * <p>
+     * <a href="https://leetcode.cn/problems/words-frequency-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/words-frequency-lcci/?envType=featured-list&envId=xb9lfcwi</a>
+     */
+    public static class WordsFrequency {
+        private final Map<String, Integer> map = new HashMap<>();
+
+        public WordsFrequency(String[] book) {
+            for (String word : book) {
+                map.put(word, map.getOrDefault(word, 0) + 1);
+            }
+        }
+
+        public int get(String word) {
+            return map.getOrDefault(word, 0);
+        }
+    }
+
+    /**
+     * 面试题 16.03. 交点
+     * <p>
+     * 给定两条线段（表示为起点start = {X1, Y1}和终点end = {X2, Y2}），如果它们有交点，请计算其交点，没有交点则返回空值。
+     * <p>
+     * <a href="https://leetcode.cn/problems/intersection-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/intersection-lcci/?envType=featured-list&envId=xb9lfcwi</a>
+     */
+    public double[] intersection(int[] start1, int[] end1, int[] start2, int[] end2) {
+        int x11 = start1[0], y11 = start1[1];
+        int x12 = end1[0], y12 = end1[1];
+        int x21 = start2[0], y21 = start2[1];
+        int x22 = end2[0], y22 = end2[1];
+        int deltaX1 = x12 - x11, deltaY1 = y12 - y11;
+        int deltaX2 = x22 - x21, deltaY2 = y22 - y21;
+        int temp = deltaY1 * deltaX2 * x11 + y21 * deltaX1 * deltaX2 - y11 * deltaX1 * deltaX2 - x21 * deltaY2 * deltaX1;
+        int k = deltaY1 * deltaX2 - deltaY2 * deltaX1;
+        if (k == 0) {
+            if (temp == 0) {
+                // 如果重叠的话需要返回x最小值（x也相同时返回y最小值）
+                int x1 = Math.min(x11, x12), x2 = Math.min(x21, x22);
+                if (x1 == x2) {
+                    int y1 = Math.min(y11, y12), y2 = Math.min(y21, y22);
+                    if (within(y1, y21, y22)) {
+                        return new double[]{x1, y1}; // y1在y21和y22中间
+                    }
+                    if (within(y2, y11, y12)) {
+                        return new double[]{x2, y2}; // y2在y11和y12中间
+                    }
+                } else if (x1 < x2) {
+                    if (within(x2, x11, x12)) {
+                        // x2在x11和x12中间
+                        if (x21 < x22) return new double[]{x21, y21};
+                        else return new double[]{x22, y22};
+                    }
+                } else {
+                    if (within(x1, x21, x22)) {
+                        // x1在x21和x22中间
+                        if (x11 < x12) return new double[]{x11, y11};
+                        else return new double[]{x21, y21};
+                    }
+                }
+            }
+            return new double[0];
+        }
+        double x = ((double) temp) / k;
+        boolean withinX1 = within(x, x11, x12);
+        boolean withinX2 = within(x, x21, x22);
+        if (withinX1 && withinX2) {
+            double y;
+            if (deltaX1 == 0) {
+                y = (double) y21 + ((double) deltaY2) / deltaX2 * (x - x21);
+            } else {
+                y = (double) y11 + ((double) deltaY1) / deltaX1 * (x - x11);
+            }
+            boolean withinY1 = within(y, y11, y12);
+            boolean withinY2 = within(y, y21, y22);
+            if (withinY1 && withinY2) return new double[]{x, y};
+        }
+        return new double[0];
+    }
+
+    private boolean within(double s, int s1, int s2) {
+        return (s >= s1 && s <= s2) || (s <= s1 && s >= s2);
+    }
+
+    /**
+     * 面试题 16.04. 井字游戏
+     * <p>
+     * 设计一个算法，判断玩家是否赢了井字游戏。输入是一个 N x N 的数组棋盘，由字符" "，"X"和"O"组成，其中字符" "代表一个空位。
+     * <p>
+     * 以下是井字游戏的规则：
+     * <p>
+     * 当有N个相同（且非空）的字符填充任何行、列或对角线时，游戏结束，对应该字符的玩家获胜。
+     * 当所有位置非空时，也算为游戏结束。
+     * 如果游戏结束，玩家不允许再放置字符。
+     * 如果游戏存在获胜者，就返回该游戏的获胜者使用的字符（"X"或"O"）；如果游戏以平局结束，则返回 "Draw"；如果仍会有行动（游戏未结束），则返回 "Pending"。
+     * <p>
+     * <a href="https://leetcode.cn/problems/tic-tac-toe-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/tic-tac-toe-lcci/?envType=featured-list&envId=xb9lfcwi</a>
+     */
+    public String tictactoe(String[] board) {
+        int n = board.length;
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < n; i++) sb.append("O");
+        for (int i = 0; i < n; i++) sb.append("X");
+        String oWin = sb.substring(0, n);
+        String xWin = sb.substring(n, n * 2);
+        for (String s : board) {
+            if (s.equals(oWin)) return "O";
+            if (s.equals(xWin)) return "X";
+        }
+
+        boolean o = true, x = true;
+        for (int i = 0; i < n; i++) {
+            char t = board[i].charAt(i);
+            if (t != 'X') x = false;
+            if (t != 'O') o = false;
+            if (!x && !o) break;
+        }
+        if (x) return "X";
+        if (o) return "O";
+
+        o = true;
+        x = true;
+        for (int i = 0; i < n; i++) {
+            char t = board[i].charAt(n - 1 - i);
+            if (t != 'X') x = false;
+            if (t != 'O') o = false;
+            if (!x && !o) break;
+        }
+        if (x) return "X";
+        if (o) return "O";
+        boolean canContinue = false;
+        for (int i = 0; i < n; i++) {
+            o = true;
+            x = true;
+            for (String s : board) {
+                char t = s.charAt(i);
+                if (t != 'X') x = false;
+                if (t != 'O') o = false;
+                if (t == ' ') canContinue = true;
+                if (!x && !o) break;
+            }
+            if (x) return "X";
+            if (o) return "O";
+        }
+        if (canContinue) return "Pending";
+        return "Draw";
+    }
+
+    /**
+     * 面试题 16.05. 阶乘尾数
+     * <p>
+     * 设计一个算法，算出 n 阶乘有多少个尾随零。
+     * <p>
+     * <a href="https://leetcode.cn/problems/factorial-zeros-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/factorial-zeros-lcci/?envType=featured-list&envId=xb9lfcwi</a>
+     */
+    public int trailingZeroes(int n) {
+        long t = 5;
+        int result = 0;
+        while (t <= n) {
+            result += n / t;
+            t *= 5;
+        }
+        return result;
+    }
+
+    /**
+     * 面试题 16.06. 最小差
+     * <p>
+     * 给定两个整数数组a和b，计算具有最小差绝对值的一对数值（每个数组中取一个值），并返回该对数值的差
+     * <p>
+     * <a href="https://leetcode.cn/problems/smallest-difference-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/smallest-difference-lcci/?envType=featured-list&envId=xb9lfcwi</a>
+     */
+    public int smallestDifference(int[] a, int[] b) {
+        Arrays.sort(a);
+        Arrays.sort(b);
+        int i = 0, j = 0;
+        int result = Integer.MAX_VALUE;
+        while (i < a.length && j < b.length) {
+            int ai = a[i];
+            int bj = b[j];
+            if (ai == bj) return 0;
+            if (ai < bj) {
+                int c = bj - ai;
+                if (c > 0) result = Math.min(result, c);
+                i++;
+            }
+            if (ai > bj) {
+                int c = ai - bj;
+                if (c > 0) result = Math.min(result, c);
+                j++;
+            }
+        }
+        return result;
+    }
+
+
+    /**
+     * 面试题 16.07. 最大数值
+     * <p>
+     * 编写一个方法，找出两个数字a和b中最大的那一个。不得使用if-else或其他比较运算符。
+     * <p>
+     * <a href="https://leetcode.cn/problems/maximum-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/maximum-lcci/?envType=featured-list&envId=xb9lfcwi</a>
+     */
+    public int maximum(int a, int b) {
+        return Math.max(a, b);
+    }
+
+    /**
+     * 给定一个整数，打印该整数的英文描述。
+     * <p>
+     * 面试题 16.08. 整数的英语表示
+     * <p>
+     * <a href="https://leetcode.cn/problems/english-int-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/english-int-lcci/?envType=featured-list&envId=xb9lfcwi</a>
+     */
+    public String numberToWords(int num) {
+        String[] ones = {
+                "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten"
+        };
+        String[] teens = {
+                "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"
+        };
+        String[] tys = {"Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"};
+        // 按照十亿/百万/千/百/十/个切分
+        if (num == 0) return "Zero";
+        if (num <= 10) return ones[num - 1];
+        if (num < 20) return teens[num - 11];
+        if (num < 100) {
+            int p = num / 10;
+            int q = num % 10;
+            if (q == 0) return tys[p - 2];
+            return tys[p - 2] + " " + ones[q - 1];
+        }
+        if (num < 1000) {
+            int p = num / 100;
+            int q = num % 100;
+            if (q == 0) return ones[p - 1] + " Hundred";
+            return ones[p - 1] + " Hundred " + numberToWords(q);
+        }
+        if (num < 1000000) {
+            int p = num / 1000;
+            int q = num % 1000;
+            if (q == 0) return numberToWords(p) + " Thousand";
+            return numberToWords(p) + " Thousand " + numberToWords(q);
+        }
+        if (num < 1000000000) {
+            int p = num / 1000000;
+            int q = num % 1000000;
+            if (q == 0) return numberToWords(p) + " Million";
+            return numberToWords(p) + " Million " + numberToWords(q);
+        }
+        int p = num / 1000000000;
+        int q = num % 1000000000;
+        if (q == 0) return numberToWords(p) + " Billion";
+        return numberToWords(p) + " Billion " + numberToWords(q);
+    }
+
+    /**
+     * 面试题 16.09. 运算
+     * <p>
+     * 请实现整数数字的乘法、减法和除法运算，运算结果均为整数数字，程序中只允许使用加法运算符和逻辑运算符，允许程序中出现正负常数，不允许使用位运算。
+     * <p>
+     * <a href="https://leetcode.cn/problems/operations-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/operations-lcci/?envType=featured-list&envId=xb9lfcwi</a>
+     */
+    public static class Operations {
+        public Operations() {
+        }
+
+        public int minus(int a, int b) {
+            if (b == Integer.MIN_VALUE) {
+                return a + Integer.MAX_VALUE + 1;
+            }
+            return a + (-b);
+        }
+
+        public int multiply(int a, int b) {
+            if (b == 0 || a == 0) return 0;
+            if (a == Integer.MIN_VALUE || b == Integer.MIN_VALUE) return Integer.MIN_VALUE;
+            boolean neg = (a > 0 && b < 0) || (a < 0 && b > 0);
+            a = a > 0 ? a : -a;
+            b = b > 0 ? b : -b;
+            int result = 0;
+            for (int i = 0; i < b; i++) result += a;
+            return neg ? -result : result;
+        }
+
+        public int divide(int a, int b) {
+            if (a == 0) return 0;
+            if (a == Integer.MIN_VALUE) return Integer.MIN_VALUE;
+            boolean neg = (a > 0 && b < 0) || (a < 0 && b > 0);
+            a = a > 0 ? a : -a;
+            b = b < 0 ? b : -b;
+            int p = -1;
+            while (a >= 0) {
+                a += b;
+                p += 1;
+            }
+            return neg ? -p : p;
+        }
+
+    }
+
+    /**
+     * 面试题 16.10. 生存人数
+     * <p>
+     * 给定 N 个人的出生年份和死亡年份，第 i 个人的出生年份为 birth[i]，死亡年份为 death[i]，实现一个方法以计算生存人数最多的年份。
+     * 如果有多个年份生存人数相同且均为最大值，输出其中最小的年份。
+     * <p>
+     * <a href="https://leetcode.cn/problems/living-people-lcci/?envType=featured-list&envId=xb9lfcwi">https://leetcode.cn/problems/living-people-lcci/?envType=featured-list&envId=xb9lfcwi</a>
+     */
+    public int maxAliveYear(int[] birth, int[] death) {
+        int max = 0;
+        int result = 1899;
+        for (int year = 1900; year <= 2000; year++) {
+            int current = 0;
+            for (int i = 0; i < birth.length; i++) {
+                if (birth[i] <= year && death[i] >= year) current++;
+            }
+            if (current > max) {
+                max = current;
+                result = year;
+            }
+        }
+        return result;
+    }
+
+    /**
+     * <a href="https://leetcode.cn/problems/diving-board-lcci/?envType=featured-list&envId=xb9lfcwi">面试题 16.11. 跳水板</a>
+     * <p>
+     * 你正在使用一堆木板建造跳水板。有两种类型的木板，其中长度较短的木板长度为shorter，长度较长的木板长度为longer。你必须正好使用k块木板。编写一个方法，生成跳水板所有可能的长度。
+     */
+    public int[] divingBoard(int shorter, int longer, int k) {
+        if (k == 0) return new int[0];
+        if (shorter == longer) return new int[]{k * shorter};
+        int[] result = new int[k + 1];
+        for (int i = 0; i <= k; i++) {
+            result[i] = i * longer + (k - i) * shorter;
+        }
+        return result;
+    }
+
+    /**
+     * <a href="https://leetcode.cn/problems/bisect-squares-lcci/?envType=featured-list&envId=xb9lfcwi">面试题 16.13. 平分正方形</a>
+     * <p>
+     * 给定两个正方形及一个二维平面。请找出将这两个正方形分割成两半的一条直线。假设正方形顶边和底边与 x 轴平行。
+     */
+    public double[] cutSquares(int[] square1, int[] square2) {
+        double x1 = square1[0], y1 = square1[1], l1 = square1[2];
+        double x2 = square2[0], y2 = square2[1], l2 = square2[2];
+        double c1x = x1 + l1 / 2, c1y = y1 + l1 / 2;
+        double c2x = x2 + l2 / 2, c2y = y2 + l2 / 2;
+        if (c1x == c2x) {
+            double yMax = Math.max(y1 + l1, y2 + l2);
+            double yMin = Math.min(y1, y2);
+            return new double[]{c1x, yMin, c2x, yMax};
+        }
+        if (c1y == c2y) {
+            double xMax = Math.max(x1 + l1, x2 + l2);
+            double xMin = Math.min(x1, x2);
+            return new double[]{xMin, c1y, xMax, c2y};
+        }
+        // 斜线，有八个交点，依次判断
+        double yk = (c2y - c1y) / (c2x - c1x);
+        double xk = (c2x - c1x) / (c2y - c1y);
+        double[][] intersections = {
+                {x1, yk * (x1 - c1x) + c1y}, {x1 + l1, yk * (x1 + l1 - c1x) + c1y}, {x2, yk * (x2 - c1x) + c1y},
+                {x2 + l2, yk * (x2 + l2 - c1x) + c1y}, {xk * (y1 - c1y) + c1x, y1},
+                {xk * (y1 + l1 - c1y) + c1x, y1 + l1}, {xk * (y2 - c1y) + c1x, y2},
+                {xk * (y2 + l2 - c1y) + c1x, y2 + l2},
+        };
+        Arrays.sort(intersections, Comparator.comparingDouble(array -> array[0]));
+        int index1 = 0, index2 = 7;
+        for (; index1 <= 7; index1++) {
+            double[] intersection = intersections[index1];
+            double ix = intersection[0], iy = intersection[1];
+            if (ix == x1 && iy >= y1 && iy <= y1 + l1) break;
+            if (ix == x2 && iy >= y2 && iy <= y2 + l2) break;
+            if (iy == y1 && ix >= x1 && ix <= x1 + l1) break;
+            if (iy == y2 && ix >= x2 && ix <= x2 + l2) break;
+            if (iy == y1 + l1 && ix >= x1 && ix <= x1 + l1) break;
+            if (iy == y2 + l2 && ix >= x2 && ix <= x2 + l2) break;
+        }
+        for (; index2 >= 0; index2--) {
+            double[] intersection = intersections[index2];
+            double ix = intersection[0], iy = intersection[1];
+            if (ix == x1 + l1 && iy >= y1 && iy <= y1 + l1) break;
+            if (ix == x2 + l2 && iy >= y2 && iy <= y2 + l2) break;
+            if (iy == y1 && ix >= x1 && ix <= x1 + l1) break;
+            if (iy == y2 && ix >= x2 && ix <= x2 + l2) break;
+            if (iy == y1 + l1 && ix >= x1 && ix <= x1 + l1) break;
+            if (iy == y2 + l2 && ix >= x2 && ix <= x2 + l2) break;
+        }
+        return new double[]{
+                intersections[index1][0], intersections[index1][1], intersections[index2][0], intersections[index2][1]
+        };
+    }
+
+    /**
+     * <a href="https://leetcode.cn/problems/best-line-lcci/?envType=featured-list&envId=xb9lfcwi">面试题 16.14. 最佳直线</a>
+     * <p>
+     * 给定一个二维平面及平面上的 N 个点列表Points，其中第i个点的坐标为Points[i]=[Xi,Yi]。请找出一条直线，其通过的点的数目最多。
+     */
+    public int[] bestLine(int[][] points) {
+        int n = points.length;
+        Map<String, int[]> map = new HashMap<>();// key:"A|B|C", value:[i,j,count]
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+                int[] p1 = points[i];
+                int[] p2 = points[j];
+                if (p1[0] == p2[0] && p1[1] == p2[1]) continue;
+                String key = genCoefficients(p1, p2);
+                if (map.containsKey(key)) {
+                    map.get(key)[2]++;
+                } else {
+                    map.put(key, new int[]{i, j, 1});
+                }
+            }
+        }
+        return map.values().stream().max((o1, o2) -> {
+            if (o1[2] > o2[2]) return 1;
+            if (o1[2] < o2[2]) return -1;
+            if (o1[0] > o2[0]) return -1;
+            if (o1[0] < o2[0]) return 1;
+            return Integer.compare(o2[1], o1[1]);
+        }).map(ints -> new int[]{ints[0], ints[1]}).orElse(null);
+    }
+
+    /**
+     * @param p1 点1
+     * @param p2 点2
+     * @return 过(p1, p2)的系数 a,b,c互质
+     * <p>
+     * 如果a!=0那么a>0
+     * <p>
+     * 如果a==0那么b>0
+     */
+    private String genCoefficients(int[] p1, int[] p2) {
+        long x1 = p1[0], x2 = p2[0], y1 = p1[1], y2 = p2[1];
+        long a = y2 - y1;
+        long b = x1 - x2;
+        long c = y1 * (x2 - x1) - x1 * (y2 - y1);
+        if (a == 0 && c == 0) return "0|1|0";
+        if (b == 0 && c == 0) return "1|0|0";
+        long con = 1;
+        // a,b不同时为0
+        if (a == 0) con = gcd(b, c);
+        else if (b == 0) con = gcd(a, c);
+        else if (c == 0) con = gcd(a, b);
+        else con = gcd(a, b, c);
+        if (a < 0) con = -con;
+        if (a == 0 && b < 0) con = -con;
+        return String.format("%s|%s|%s", a / con, b / con, c / con);
+    }
+
+    private long gcd(long a, long b, long c) {
+        long con = gcd(a, b);
+        if (con == 1) return 1;
+        con = gcd(con, c);
+        return con;
+    }
+
+    private long gcd(long a, long b) {
+        assert a != 0 && b != 0;
+        // 辗转相除求最大公约数
+        a = Math.abs(a);
+        b = Math.abs(b);
+        if (a < b) {
+            long c = a;
+            a = b;
+            b = c;
+        }
+        long r = a % b;
+        while (r != 0) {
+            if (b == 1) return 1;
+            a = b;
+            b = r;
+            r = a % b;
+        }
+        return b;
+    }
+
+    /**
+     * <a href="https://leetcode.cn/problems/master-mind-lcci/?envType=featured-list&envId=xb9lfcwi">面试题 16.15. 珠玑妙算</a>
+     * <p>
+     * 珠玑妙算游戏（the game of master mind）的玩法如下。
+     * <p>
+     * 计算机有4个槽，每个槽放一个球，颜色可能是红色（R）、黄色（Y）、绿色（G）或蓝色（B）。例如，计算机可能有RGGB 4种（槽1为红色，槽2、3为绿色，槽4为蓝色）。作为用户，你试图猜出颜色组合。打个比方，你可能会猜YRGB。要是猜对某个槽的颜色，则算一次“猜中”；要是只猜对颜色但槽位猜错了，则算一次“伪猜中”。注意，“猜中”不能算入“伪猜中”。
+     * <p>
+     * 给定一种颜色组合solution和一个猜测guess，编写一个方法，返回猜中和伪猜中的次数answer，其中answer[0]为猜中的次数，answer[1]为伪猜中的次数。
+     */
+    public int[] masterMind(String solution, String guess) {
+        Map<Character, Integer> map = new HashMap<>();
+        int c = 0;
+        for (int i = 0; i < solution.length(); i++) {
+            if (solution.charAt(i) == guess.charAt(i)) c++;
+            map.put(solution.charAt(i), map.getOrDefault(solution.charAt(i), 0) + 1);
+        }
+        int g = -c;
+        for (int i = 0; i < guess.length(); i++) {
+            char a = guess.charAt(i);
+            if (map.getOrDefault(a, 0) > 0) {
+                g++;
+                map.put(a, map.getOrDefault(a, 0) - 1);
+            }
+        }
+        return new int[]{c, g};
+    }
+
+    /**
+     * <a href="https://leetcode.cn/problems/sub-sort-lcci/?envType=featured-list&envId=xb9lfcwi">面试题 16.16. 部分排序</a>
+     * <p>
+     * 给定一个整数数组，编写一个函数，找出索引m和n，只要将索引区间[m,n]的元素排好序，整个数组就是有序的。注意：n-m尽量最小，也就是说，找出符合条件的最短序列。函数返回值为[m,n]，若不存在这样的m和n（例如整个数组是有序的），请返回[-1,-1]。
+     */
+    public int[] subSort(int[] array) {
+        // 排序，第一个不相等到最后一个不相等的之间就是结果
+        int[][] t = new int[array.length][2];
+        for (int i = 0; i < array.length; i++) {
+            t[i][0] = array[i];
+            t[i][1] = i;
+        }
+        Arrays.sort(t, (o1, o2) -> {
+            if (o1[0] > o2[0]) return 1;
+            if (o1[0] < o2[0]) return -1;
+            return Integer.compare(o1[1], o2[1]);
+        });
+        int min = -1, max = -1;
+        for (int i = 0; i < t.length; i++) {
+            if (t[i][1] != i) {
+                min = i;
+                break;
+            }
+        }
+        if (min != -1) {
+            for (int i = t.length - 1; i >= 0; i--) {
+                if (t[i][1] != i) {
+                    max = i;
+                    break;
+                }
+            }
+        }
+        return new int[]{min, max};
+
+
+    }
+
+    /**
+     * <a href="https://leetcode.cn/problems/contiguous-sequence-lcci/?envType=featured-list&envId=xb9lfcwi">面试题 16.17. 连续数列</a>
+     * <p>
+     * 给定一个整数数组，找出总和最大的连续数列，并返回总和。
+     */
+    public int maxSubArray(int[] nums) {
+        int[] dp = new int[nums.length];
+        dp[0] = nums[0];
+        int max = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            if (dp[i - 1] > 0) dp[i] = nums[i] + dp[i - 1];
+            else dp[i] = nums[i];
+            max = Math.max(dp[i], max);
+        }
+        return max;
+    }
+
+    /**
+     * <a href="https://leetcode.cn/problems/pattern-matching-lcci/?envType=featured-list&envId=xb9lfcwi">面试题 16.18. 模式匹配</a>
+     * <p>
+     * 你有两个字符串，即pattern和value。 pattern字符串由字母"a"和"b"组成，用于描述字符串中的模式。例如，字符串"catcatgocatgo"匹配模式"aabab"（其中"cat"是"a"，"go"是"b"），该字符串也匹配像"a"、"ab"和"b"这样的模式。但需注意"a"和"b"不能同时表示相同的字符串。编写一个方法判断value字符串是否匹配pattern字符串。
+     */
+    public boolean patternMatching(String pattern, String value) {
+        return match(pattern, 0, value, 0, null, null);
+    }
+
+    public boolean match(String pattern, int i, String value, int j, String a, String b) {
+        if (a != null && a.equals(b)) return false;
+        if (i == pattern.length()) return j == value.length();
+        char c = pattern.charAt(i);
+        if (c == 'a') {
+            if (a != null)
+                return value.substring(j).startsWith(a) && match(pattern, i + 1, value, j + a.length(), a, b);
+            else {
+                for (int x = j; x <= value.length(); x++) {
+                    if (match(pattern, i + 1, value, x, value.substring(j, x), b)) return true;
+                }
+            }
+        }
+        if (c == 'b') {
+            if (b != null)
+                return value.substring(j).startsWith(b) && match(pattern, i + 1, value, j + b.length(), a, b);
+            else {
+                for (int x = j; x <= value.length(); x++) {
+                    if (match(pattern, i + 1, value, x, a, value.substring(j, x))) return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * <a href="https://leetcode.cn/problems/pond-sizes-lcci/?envType=featured-list&envId=xb9lfcwi">面试题 16.19. 水域大小</a>
+     * 你有一个用于表示一片土地的整数矩阵land，该矩阵中每个点的值代表对应地点的海拔高度。若值为0则表示水域。由垂直、水平或对角连接的水域为池塘。池塘的大小是指相连接的水域的个数。编写一个方法来计算矩阵中所有池塘的大小，返回值需要从小到大排序。
+     */
+    public int[] pondSizes(int[][] land) {
+        List<Integer> result = new ArrayList<>();
+        for (int i = 0; i < land.length; i++) {
+            for (int j = 0; j < land[0].length; j++) {
+                int k = expand(land, i, j);
+                if (k > 0) result.add(k);
+            }
+        }
+        int[] t = new int[result.size()];
+        for (int i = 0; i < result.size(); i++) t[i] = result.get(i);
+        Arrays.sort(t);
+        return t;
+    }
+
+    private int expand(int[][] land, int i, int j) {
+        if (i < 0 || j < 0 || i >= land.length || j >= land[0].length) return 0;
+        if (land[i][j] != 0) return 0;
+        land[i][j] = Integer.MAX_VALUE;
+        return 1 + expand(land, i - 1, j - 1) + expand(land, i - 1, j) + expand(land, i - 1, j + 1) + expand(land, i, j - 1) + expand(land, i, j + 1) + expand(land, i + 1, j - 1) + expand(land, i + 1, j) + expand(land, i + 1, j + 1);
+    }
+
+    /**
+     * <a href="https://leetcode.cn/problems/t9-lcci/?envType=featured-list&envId=xb9lfcwi">面试题 16.20. T9键盘</a>
+     * <p>
+     * 在老式手机上，用户通过数字键盘输入，手机将提供与这些数字相匹配的单词列表。每个数字映射到0至4个字母。给定一个数字序列，实现一个算法来返回匹配单词的列表。
+     */
+    public List<String> getValidT9Words(String num, String[] words) {
+        char[] table = new char[26];
+        for (int i = 0; i < 26; i++) {
+            if (i < 3) table[i] = '2';
+            else if (i < 6) table[i] = '3';
+            else if (i < 9) table[i] = '4';
+            else if (i < 12) table[i] = '5';
+            else if (i < 15) table[i] = '6';
+            else if (i < 19) table[i] = '7';
+            else if (i < 22) table[i] = '8';
+            else table[i] = '9';
+        }
+        Map<String, List<String>> dic = new HashMap<>();
+        for (String s : words) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < s.length(); i++) {
+                sb.append(table[s.charAt(i) - 'a']);
+            }
+            String key = sb.toString();
+            if (dic.containsKey(key)) dic.get(key).add(s);
+            else dic.put(key, new ArrayList<String>() {{
+                add(s);
+            }});
+        }
+        return dic.getOrDefault(num, Collections.emptyList());
+    }
+
+    /**
+     * <a href="https://leetcode.cn/problems/sum-swap-lcci/?envType=featured-list&envId=xb9lfcwi">面试题 16.21. 交换和</a>
+     * <p>
+     * 给定两个整数数组，请交换一对数值（每个数组中取一个数值），使得两个数组所有元素的和相等。
+     */
+    public int[] findSwapValues(int[] array1, int[] array2) {
+        int sum1 = Arrays.stream(array1).sum(), sum2 = Arrays.stream(array2).sum();
+        if ((sum1 - sum2) % 2 != 0) return new int[0];
+        int t = (sum1 - sum2) / 2;
+        // ai = bj + t
+        Set<Integer> x = Arrays.stream(array2).map(i -> i + t).boxed().collect(Collectors.toSet());
+        for (int i : array1) {
+            if (x.contains(i)) return new int[]{i, i - t};
+        }
+        return new int[0];
+    }
+
+    /**
+     * <a href="https://leetcode.cn/problems/langtons-ant-lcci/?envType=featured-list&envId=xb9lfcwi">面试题 16.22. 兰顿蚂蚁</a>
+     * <p>
+     * 一只蚂蚁坐在由白色和黑色方格构成的无限网格上。开始时，网格全白，蚂蚁面向右侧。每行走一步，蚂蚁执行以下操作。
+     * <p>
+     * (1) 如果在白色方格上，则翻转方格的颜色，向右(顺时针)转 90 度，并向前移动一个单位。
+     * <p>
+     * (2) 如果在黑色方格上，则翻转方格的颜色，向左(逆时针方向)转 90 度，并向前移动一个单位。
+     * <p>
+     * 编写程序来模拟蚂蚁执行的前 K 个动作，并返回最终的网格。
+     */
+    public List<String> printKMoves(int k) {
+        Map<String, Character> t = new HashMap<>();
+        String current = "0|0";
+        t.put(current, '_');
+        int no = 0;
+        char[] directions = {'R', 'D', 'L', 'U'};
+        int[][] ops = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+        int minI = 0, minJ = 0;
+        int maxI = 0, maxJ = 0;
+        for (int m = 0; m < k; m++) {
+            char c = t.get(current);
+            String[] temp = current.split("\\|");
+            int i = Integer.parseInt(temp[0]), j = Integer.parseInt(temp[1]);
+            if (c == '_') {
+                t.put(current, 'X');
+                no = (no + 1) % 4;
+            } else {
+                t.put(current, '_');
+                no = (no + 3) % 4;
+            }
+            int nextI = i + ops[no][0], nextJ = j + ops[no][1];
+            minI = Math.min(nextI, minI);
+            minJ = Math.min(nextJ, minJ);
+            maxI = Math.max(nextI, maxI);
+            maxJ = Math.max(nextJ, maxJ);
+            current = String.format("%d|%d", nextI, nextJ);
+            if (!t.containsKey(current)) t.put(current, '_');
+        }
+        char[][] result = new char[maxI - minI + 1][maxJ - minJ + 1];
+        for (int i = 0; i < result.length; i++) {
+            for (int j = 0; j < result[0].length; j++) {
+                String loc = String.format("%d|%d", minI + i, minJ + j);
+                result[i][j] = t.getOrDefault(loc, '_');
+            }
+        }
+        String[] temp = current.split("\\|");
+        int i = Integer.parseInt(temp[0]), j = Integer.parseInt(temp[1]);
+        result[i - minI][j - minJ] = directions[no];
+        return Arrays.stream(result).map(String::new).collect(Collectors.toList());
+    }
+
+    /**
+     * <a href="https://leetcode.cn/problems/pairs-with-sum-lcci/?envType=featured-list&envId=xb9lfcwi">面试题 16.24. 数对和</a>
+     * <p>
+     * 设计一个算法，找出数组中两数之和为指定值的所有整数对。一个数只能属于一个数对。
+     */
+    public List<List<Integer>> pairSums(int[] nums, int target) {
+        Map<Integer, Integer> numCount = new HashMap<>();
+        for (int i : nums) {
+            numCount.put(i, numCount.getOrDefault(i, 0) + 1);
+        }
+        List<List<Integer>> result = new ArrayList<>();
+        for (int i : nums) {
+            int iCount = numCount.getOrDefault(i, 0);
+            int c = target - i;
+            if (i != c) {
+                int cCount = numCount.getOrDefault(c, 0);
+                if (iCount > 0 && cCount > 0) {
+                    numCount.put(i, iCount - 1);
+                    numCount.put(c, cCount - 1);
+                    result.add(Arrays.asList(i, c));
+                }
+            } else {
+                if (iCount >= 2) {
+                    numCount.put(i, iCount - 2);
+                    result.add(Arrays.asList(i, c));
+                }
+            }
+        }
+        return result;
+    }
+
+    /**
+     * <a href="https://leetcode.cn/problems/lru-cache-lcci/?envType=featured-list&envId=xb9lfcwi">面试题 16.25. LRU 缓存</a>
+     * <p>
+     * 设计和构建一个“最近最少使用”缓存，该缓存会删除最近最少使用的项目。缓存应该从键映射到值(允许你插入和检索特定键对应的值)，并在初始化时指定最大容量。当缓存被填满时，它应该删除最近最少使用的项目。
+     * <p>
+     * 它应该支持以下操作： 获取数据 get 和 写入数据 put 。
+     * <p>
+     * 获取数据 get(key) - 如果密钥 (key) 存在于缓存中，则获取密钥的值（总是正数），否则返回 -1。
+     * <p>
+     * 写入数据 put(key, value) - 如果密钥不存在，则写入其数据值。当缓存容量达到上限时，它应该在写入新数据之前删除最近最少使用的数据值，从而为新的数据值留出空间。
+     */
+    public static class LRUCache {
+
+        private final int maxSize;
+        private final Map<Integer, DoubleLinkNode> data;
+        private DoubleLinkNode head; // head.pre = null 这是最先使用的
+        private DoubleLinkNode tail; // tail.next = null 这是最近使用的
+
+        public LRUCache(int capacity) {
+            maxSize = capacity;
+            data = new HashMap<>(capacity);
+            head = null;
+            tail = null;
+        }
+
+        public int get(int key) {
+            if (!data.containsKey(key)) return -1;
+            DoubleLinkNode node = data.get(key);
+            move2Tail(node);
+            return node.val;
+        }
+
+        public void put(int key, int value) {
+            if (data.containsKey(key)) {
+                DoubleLinkNode node = data.get(key);
+                node.val = value;
+                move2Tail(node);
+            } else {
+                DoubleLinkNode node = new DoubleLinkNode(key, value);
+                if (data.size() == 0) {
+                    head = node;
+                    tail = node;
+                } else {
+                    if (data.size() >= maxSize) {
+                        data.remove(head.key);
+                        head = head.next;
+                        if (head != null) {
+                            head.pre = null;
+                        }
+                    }
+                    move2Tail(node);
+                }
+                data.put(key, node);
+            }
+        }
+
+        private static class DoubleLinkNode {
+            int key;
+            int val;
+            DoubleLinkNode pre;
+            DoubleLinkNode next;
+
+            DoubleLinkNode(int key, int val) {
+                this.key = key;
+                this.val = val;
+            }
+
+            @Override
+            public String toString() {
+                List<Integer> x = new ArrayList<>();
+                x.add(val);
+                DoubleLinkNode current = this;
+                while (current.next != null && current.next != this) {
+                    x.add(current.next.val);
+                    current = current.next;
+                }
+                return x.toString();
+            }
+
+        }
+
+        private void move2Tail(DoubleLinkNode node) {
+            if (node == tail) return;
+            if (head == node) {
+                head = head.next;
+            }
+            if (head == null) {
+                head = node;
+            }
+            if (node.pre != null) {
+                node.pre.next = node.next;
+            }
+            if (node.next != null) {
+                node.next.pre = node.pre;
+            }
+            if (tail != null) {
+                tail.next = node;
+            }
+            node.pre = tail;
+            node.next = null;
+            tail = node;
+        }
+    }
+
+    /**
+     * <a href="https://leetcode.cn/problems/calculator-lcci/?envType=featured-list&envId=xb9lfcwi">面试题 16.26. 计算器</a>
+     * <p>
+     * 给定一个包含正整数、加(+)、减(-)、乘(*)、除(/)的算数表达式(括号除外)，计算其结果。
+     * <p>
+     * 表达式仅包含非负整数，+， - ，*，/ 四种运算符和空格  。 整数除法仅保留整数部分。
+     */
+    public int calculate(String s) {
+        Stack<Integer> ns = new Stack<>();
+        short op = 0; // 0123表示+-*/
+        int i = 0;
+        while (i < s.length()) {
+            char c = s.charAt(i);
+            if (c == ' ') {
+                i++;
+                continue;
+            }
+            if (c <= '9' && c >= '0') {
+                int k = c - '0';
+                i++;
+                while (i < s.length() && s.charAt(i) <= '9' && s.charAt(i) >= '0') {
+                    k = k * 10 + s.charAt(i) - '0';
+                    i++;
+                }
+                if (op == 0) ns.push(k);
+                if (op == 1) ns.push(-k);
+                if (op == 2) ns.push(ns.pop() * k);
+                if (op == 3) ns.push(ns.pop() / k);
+                continue;
+            }
+            if (c == '+') op = 0;
+            if (c == '-') op = 1;
+            if (c == '*') op = 2;
+            if (c == '/') op = 3;
+            i++;
+        }
+        int result = 0;
+        for (int k : ns) {
+            result += k;
+        }
+        return result;
+    }
+
+    /**
+     * <a href="https://leetcode.cn/problems/add-without-plus-lcci/?envType=featured-list&envId=xb9lfcwi">不用+实现加法</a>
+     * <p>
+     * 设计一个函数把两个数字相加。不得使用 + 或者其他算术运算符。
+     */
+    public int add(int a, int b) {
+        boolean add = false;
+        int result = 0;
+        for (int i = 0; i < 32; i++) {
+            boolean ax = (a & (1 << i)) != 0;
+            boolean bx = (b & (1 << i)) != 0;
+            boolean sx = (!ax && !bx && add) || (!ax && bx && !add) || (ax && !bx && !add) || (ax && bx && add);
+            add = !ax && bx && add || ax && !bx && add || ax && bx;
+            if (sx) result |= (1 << i);
+        }
+        return result;
+    }
+
+    /**
+     * <a href="https://leetcode.cn/problems/missing-number-lcci/?envType=featured-list&envId=xb9lfcwi">面试题 17.04. 消失的数字</a>
+     * <p>
+     * 数组nums包含从0到n的所有整数，但其中缺了一个。请编写代码找出那个缺失的整数。你有办法在O(n)时间内完成吗？
+     */
+    public int missingNumber(int[] nums) {
+        int n = nums.length;
+        return n * (n + 1) / 2 - Arrays.stream(nums).sum();
+    }
+
+    /**
+     * <a href="https://leetcode.cn/problems/find-longest-subarray-lcci/?envType=featured-list&envId=xb9lfcwi">面试题 17.05. 字母与数字</a>
+     * <p>
+     * 给定一个放有字母和数字的数组，找到最长的子数组，且包含的字母和数字的个数相同。
+     * <p>
+     * 返回该子数组，若存在多个最长子数组，返回左端点下标值最小的子数组。若不存在这样的数组，返回一个空数组。
+     */
+    public String[] findLongestSubarray(String[] array) {
+        int[] t = new int[array.length + 1];
+        t[0] = 0;
+        for (int i = 0; i < array.length; i++) {
+            t[i + 1] = t[i] + (isNum(array[i]) ? 1 : -1);
+        }
+        Map<Integer, List<Integer>> map = new HashMap<>();
+        for (int i = 0; i < t.length; i++) {
+            if (map.containsKey(t[i])) {
+                map.get(t[i]).add(i);
+            } else {
+                final int k = i;
+                map.put(t[i], new ArrayList<Integer>() {{
+                    add(k);
+                }});
+            }
+        }
+        int i = 0, j = 0, max = 0;
+        for (List<Integer> value : map.values()) {
+            if (value.size() > 1) {
+                int len = value.get(value.size() - 1) - value.get(0);
+                if (len > max) {
+                    max = len;
+                    i = value.get(0);
+                    j = value.get(value.size() - 1);
+                }
+            }
+        }
+        if (i == j && i == 0) return new String[0];
+        String[] result = new String[j - i];
+        System.arraycopy(array, i, result, 0, j - i);
+        return result;
+    }
+
+    private boolean isNum(String t) {
+        char c = t.charAt(0);
+        return c >= '0' && c <= '9';
+    }
+
+    /**
+     * <a href="https://leetcode.cn/problems/number-of-2s-in-range-lcci/?envType=featured-list&envId=xb9lfcwi">面试题 17.06. 2出现的次数</a>
+     * <p>
+     * 编写一个方法，计算从 0 到 n (含 n) 中数字 2 出现的次数。
+     */
+    public int numberOf2sInRange(int n) {
+        int result = 0;
+        int s = 1;
+        int origin = n;
+        while (n > 0) {
+            int r = n % 10;
+            n = n / 10;
+            if (r > 2) result += (n + 1) * s;
+            else result += n * s;
+            if (r == 2) result += origin - n * s * 10 - 2 * s + 1;
+            s *= 10;
+        }
+        return result;
+    }
+
+    /**
+     * <a href="https://leetcode.cn/problems/baby-names-lcci/?envType=featured-list&envId=xb9lfcwi?envType=featured-list&envId=xb9lfcwi">面试题 17.07. 婴儿名字</a>
+     * <p>
+     * 每年，政府都会公布一万个最常见的婴儿名字和它们出现的频率，也就是同名婴儿的数量。有些名字有多种拼法，例如，John 和 Jon 本质上是相同的名字，但被当成了两个名字公布出来。给定两个列表，一个是名字及对应的频率，另一个是本质相同的名字对。设计一个算法打印出每个真实名字的实际频率。注意，如果 John 和 Jon 是相同的，并且 Jon 和 Johnny 相同，则 John 与 Johnny 也相同，即它们有传递和对称性。
+     * <p>
+     * 在结果列表中，选择 字典序最小 的名字作为真实名字。
+     */
+    public String[] trulyMostPopular(String[] names, String[] synonyms) {
+        Map<String, String> map = new HashMap<>();
+        Map<String, Set<String>> reverseMap = new HashMap<>();
+        for (String pair : synonyms) {
+            String[] temp = pair.substring(1, pair.length() - 1).split(",");
+            String name1 = temp[0], name2 = temp[1];
+            String key1 = map.get(name1), key2 = map.get(name2);
+            String name = name1.compareTo(name2) > 0 ? name2 : name1;
+
+            if (key1 == null && key2 == null) {
+                // 如果都不在里面，可以直接加入
+                map.put(name1, name);
+                map.put(name2, name);
+                reverseMap.put(name, new HashSet<String>() {{
+                    add(name1);
+                    add(name2);
+                }});
+            } else if (key1 == null || key2 == null) {
+                // 如果有一个在里面，另一个不在，可以找到在的那个，合并不在的一个
+                String lastKey = key1 == null ? key2 : key1;
+                Set<String> set = reverseMap.get(lastKey);
+                set.add(name1);
+                set.add(name2);
+                String newKey = lastKey.compareTo(name) > 0 ? name : lastKey;
+                if (!newKey.equals(lastKey)) {
+                    for (String eachName : set) {
+                        map.put(eachName, newKey);
+                    }
+                    reverseMap.remove(lastKey);
+                    reverseMap.put(newKey, set);
+                } else {
+                    map.put(name1, newKey);
+                    map.put(name2, newKey);
+                }
+            } else {
+                // 如果两个都在里面，分别找到之后合并
+                Set<String> set1 = reverseMap.get(key1);
+                Set<String> set2 = reverseMap.get(key2);
+                set1.addAll(set2);
+                // 找到新的最小值
+                if (key1.compareTo(key2) > 0) {
+                    reverseMap.remove(key1);
+                    reverseMap.put(key2, set1);
+                } else {
+                    reverseMap.remove(key2);
+                    reverseMap.put(key1, set1);
+                }
+                String newKey = key1.compareTo(key2) > 0 ? key2 : key1;
+                for (String eachName : set1) {
+                    map.put(eachName, newKey);
+                }
+            }
+        }
+        Map<String, Integer> result = new HashMap<>();
+        for (String nameCount : names) {
+            String[] temp = nameCount.split("[()]");
+            String name = temp[0];
+            String key = map.get(name);
+            int count = Integer.parseInt(temp[1]);
+            if (key == null) {
+                result.put(name, count);
+            } else {
+                if (result.containsKey(key)) {
+                    result.put(key, result.get(key) + count);
+                } else {
+                    result.put(key, count);
+                }
+            }
+        }
+        String[] returnValue = new String[result.size()];
+        int i = 0;
+        for (Map.Entry<String, Integer> entry : result.entrySet()) {
+            returnValue[i] = String.format("%s(%d)", entry.getKey(), entry.getValue());
+            i += 1;
+        }
+        return returnValue;
+    }
+
+
+    /**
+     * <a href="https://leetcode.cn/problems/circus-tower-lcci/?envType=featured-list&envId=xb9lfcwi?envType=featured-list&envId=xb9lfcwi">面试题 17.08. 马戏团人塔</a>
+     * <p>
+     * 有个马戏团正在设计叠罗汉的表演节目，一个人要站在另一人的肩膀上。出于实际和美观的考虑，在上面的人要比下面的人矮一点且轻一点。已知马戏团每个人的身高和体重，请编写代码计算叠罗汉最多能叠几个人。
+     */
+    public int bestSeqAtIndex(int[] height, int[] weight) {
+        int[][] k = new int[height.length][2];
+        for (int i = 0; i < height.length; i++) k[i] = new int[]{height[i], weight[i]};
+        Arrays.sort(k, (o1, o2) -> {
+            if (o1[0] < o2[0]) return -1;
+            if (o1[0] > o2[0]) return 1;
+            return Integer.compare(o1[1], o2[1]);
+        });
+        for (int i = 0; i < height.length; i++) {
+            height[i] = k[i][0];
+            weight[i] = k[i][1];
+        }
+        
+        for (int i = 1; i < height.length; i++) {
+        }
+        return LIS(weight);
+    }
+
+
+    /**
+     * Longest Increasing Subsequence
+     *
+     * @param seq 序列
+     * @return 最长严格递增子序列长度
+     */
+    private int LIS(int[] seq) {
+        int[] k = new int[seq.length];
+        int le = 0;
+        for (int t : seq) {
+            if (le == 0 || k[le - 1] < t) {
+                k[le] = t;
+                le++;
+            } else if (k[le - 1] > t) {
+                int index = Arrays.binarySearch(k, 0, le, t);
+                if (index < 0) k[-(index + 1)] = t;
+            }
+        }
+        return le;
+    }
 }

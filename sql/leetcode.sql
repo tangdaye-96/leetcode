@@ -337,7 +337,6 @@ having count(*) >= 3;
 
 -- 写一条SQL 查询语句获取 Sales 表中所有产品对应的 产品名称 product_name 以及该产品的所有 售卖年份 year 和 价格 price 。
 -- https://leetcode.cn/problems/product-sales-analysis-i/
-
 select p.product_name as product_name, s.year as year, s.price as price
 from Product p,
      Sales s

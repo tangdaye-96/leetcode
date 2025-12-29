@@ -73,8 +73,11 @@ public class Sort {
 
     // 冒泡排序
     public static void bubbleSort(int[] array, boolean revert) {
-        for (int i = 0; i < array.length; i++) {
-            for (int j = i + 1; j < array.length; j++) {
+        for (int i = 0; i < array.length - 1; i++) {
+            for (int j = 1; j < array.length - i; j++) {
+                // 如果当前值比前一个值大，需要交换下，把大的放在前面，这样做完之后，最小的会被放在最后
+                if (array[j] > array[j - 1] && revert) swap(array, j - 1, j);
+                if (array[j] < array[j - 1] && !revert) swap(array, j - 1, j);
             }
         }
     }
@@ -86,5 +89,72 @@ public class Sort {
         array[i] = array[i] ^ array[j];
     }
 
+    // 堆排序
+    public static void heapSort(int[] array, boolean revert) {
+        // 构建堆
+        buildHeap(array, !revert);
+        // 交换堆顶和最后一个值
+        for (int i = array.length - 1; i > 0; i--) {
+            swap(array, 0, i);
+            down(array, i, 0, !revert);
+        }
+    }
 
+    // 原地构建大顶堆
+    private static void buildHeap(int[] array, boolean isBig) {
+        // 最后一个非叶子节点，即最后一个节点的父节点
+        int lastNotLeafIndex = array.length / 2 - 1;
+        for (int i = lastNotLeafIndex; i >= 0; i--) {
+            down(array, array.length, i, isBig);
+        }
+    }
+
+    // 从给定位置向下调整，当前节点需要和两个子节点中最大的交换，再把交换的节点当作当前节点，直到当前节点没有子节点
+    private static void down(int[] array, int len, int currentIndex, boolean isBig) {
+        while (currentIndex * 2 + 1 < len) {
+            int result = adjust(array, len, currentIndex, isBig);
+            if (result == -1) {
+                currentIndex = currentIndex * 2 + 1;  // 移动到左子节点
+            } else if (result == 1) {
+                currentIndex = currentIndex * 2 + 2;  // 移动到右子节点
+            } else {
+                return;
+            }
+        }
+    }
+
+    // 当前节点和两个子节点中最大的交换，并返回0：不调整/-1：左/1：右
+    private static int adjust(int[] array, int len, int currentIndex, boolean isBig) {
+        int current = array[currentIndex];
+        int leftIndex = currentIndex * 2 + 1;
+        if (leftIndex >= len) return 0;
+        int left = array[leftIndex];
+        int rightIndex = currentIndex * 2 + 2;
+        if (rightIndex >= len) {
+            if ((current >= left) ^ isBig) {
+                swap(array, currentIndex, leftIndex);
+                return -1;
+            }
+        } else {
+            int right = array[rightIndex];
+            if (isBig) {
+                if (left >= current && left >= right) {
+                    swap(array, currentIndex, leftIndex);
+                    return -1;
+                } else if (right >= current) {
+                    swap(array, currentIndex, rightIndex);
+                    return 1;
+                }
+            } else {
+                if (left <= current && left <= right) {
+                    swap(array, currentIndex, leftIndex);
+                    return -1;
+                } else if (right <= current) {
+                    swap(array, currentIndex, rightIndex);
+                    return 1;
+                }
+            }
+        }
+        return 0;
+    }
 }

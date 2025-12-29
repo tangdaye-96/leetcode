@@ -15,6 +15,12 @@ public class SortTest {
 
         Sort.mergeSort(array, false);
         Assert.assertEquals("[1, 1, 3, 3, 4, 5, 7]", Arrays.toString(array));
+
+        Sort.heapSort(array, true);
+        Assert.assertEquals("[7, 5, 4, 3, 3, 1, 1]", Arrays.toString(array));
+
+        Sort.bubbleSort(array, false);
+        Assert.assertEquals("[1, 1, 3, 3, 4, 5, 7]", Arrays.toString(array));
     }
 
 }

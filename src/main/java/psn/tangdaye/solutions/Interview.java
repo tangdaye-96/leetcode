@@ -3074,14 +3074,11 @@ public class Interview {
         Arrays.sort(k, (o1, o2) -> {
             if (o1[0] < o2[0]) return -1;
             if (o1[0] > o2[0]) return 1;
-            return Integer.compare(o1[1], o2[1]);
+            return Integer.compare(o2[1], o1[1]);
         });
         for (int i = 0; i < height.length; i++) {
             height[i] = k[i][0];
             weight[i] = k[i][1];
-        }
-        
-        for (int i = 1; i < height.length; i++) {
         }
         return LIS(weight);
     }
